@@ -140,20 +140,21 @@ const Dashboard = (props) => {
         setlastname(lname)
         let txn =  transactionId;
         console.log(txn)
-        // console.log({
-        //     key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
-        //     email: email, // customer email 
-        //     amount: amount_, // amount to be processed
-        //     currency: "NGN", // currency
-        //     first_name: fname,
-        //     last_name: lname,
-        //     phone_number: phone, // customer's phone number (optional)
-        //     customerId: email,
-        //     ref: txn, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-        //     narration: 'something nice',
-        //     isBill:true,
-        //     callback_url: window.location.href,
-        // });
+        
+        console.log({
+            key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
+            email: email, // customer email 
+            amount: amount_, // amount to be processed
+            currency: "NGN", // currency
+            first_name: fname,
+            last_name: lname,
+            phone_number: phone, // customer's phone number (optional)
+            customerId: email,
+            ref: txn, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+            narration: 'something nice',
+            isBill:true,
+            callback_url: window.location.href,
+        });
 
         const payload = {
             // key: 'test_ZTgxNTYxMzUwODYyODU3NzM5MmI4OTdjZmZmMGYyY2FkNGU5Nzc5ZDAwM2NlOWIyZTE3YzEwMTQwNDIwNTA0OA', // this is a demo key.  
