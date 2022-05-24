@@ -1,6 +1,6 @@
 import { FooterContainer } from '../Home/HomeElements';
 import { Section, Container } from './../Layout/layoutElement';
-import { ButtonMain } from '../button/buttonElements';
+// import { ButtonMain } from '../button/buttonElements';
 import MainButton from '../button/MainButton';
 import { Link } from 'react-router-dom';
 
@@ -54,18 +54,18 @@ export default function Footer() {
                     <div className="footer_copyright">
                         <div className="footer_contacts_social footer_hidden">
                             <ul className="footer_contacts_social_list">
-                                <li className='footer_contacts_social_item'><a href="" className="footer_contacts_social_link"><img src='/img/facebook.svg' alt='' width={20} height={20}/></a></li>
-                                <li className='footer_contacts_social_item'><a href="" className="footer_contacts_social_link"><img src='/img/twitter.svg' alt='' width={20} height={20}/></a></li>
-                                <li className='footer_contacts_social_item'><a href="" className="footer_contacts_social_link"><img src='/img/instagram.svg' alt='' width={20} height={20}/></a></li>
-                                <li className='footer_contacts_social_item'><a href="" className="footer_contacts_social_link"><img src='/img/linkden.svg' alt='' width={20} height={20}/></a></li>
+                                <li className='footer_contacts_social_item'><a href="/" className="footer_contacts_social_link"><img src='/img/facebook.svg' alt='' width={20} height={20}/></a></li>
+                                <li className='footer_contacts_social_item'><a href="/" className="footer_contacts_social_link"><img src='/img/twitter.svg' alt='' width={20} height={20}/></a></li>
+                                <li className='footer_contacts_social_item'><a href="/" className="footer_contacts_social_link"><img src='/img/instagram.svg' alt='' width={20} height={20}/></a></li>
+                                <li className='footer_contacts_social_item'><a href="/" className="footer_contacts_social_link"><img src='/img/linkden.svg' alt='' width={20} height={20}/></a></li>
                             </ul>
                         </div>
                         <div className="footer_copyright_rights">
                             <h4>2022  Icadpay. All Rights Reserved</h4>
                         </div>
                         <div className="footer_copyright_policy">
-                            <a href="" className="">Privacy Policy</a>
-                            <a href="" className="">Cookies</a>
+                            <a href="/" className="">Privacy Policy</a>
+                            <a href="/" className="">Cookies</a>
                         </div>
                     </div>
                 </FooterContainer>
