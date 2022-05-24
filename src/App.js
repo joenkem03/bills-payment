@@ -1,24 +1,44 @@
 import logo from './logo.svg';
 import './App.css';
-
+import { Routes, Route } from 'react-router-dom';
+import Home from './components/Home';
+import Bills from './components/Bills';
+import Layout from './components/Layout/layout';
+import Dashboard from './components/dashboard/Dashboard';
+import { Helmet } from "react-helmet"
+import TopBarProgress from "react-topbar-progress-indicator";
+import { useState } from 'react';
 function App() {
+
+  const [loading,setLoading]= useState(false);
+
+  TopBarProgress.config({
+    barColors: {
+      "0": "blue",
+      "1.0": "red"
+    },
+    shadowBlur: 5
+  });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Helmet>
+          <script
+            src="https://pay-service.icadpay.com/inline-pay.js"
+            async
+          ></script>
+      </Helmet>
+      
+      {loading && <TopBarProgress /> }
+      <Routes>
+        <Route path='/' element={<Layout/>}>
+          <Route path='/' element={<Home/>}/>
+          <Route path='bills' element={<Bills/>}/>
+          <Route path='/dashboard' element={<Dashboard load={setLoading}/>}>
+            <Route path=':biller' element={<Dashboard/>} />
+          </Route>
+        </Route>
+      </Routes>
+    </>
   );
 }
 
