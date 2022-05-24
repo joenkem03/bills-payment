@@ -53,8 +53,9 @@ const Dashboard = (props) => {
         if(status === 'SUCCESS'){
             // console.log('status: ',status);
             setmodal(true)
+            console.log(fixed);
         }
-    },[status])   
+    },[status,fixed])   
     useEffect(()=>{
         console.log(params)
         if(params.biller === 'airtime' || params.biller === 'data'){
@@ -118,7 +119,9 @@ const Dashboard = (props) => {
         }else{
             setProceed(false)
         }
+        
         getProducts();
+
      },[])
      
     const handleSelectBiller = (bill)=>{
@@ -187,7 +190,7 @@ const Dashboard = (props) => {
         const varietyData = await variety.data;
     
         // console.log('data',billsdata.products[0]);
-        if(varietyData == ''){
+        if(varietyData === ''){
             // console.log('no data returned');
             setVariety(false);
         }else{

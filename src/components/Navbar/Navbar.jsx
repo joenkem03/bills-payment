@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Menu, MenuItem, NavContainer, NavLogo , ButtonContainer, Nav, MobileMenu} from "./NavbarElements"
 import { Link } from "react-router-dom";
 import Button from "../button/button"
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 import { FiMenu } from "react-icons/fi";
 import { GrFormClose } from "react-icons/gr";
