@@ -12,6 +12,7 @@ export default function SearchBar ({props}) {
         const arr = [];
         
         if(e.currentTarget.value.length >= 3){
+            // eslint-disable-next-line array-callback-return
             props.filter((cat) => {
                 if(cat.identifier.toLowerCase().includes(e.currentTarget.value)){     
                     return (

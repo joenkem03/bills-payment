@@ -92,6 +92,7 @@ const Dashboard = (props) => {
         if(Object.keys(selectedVariety).length !== 0 ){
             
             
+            // eslint-disable-next-line array-callback-return
             selectedVariety.map(item => {
                 // console.log(item.fixedPrice)
                 
@@ -122,6 +123,7 @@ const Dashboard = (props) => {
         
         getProducts();
 
+     // eslint-disable-next-line react-hooks/exhaustive-deps
      },[])
      
     const handleSelectBiller = (bill)=>{
@@ -203,6 +205,7 @@ const Dashboard = (props) => {
     const handleSelectChange= (id)=>{
         let arr =[];
         let filterArray = varietyData.varations;
+        // eslint-disable-next-line array-callback-return
         filterArray.filter((e)=>{
             if(e.variation_code === id){
                 arr.push(e);
