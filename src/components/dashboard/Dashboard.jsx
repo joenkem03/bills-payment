@@ -130,16 +130,18 @@ const Dashboard = (props) => {
         setselectedBiller(bill)
     }
     
-    const handlepaymentFull = async ()=>{
-        console.log(name)
+    const handlepaymentFull = async (data)=>{
+        // console.log(data)
+        setTransactionId(data)
+
         const namearr = name.split(" ");
         const fname = namearr[0] === ''? 'firstname':namearr[0]
         const lname = namearr[1] === ''? 'lastname':namearr[1]
         console.log(fname +'=='+ lname )
         setfirstname(fname)
         setlastname(lname)
-        let txn =  transactionId;
-        console.log(txn)
+        // let txn =  data;
+        // console.log(txn)
 
         console.log({
             key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
@@ -150,7 +152,7 @@ const Dashboard = (props) => {
             last_name: lname,
             phone_number: phone, // customer's phone number (optional)
             customerId: email,
-            ref: txn, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+            ref: data, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
             narration: 'something nice',
             isBill:true,
             callback_url: window.location.href,
@@ -166,7 +168,7 @@ const Dashboard = (props) => {
             last_name: lastname,
             phone_number: phone, // customer's phone number (optional)
             customerId: email,
-            ref: txn, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+            ref: data, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
             narration: 'something nice',
             isBill:true,
             callback_url: window.location.href, // specified redirect URL (potional)
@@ -240,8 +242,10 @@ const Dashboard = (props) => {
     }
 
 
-    const handlePayment = async ()=>{
+    const handlePayment = async () => {
+        
         props.load(true);
+
         const payload ={
             billPaymentProductId: serviceId,
             amount: amount_,
@@ -251,13 +255,21 @@ const Dashboard = (props) => {
             customerId: '',
             billersCode:billerCode,
             variation_code: type
-          }
-        const res = await axios.post('https://app-service.icadpay.com/api/AltBiller/initiatePayment',payload)
-        const resData = res.data.transId;
+        }
 
-        setTransactionId(resData);
-        console.log('trans id: ', resData)
-        handlepaymentFull();
+        const res = await axios.post('https://app-service.icadpay.com/api/AltBiller/initiatePayment',payload)
+
+        
+        console.log(res.data.transId);
+
+        // .then((val) =>{
+        //     const resData = val.data.transId;
+        //     setTransactionId(resData);
+        //     console.log('trans id: ', resData)
+        // }).catch((err)=>{
+            // })
+        handlepaymentFull(res.data.transId);
+
     }
 
     const getProducts = async (context) => {
