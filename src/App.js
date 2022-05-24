@@ -23,8 +23,8 @@ function App() {
     <>
       <Helmet>
           <script
-            src="https://demo.icadpay.com/inline-pay.js"
-            // src="https://pay-service.icadpay.com/inline-pay.js"
+            // src="https://demo.icadpay.com/inline-pay.js"
+            src="https://pay-service.icadpay.com/inline-pay.js"
             async
           ></script>
       </Helmet>
