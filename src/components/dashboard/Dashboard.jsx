@@ -28,6 +28,7 @@ const Dashboard = (props) => {
     const [type, setType]=useState('');
     const [serviceId, setServiceId]=useState({});
     const [billerCode, setbillerCode]=useState('');
+    // eslint-disable-next-line no-unused-vars
     const [transactionId,setTransactionId]=useState('');
     const [proceed,setProceed]=useState(false);
     let params = useParams();
