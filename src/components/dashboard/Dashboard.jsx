@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect,useCallback } from "react";
-import { Billimg, DashMain, DashMainContent, DListimg } from "../bills/billsElements";
+import {  DashMain, DashMainContent, DListimg } from "../bills/billsElements";
 import Sidebar from "../bills/Sidebar";
 import Modal from "../modal/modal";
 // import { useRouter } from 'next/router'
 import axios from "axios";
 // import Script from 'next/script'
-import { isMobile,isBrowser } from "react-device-detect";
+import { isBrowser } from "react-device-detect";
 
 
 const Dashboard = (props) => {
@@ -31,7 +31,7 @@ const Dashboard = (props) => {
     const [transactionId,setTransactionId]=useState('');
     const [proceed,setProceed]=useState(false);
     let params = useParams();
-    const { biller,status,amount,ref } = params;
+    const { status,amount,ref } = params;
 
 
     const handleValidation = useCallback( async ()=>{
@@ -123,15 +123,13 @@ const Dashboard = (props) => {
      
     const handleSelectBiller = (bill)=>{
         setselectedBiller(bill)
-        // console.log('slected bill',bill);
     }
     
-    // console.log('biller',bills);
     const handlepaymentFull = async ()=>{
         console.log(name)
         const namearr = name.split(" ");
-        const fname = namearr[0] == ''? 'firstname':namearr[0]
-        const lname = namearr[1] == ''? 'lastname':namearr[1]
+        const fname = namearr[0] === ''? 'firstname':namearr[0]
+        const lname = namearr[1] === ''? 'lastname':namearr[1]
         console.log(fname +'=='+ lname )
         setfirstname(fname)
         setlastname(lname)

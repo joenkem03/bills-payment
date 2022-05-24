@@ -1,4 +1,4 @@
-import { BillheaderContainer, Billimg,SearchResult } from './billsElements';
+import { BillheaderContainer, Billimg } from './billsElements';
 import SearchBar from './searchbar';
 
 export default function Billsheader({data}){

@@ -1,6 +1,6 @@
-import { DashListContainer, DashListimg, DashListsContent,DashListCheck } from './billsElements';
-import react, { useEffect, useState } from 'react';
-import axios from "axios";
+import { DashListContainer, DashListimg, DashListsContent } from './billsElements';
+import  { useEffect, useState } from 'react';
+// import axios from "axios";
 
 export default function DashList({datas,setdata,bill,proceed}) {
     
@@ -19,12 +19,14 @@ export default function DashList({datas,setdata,bill,proceed}) {
         if(datas !== '' ){
 
             datas.filter((item)=>{
+                
                 if(item.serviceID === id){
                     setdata(item);
                     setactive(item.serviceID);
                     setproceed(true)
                     // handleVariety(item.serviceID)
                 }
+                return item;
             })
         }
 
@@ -52,7 +54,7 @@ export default function DashList({datas,setdata,bill,proceed}) {
                         datas.filter(Boolean).map((item,i)=>{
                             return(
                                         <>
-                                            <li key={i} className={active == item.serviceID ? 'active':''} id={item.serviceID} onClick={handleClick}>
+                                            <li key={i} className={active === item.serviceID ? 'active':''} id={item.serviceID} onClick={handleClick}>
                                                 <DashListimg
                                                     src={item.image}
                                                 />

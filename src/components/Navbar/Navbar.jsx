@@ -10,7 +10,7 @@ import { GrFormClose } from "react-icons/gr";
 export default function Navbar(){
     const [open,setopen] =useState(false)
 
-    let navigate = useNavigate();
+    // let navigate = useNavigate();
 
     const toggleMenu = (e)=>{
         e.preventDefault();

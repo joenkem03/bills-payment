@@ -6,7 +6,7 @@ import { useState } from 'react';
 import axios from 'axios';
 const Bills = () => {
   const [billers,setbillers] = useState();
-  const [category,setcategory] = useState();
+  // const [category,setcategory] = useState();
 
 
   useEffect(()=>{
