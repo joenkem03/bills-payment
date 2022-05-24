@@ -140,7 +140,7 @@ const Dashboard = (props) => {
         setlastname(lname)
         let txn =  transactionId;
         console.log(txn)
-        
+
         console.log({
             key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
             email: email, // customer email 
@@ -253,7 +253,7 @@ const Dashboard = (props) => {
             variation_code: type
           }
         const res = await axios.post('https://app-service.icadpay.com/api/AltBiller/initiatePayment',payload)
-        const resData = await res.data.transId;
+        const resData = res.data.transId;
 
         setTransactionId(resData);
         console.log('trans id: ', resData)
