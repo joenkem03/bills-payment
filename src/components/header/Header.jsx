@@ -8,7 +8,7 @@ export default function Header () {
 
     const hadleregister = ()=>{
         // window.location.href('' )
-        window.open('https://icadpay.com/user/register/index.html', "_blank")
+        window.open('https://portal.icadpay.com/user/register', "_blank")
     }
     return (
         <HeaderMain>

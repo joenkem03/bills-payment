@@ -22,7 +22,7 @@ export default function Navbar(){
    
     const navigateToLogin = ()=>{
         // window.location.replace('https://icadpay.com/user/login')
-        window.open('https://icadpay.com/user/login/index.html', "_blank")
+        window.open('https://portal.icadpay.com/user/login', "_blank")
 
     }
     return(
