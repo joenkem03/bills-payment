@@ -331,7 +331,7 @@ const Dashboard = (props) => {
                         <>
                         <div className="dashcontent">
                         <div className="dashcontent_left">
-                                <h3 className="">Enter Your Detials</h3>
+                                <h3 className="">Enter Your Details</h3>
                                 {
                                     Object.keys(selectedBiller).length !== 0  && (
                                         <>
