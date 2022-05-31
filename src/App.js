@@ -34,9 +34,12 @@ function App() {
         <Route path='/' element={<Layout/>}>
           <Route path='/' element={<Home/>}/>
           <Route path='bills' element={<Bills/>}/>
+          <Route path='*' element={<Home/>}/>
+          
           <Route path='/dashboard' element={<Dashboard load={setLoading}/>}>
             <Route path=':biller' element={<Dashboard/>} />
           </Route>
+          
         </Route>
       </Routes>
     </>

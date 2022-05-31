@@ -19,8 +19,11 @@ export default function Navbar(){
         console.log('menu: ',open);
     }
 
-    const hadleregister = ()=>{
-        window.location.replace('https://icadpay.com/user/register');
+   
+    const navigateToLogin = ()=>{
+        // window.location.replace('https://icadpay.com/user/login')
+        window.open('https://icadpay.com/user/login/index.html', "_blank")
+
     }
     return(
         <NavContainer>
@@ -31,11 +34,11 @@ export default function Navbar(){
                 <Menu>
                     <MenuItem><Link to={`/bills`}>Pay bills</Link></MenuItem>
                     <MenuItem><Link to={`/`}>For businesses </Link></MenuItem>
-                    <MenuItem><Link to={`/`}>Documentation </Link></MenuItem>
+                    <MenuItem><a href={`https://icadpay.com/developers/index.html`} target="_blank" rel="noreferrer" >Documentation </a></MenuItem>
                 </Menu>
             </Nav>
             <ButtonContainer>
-                <Button text={`Register`} click={hadleregister}/>
+                <Button text={`Login`} click={navigateToLogin} />
             </ButtonContainer>
             <MobileMenu open={open}>
                 <button className="menubtn" onClick={toggleMenu}>
@@ -54,9 +57,9 @@ export default function Navbar(){
                         <ul>
                             <li className=""><Link to={`/bills`}>Pay Bills </Link></li>
                             <li className=""><Link to={`/`}>For Businessess</Link></li>
-                            <li className=""><Link to={`/`}>Documentation </Link></li>
+                            <li className=""><a href={`https://icadpay.com/developers/`} target="_blank" rel="noreferrer" >Documentation </a></li>
                         </ul>
-                        <Button text={`Register`}/>
+                        <Button text={`Login`} />
                     </div>
                 </div>
             </MobileMenu>

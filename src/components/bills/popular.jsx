@@ -24,7 +24,7 @@ const Popular = ({bills}) => {
                     <PopularMainCat>
                         {
                             bills !== undefined &&(
-                                bills.map((data,i)=>{
+                                bills.map((data)=>{
                                     return(
                                         // <a key={i} href={'/bills/dashboard/'+data.billerId}>
                                         //     <Cat >
@@ -32,14 +32,14 @@ const Popular = ({bills}) => {
                                         //         <h3 className="">{data.billerId}</h3>
                                         //     </Cat>
                                         // </a>
-                                    <Link key={i} to={'/dashboard/'+data.identifier}>
+                                    <Link key={data.identifier} to={'/dashboard/'+data.identifier}>
                                         <Cat >
                                             {   images.map(item => {
                                                 return(
                                                     <>
                                                     { 
                                                      data.identifier === item.identifier ? (
-                                                         <Catimg src={item.src} />
+                                                         <Catimg key={item.identifier} src={item.src} />
                                                          ):(<></>)
                                                         }
                                                     </>

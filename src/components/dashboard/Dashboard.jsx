@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams , useLocation} from "react-router-dom";
 import { useState, useEffect,useCallback } from "react";
 import {  DashMain, DashMainContent, DListimg } from "../bills/billsElements";
 import Sidebar from "../bills/Sidebar";
@@ -31,8 +31,13 @@ const Dashboard = (props) => {
     // eslint-disable-next-line no-unused-vars
     const [transactionId,setTransactionId]=useState('');
     const [proceed,setProceed]=useState(false);
+    
     let params = useParams();
-    const { status,amount,ref } = params;
+
+    // const { status,amount,ref } = params;
+    const search = useLocation().search;
+    const amount = new URLSearchParams(search).get('amount');
+    const ref = new URLSearchParams(search).get('ref');
 
 
     const handleValidation = useCallback( async ()=>{
@@ -51,12 +56,16 @@ const Dashboard = (props) => {
     },[billerCode,serviceId,type]);
  
     useEffect(()=>{
-        if(status === 'SUCCESS'){
+        const name = new URLSearchParams(search).get('status');
+        console.log(name)
+        if(name === 'SUCCESS'){
             // console.log('status: ',status);
             setmodal(true)
             console.log(fixed);
         }
-    },[status,fixed])   
+
+    },[search,fixed])   
+
     useEffect(()=>{
         console.log(params)
         if(params.biller === 'airtime' || params.biller === 'data'){

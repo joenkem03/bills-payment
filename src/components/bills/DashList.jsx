@@ -54,7 +54,7 @@ export default function DashList({datas,setdata,bill,proceed}) {
                         datas.filter(Boolean).map((item,i)=>{
                             return(
                                         <>
-                                            <li key={i} className={active === item.serviceID ? 'active':''} id={item.serviceID} onClick={handleClick}>
+                                            <li key={item.serviceID} className={active === item.serviceID ? 'active':''} id={item.serviceID} onClick={handleClick}>
                                                 <DashListimg
                                                     src={item.image}
                                                 />

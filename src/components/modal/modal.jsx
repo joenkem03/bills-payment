@@ -1,9 +1,12 @@
 import { ModalContainer,Modalbox } from './../bills/billsElements';
 import { Link } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 export default function Modal(props){
-    const handleContinue = ()=>{
-        props.close();
-    }
+    // const navigate = useNavigate();
+    // const handleContinue = ()=>{
+    //     props.close();
+    //     navigate('/bills')
+    // }
     return (
         <ModalContainer show={props.show}>
             <Modalbox>
@@ -23,7 +26,7 @@ export default function Modal(props){
             <h2 className="">Payment succesful</h2>
             <p className="">Your {props.name} payment of N{props.amount} was successful. A receipt has been sent to your email.</p>
             <button className='red'><Link to='/bills' >Pay more Bills</Link></button> 
-            <button className='blue' onClick={handleContinue}>Continue</button>
+            {/* <button className='blue' onClick={handleContinue}>Continue</button> */}
             </Modalbox>
         </ModalContainer>
     );
