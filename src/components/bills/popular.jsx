@@ -5,6 +5,7 @@ import { Cat, Catimg, PopularContainer, PopularMain, PopularMainCat } from "./bi
 import { Link } from "react-router-dom";
 
 const Popular = ({bills}) => {
+
     const images =[
         { identifier: 'airtime', src: '/img/phone.png' },
         { identifier: 'data', src: '/img/data.png' },
@@ -20,34 +21,34 @@ const Popular = ({bills}) => {
     <PopularContainer>
             <Container>
                 <PopularMain>
-                    <h2 className="">Popular </h2>
+                    <h2 className="">Search By Category </h2>
                     <PopularMainCat>
                         {
                             bills !== undefined &&(
-                                bills.map((data)=>{
+                                bills.map((data,i)=>{
                                     return(
-                                        // <a key={i} href={'/bills/dashboard/'+data.billerId}>
-                                        //     <Cat >
-                                        //         <Catimg src={data.billerLogoUrl} />
-                                        //         <h3 className="">{data.billerId}</h3>
-                                        //     </Cat>
-                                        // </a>
-                                    <Link key={data.identifier} to={'/dashboard/'+data.identifier}>
-                                        <Cat >
-                                            {   images.map(item => {
-                                                return(
-                                                    <>
-                                                    { 
-                                                     data.identifier === item.identifier ? (
-                                                         <Catimg key={item.identifier} src={item.src} />
-                                                         ):(<></>)
-                                                        }
-                                                    </>
-                                                )
-                                            })}
-                                            <h3 className="">{data.name}</h3>
-                                        </Cat>
-                                    </Link>
+                                        <Link key={data.categoryId} to={'/dashboard/'+data.categoryId}>
+                                            {/* <a key={i} href={'/bills/dashboard/'+data.billerId}> */}
+                                            <Cat >
+                                                {/* <Catimg src={data.billerLogoUrl} /> */}
+                                                <h3 className="">{data.categoryName}</h3>
+                                            </Cat>
+                                            {/* </a> */}
+                                        </Link>
+                                    //     <Cat >
+                                    //         {   images.map(item => {
+                                    //             return(
+                                    //                 <>
+                                    //                 { 
+                                    //                  data.identifier === item.identifier ? (
+                                    //                      <Catimg key={item.identifier} src={item.src} />
+                                    //                      ):(<></>)
+                                    //                     }
+                                    //                 </>
+                                    //             )
+                                    //         })}
+                                    //         <h3 className="">{data.name}</h3>
+                                    //     </Cat>
                                 )
                             })
                             )

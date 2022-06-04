@@ -82,13 +82,15 @@ export const SearchbarIcon = styled.img`
 `
 export const Searchbardropdown = styled.div`
     width: 635px;
-    min-height: 20vh;
+    height: 500px;
     background: #ffffff;
     box-shadow: 0px 0px 3px 0px rgba(0,0,0,.3);
     position: absolute;
-    bottom: -180px;
+    bottom: -180%;
     border-radius:15px;
     padding: 16px 30px;
+    overflow: scroll;
+
     display: ${props=> props.show ? 'block':'none'};
     ul{
         padding: 0;
@@ -96,7 +98,10 @@ export const Searchbardropdown = styled.div`
             border-bottom:1px solid rgba(0,0,0,.1);
             padding:10px 0px;
 
-            a{}
+            a{
+                letter-spacing: 0;
+                text-transform: capitalize;
+            }
         }
     }
 `
@@ -126,9 +131,10 @@ export const PopularMain = styled.div`
 export const PopularMainCat = styled.div`
     display: flex;
     justify-content: center;
+    flex-flow: row wrap;
     width: 100%;
     a{
-        margin-right: 30px;
+        /* margin-right: 30px; */
         @media screen and (max-width: 480px) {
             margin: 0;
         }
@@ -144,10 +150,10 @@ export const PopularMainCat = styled.div`
 
 `
 export const Cat = styled.div`
-    height: 139px;
+    /* height: 139px; */
     min-width: 100px;
     border-radius: 5px;
-    background: #FFFFFF;
+    background: #F3F6FF;
     border: 1px solid #E7E8E5;
     box-sizing: border-box;
     border-radius: 5px;
@@ -155,7 +161,17 @@ export const Cat = styled.div`
     flex-flow: column;
     justify-content: space-around;
     align-items: center;
-    padding: 5px;
+    padding: 5px 20px;
+    border-radius: 50px;
+    margin-bottom: 15px;
+    margin-right: 10px;
+    &:hover{
+        cursor: pointer;
+        /* box-shadow: 0px 0px 3px #E7E8E5; */
+        border: 3px solid #E7E8E5;
+        padding: 2px 18px;
+
+    }
     @media screen and (max-width: 480px) {
         width: 80px;
         height: 100px;
@@ -164,7 +180,7 @@ export const Cat = styled.div`
     h3{
         //styleName: body 2 ;
         font-family: Poppins;
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 400;
         line-height: 21px;
         letter-spacing: 0em;
