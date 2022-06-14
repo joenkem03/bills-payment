@@ -1,89 +1,78 @@
-import { useState, useEffect, useCallback} from "react";
+/* eslint-disable array-callback-return */
+import React,{ useContext,useState, useEffect, } from 'react'
 import { SearchbarContainer, SearchbarIcon, Searchbarinput,Searchbardropdown } from "./billsElements";
 // import Link from 'next/link';
 import { Link } from "react-router-dom";
-import Select from 'react-select'
-
+import appContext from '../../hooks/appHook';
 
 export default function SearchBar ({props}) {
 
     const [result,setResult] = useState([]);
     const [showDropdown,setshowDropdown] = useState(false);
-    const [search,setSearch] = useState('');
+    const [search,setSearch] = useState([]);
     const [searchResult,setSearchResult] = useState('');
+    const {getBillers,billerProducts,isloaded} = useContext(appContext);
 
-    const handleSearch = useCallback((e) => {
-        // const arr = [];
-        // const searchParams = e.currentTarget.value.toUpperCase();
-        // if(searchParams.length >= 3){
-            // eslint-disable-next-line array-callback-return
-            // console.log(searchParams.toUpperCase())
-        //     props?.filter((cat) => {
-        //         if(cat.billerName){
-        //             let isValid = cat.billerName.includes(searchParams.toUpperCase())
-        //             console.log(isValid);
-        //             if(cat.billerName.includes(searchParams)){     
-        //                 return (
-        //                     arr.push({
-        //                         id:cat.billerId,
-        //                         name:cat.billerName,
-        //                         catId:cat.categoryId
-        //                     })
-        //                 )               
-        //             }
-        //         }
-        //     })
-        //     setshowDropdown(true);
-        //     setResult(arr);
-        //     console.log('typing',arr)
-        // }else{
-        //     setResult([]);
-        //     // setshowDropdown(false)
-        //     console.log('value',e.currentTarget.value )
-        // }
-        const arr = []
-        // const searchParams = e.currentTarget.value.toUpperCase();
+    useEffect(()=>{
+        getBillers();
+    },[])
+    
+    useEffect(()=>{
+        if(isloaded){
+           console.log(billerProducts)
+           handleData(billerProducts);
+        }
+    },[])
 
-        console.log(props)
+    useEffect(()=>{
+        if(search.length > 0){
+            console.log('perform search')
+            handlesearch(search);
 
-        props?.filter((item) => {
-            if(item.billerName){
+            setTimeout(()=>{
+                setshowDropdown(true)
+            },300)
+        }else{
+            setTimeout(()=>{
+                setshowDropdown(false)
+            },300)
+        }
+        // console.log('perform search')
+    },[search])
+
+    const handleData = (data) =>{
+        const arr =[];
+        console.log(data);
+        data?.filter((item)=>{
+            // if(item.billerName){
+            //     arr.push({
+            //         label:item.billerShortName,
+            //         value:item.categoryId
+            //     })
+            // }
+            if(item.name){
                 arr.push({
-                    label:item.billerName,
-                    value:item.categoryId
+                    label:item.name,
+                    value:item.identifier
                 })
             }
         })
+        console.log(arr)
         setResult(arr);
-        console.log(result)
-    },[])
-
-    const handleSearch2 = (e) =>{
-            const arr = []
-            result.filter((item)=>{
-                return (
-                    item.label.includes(search) && arr.push({
-                        item
-                    })
-                )
-            })
-            setSearchResult(arr)
-            console.log(searchResult)
     }
-
-
-    useEffect(()=>{
-        if(props !== null){
-            handleSearch();
-        }
-    },[props,handleSearch])
-
-    // useEffect(()=>{
-    //     if(search.length > 0 ){
-    //         handleSearch2()
-    //     }
-    // },[search,handleSearch2])
-
+    const handlesearch = (search)=>{
+        const arr = []
+        result?.filter((item)=>{
+            if(item.label.toLowerCase().includes(search.toLowerCase())){
+                arr.push({
+                    label:item.label,
+                    value:item.value
+                })
+            }
+        })
+        console.log(arr);
+        setSearchResult(arr)
+    }
     return (
         <>
         <SearchbarContainer>
@@ -96,12 +85,11 @@ export default function SearchBar ({props}) {
                 placeholder="Enter bill type e.g DSTV "
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                onKeyUp={handleSearch2}
             />
         {/* <Select options={result} /> */}
 
         </SearchbarContainer>
-        <Searchbardropdown show={true}>
+        <Searchbardropdown show={showDropdown}>
             <ul className="">  
                 {
                     searchResult && searchResult?.map((item)=>{

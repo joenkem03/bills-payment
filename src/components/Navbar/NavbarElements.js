@@ -10,7 +10,7 @@ export const NavContainer = styled.div`
     padding:0px 80px;
     position: fixed;
     background: #FFFFFF;
-    z-index: 10;
+    z-index: 100;
     @media screen and (max-width: 480px) {
         height: 99px;
         padding: 0px 32px;
@@ -42,7 +42,7 @@ export const MenuItem = styled.li`
     a{
         text-decoration: none;
         font-family: Poppins;
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 500;
         line-height: 18px;
         color: #2B2C3E;

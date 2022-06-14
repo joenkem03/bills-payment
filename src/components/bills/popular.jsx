@@ -1,21 +1,49 @@
 import React from 'react'
 import { Container } from "../Layout/layoutElement";
-import { Cat, Catimg, PopularContainer, PopularMain, PopularMainCat } from "./billsElements";
-// import {Link} from 'next/link';
+import { Cat, PopularContainer, PopularMain, PopularMainCat } from "./billsElements";
 import { Link } from "react-router-dom";
+import CategoryLoader from '../loaders/CategoryLoader';
 
-const Popular = ({bills}) => {
+const Categories =({bills,load})=>{
+    return(
+        // <Link  to={'/dashboard/'}>
+        //     <Cat >
+        //         <h3 className="">fsfsfdffsdsfd</h3>
+        //     </Cat>
+        // </Link>
+        // bills !== undefined &&(
+            // load && bills?.map((data,i)=>{
+            //     return(
+            //         <Link key={data.categoryId} to={'/dashboard/'+data.categoryId}>
+            //             <Cat >
+            //                 <h3 className="">{data.categoryName}</h3>
+            //             </Cat>
+            //         </Link>
+            // )
+            load && bills?.map((data,i)=>{
+                return(
+                    <Link key={i} to={'/dashboard/'+data.identifier}>
+                        <Cat >
+                            <h3 className="">{data.name}</h3>
+                        </Cat>
+                    </Link>
+            )
+        })
+        // )
+    )
+}
+const Popular = ({bills,loading}) => {
 
-    const images =[
-        { identifier: 'airtime', src: '/img/phone.png' },
-        { identifier: 'data', src: '/img/data.png' },
-        { identifier: 'tv-subscription', src: '/img/subscription.png' },
-        { identifier: 'electricity-bill', src: '/img/electric.png' },
-        { identifier: 'education', src: '/img/education.png' },
-        { identifier: 'events', src: '/img/events.png' },
-        { identifier: 'other-services', src: '/img/others.png' },
-        { identifier: 'insurance', src: '/img/insurance.png' }
-    ]
+    // const images =[
+    //     { identifier: 'airtime', src: '/img/phone.png' },
+    //     { identifier: 'data', src: '/img/data.png' },
+    //     { identifier: 'tv-subscription', src: '/img/subscription.png' },
+    //     { identifier: 'electricity-bill', src: '/img/electric.png' },
+    //     { identifier: 'education', src: '/img/education.png' },
+    //     { identifier: 'events', src: '/img/events.png' },
+    //     { identifier: 'other-services', src: '/img/others.png' },
+    //     { identifier: 'insurance', src: '/img/insurance.png' }
+    // ]
 
   return (
     <PopularContainer>
@@ -23,37 +51,13 @@ const Popular = ({bills}) => {
                 <PopularMain>
                     <h2 className="">Search By Category </h2>
                     <PopularMainCat>
-                        {
-                            bills !== undefined &&(
-                                bills.map((data,i)=>{
-                                    return(
-                                        <Link key={data.categoryId} to={'/dashboard/'+data.categoryId}>
-                                            {/* <a key={i} href={'/bills/dashboard/'+data.billerId}> */}
-                                            <Cat >
-                                                {/* <Catimg src={data.billerLogoUrl} /> */}
-                                                <h3 className="">{data.categoryName}</h3>
-                                            </Cat>
-                                            {/* </a> */}
-                                        </Link>
-                                    //     <Cat >
-                                    //         {   images.map(item => {
-                                    //             return(
-                                    //                 <>
-                                    //                 { 
-                                    //                  data.identifier === item.identifier ? (
-                                    //                      <Catimg key={item.identifier} src={item.src} />
-                                    //                      ):(<></>)
-                                    //                     }
-                                    //                 </>
-                                    //             )
-                                    //         })}
-                                    //         <h3 className="">{data.name}</h3>
-                                    //     </Cat>
-                                )
-                            })
-                            )
-                        }
+
+                    {loading ?
+                        <Categories load={loading} bills={bills}/>
+                        : <CategoryLoader/>
+                    }
                     </PopularMainCat>
+
                 </PopularMain>
             </Container>
         </PopularContainer>

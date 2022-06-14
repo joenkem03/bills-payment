@@ -1,6 +1,6 @@
 import { useParams , useLocation} from "react-router-dom";
-import { useState, useEffect,useCallback } from "react";
-import {  DashMain, DashMainContent, DListimg } from "../bills/billsElements";
+import { useState, useEffect,useCallback ,useMemo} from "react";
+import {  DashMain, DashMainContent, DListimg,Loader } from "../bills/billsElements";
 import Sidebar from "../bills/Sidebar";
 import Modal from "../modal/modal";
 // import { useRouter } from 'next/router'
@@ -8,12 +8,22 @@ import axios from "axios";
 // import Script from 'next/script'
 import { isBrowser } from "react-device-detect";
 
+import Skeleton from 'react-loading-skeleton'
+// import Box from '@mui/material/Box';
+import FormControl,{ useFormControl } from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperText from '@mui/material/FormHelperText';
+import { MenuItem, Select } from "@mui/material";
+import PuffLoader from "react-spinners/PuffLoader"
+import PaymentModal from './../modal/paymentType';
 
 const Dashboard = (props) => {
 
     const [bills,setBills]=useState('');
     const [selectedBiller,setselectedBiller]=useState('');
-    const [amount_,setamount]=useState('');
+    const [amount_,setamount]=useState(0);
     const [email,setemail]=useState('');
     const [phone,setphone]=useState('');
     const [name,setname]=useState('');
@@ -24,14 +34,27 @@ const Dashboard = (props) => {
     const [active,setactive]=useState(false);
     const [variety, setVariety]=useState(false);
     const [varietyData, setVarietyData]=useState();
-    const [selectedVariety, setSelectedVariety]=useState({});
     const [type, setType]=useState('');
     const [serviceId, setServiceId]=useState({});
     const [billerCode, setbillerCode]=useState('');
+    const [billerCodeValid, setbillerCodevalid]=useState(false);
+    const [billerCodeErr, setbillerCodeErr]=useState('Not Valid');
     // eslint-disable-next-line no-unused-vars
     const [transactionId,setTransactionId]=useState('');
     const [proceed,setProceed]=useState(false);
     
+    const [selectedVariety, setSelectedVariety]=useState({});
+    const [selectedVarietyFields, setselectedVarietyFields]=useState([]);
+    const [selectedVarietyStatus, setselectedVarietyStatus]=useState(false);
+    const [selectedVarietyId, setSelectedVarietyId] = useState(null);
+
+
+    const [productExist,setProductExist] = useState(false);
+    const [paymentType,setPaymentType] = useState(false);
+
+    let [loading, setLoading] = useState(false);
+    let [color, setColor] = useState(" #2C63EA");
+
     let params = useParams();
 
     // const { status,amount,ref } = params;
@@ -50,9 +73,15 @@ const Dashboard = (props) => {
         const validationData = await validation.data;
         // console.log(payload);
         // console.log(validationData);
-        if(validationData.WrongBillersCode){
-            setname(validationData.Customer_Name)
+
+        if(validationData.error){
+            setbillerCodevalid(true)
+            setbillerCodeErr(setbillerCodevalid)
+            // setname(validationData.Customer_Name)
         }
+        // if(validationData.WrongBillersCode){
+        //     setname(validationData.Customer_Name)
+        // }
     },[billerCode,serviceId,type]);
  
     useEffect(()=>{
@@ -86,7 +115,7 @@ const Dashboard = (props) => {
         }
      },[email,phone,active])   
 
-     useEffect(()=>{
+    useEffect(()=>{
         if(Object.keys(selectedBiller).length !== 0 ){
             
             // setamount(selectedBiller.amount)
@@ -99,32 +128,31 @@ const Dashboard = (props) => {
             handleVariety(selectedBiller.serviceID);
             setServiceId(selectedBiller.serviceID);
         }
-        if(Object.keys(selectedVariety).length !== 0 ){
-            
-            
-            // eslint-disable-next-line array-callback-return
-            selectedVariety.map(item => {
-                // console.log(item.fixedPrice)
-                
-                if(item.fixedPrice === "Yes"){
-                        setamount(item.variation_amount);
-                        setType(item.variation_code);
-                        setfixed(true)
-                        // console.log(item.variation_amount)
-                    }else{
-                        setfixed(false)
-                    }
-            })
-        }
-     },[selectedBiller,selectedVariety])   
 
-     useEffect(()=>{
+        if(Object.keys(selectedVariety).length !== 0){
+                // eslint-disable-next-line array-callback-return
+                selectedVariety.map(item => {
+                    // console.log(item.fixedPrice)
+                    if(item.fixedPrice === "Yes"){
+                            setamount(item.variation_amount);
+                            setType(item.variation_code);
+                            setfixed(true)
+                            // console.log(item.variation_amount)
+                        }else{
+                            setfixed(false)
+                        }
+                })
+        }
+    },[selectedBiller,selectedVariety])
+
+    useEffect(()=>{
         if(billerCode.length >= 10){
              handleValidation();
         }
-     },[billerCode,handleValidation])
+    },[billerCode,handleValidation])
 
-     useEffect(()=>{
+
+    useEffect(()=>{
         if(isBrowser){
             setProceed(true)
         }else{
@@ -134,9 +162,10 @@ const Dashboard = (props) => {
         getProducts();
 
      // eslint-disable-next-line react-hooks/exhaustive-deps
-     },[])
+    },[])
      
     const handleSelectBiller = (bill)=>{
+        
         setselectedBiller(bill)
     }
     
@@ -174,8 +203,8 @@ const Dashboard = (props) => {
             email: email, // customer email 
             amount: amount_, // amount to be processed
             currency: "NGN", // currency
-            first_name: firstname,
-            last_name: lastname,
+            first_name: fname,
+            last_name: lname,
             phone_number: phone, // customer's phone number (optional)
             customerId: email,
             ref: data, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
@@ -203,32 +232,102 @@ const Dashboard = (props) => {
     }
 
     const handleVariety = async (id)=>{
+        console.log(id);
         const variety = await axios.get('https://app-service.icadpay.com/api/AltBiller/serviceVariety?id='+id);
-        const varietyData = await variety.data;
+        // const variety = await axios.get('https://app-service.icadpay.com/api/Biller/billerProducts?billerId='+id);
+        // const varietyData = variety.data.products;
+        const varietyData = variety.data.varations;
     
-        // console.log('data',billsdata.products[0]);
-        if(varietyData === ''){
-            // console.log('no data returned');
+        console.log('varietyData: ',varietyData);
+        if(varietyData === undefined){
+            console.log('no data returned: ' , selectedBiller);
+            setSelectedVarietyId(selectedBiller.serviceID);
+            // setSelectedVarietyId(selectedBiller.billerId);
             setVariety(false);
+            setProductExist(true)
+            setVarietyData(null)
+            setselectedVarietyFields([])
         }else{
-            // console.log('data',varietyData.varations);
+            console.log('data',varietyData);
+            setProductExist(true)
             setVariety(true);
+            // setProductExist(false)
             setVarietyData(varietyData)
         }
     }
-
-    const handleSelectChange= (id)=>{
-        let arr =[];
-        let filterArray = varietyData.varations;
-        // eslint-disable-next-line array-callback-return
-        filterArray.filter((e)=>{
-            if(e.variation_code === id){
-                arr.push(e);
-            }
-        })
-        // console.log('array values: ',arr);
+    
+    const handleSelectChange= (e)=>{
+        // setLoading(true);
+        setSelectedVarietyId(e.target.value);
+        console.log(selectedVarietyId);
+        const id = e.target.value; 
+        // if(selectedVarietyId !== null){
+            console.log('selectedVarietyId______',selectedVariety);
+            // console.log(selectedVarietyId);
+            const arr =[];
+            const filterArray = varietyData;
+            // eslint-disable-next-line array-callback-return
+            filterArray.filter((e)=>{
+                if(e.variation_code === id){
+                    arr.push(e);
+                }
+            })
+    
+        console.log('array values: ',arr);
         setSelectedVariety(arr);
-        handleValidation();
+
+            // filterArray?.filter((item)=>{
+            //     if(item.billPaymentProductId === selectedVarietyId){
+            //         arr.push(item);
+            //         console.log('array values: ',arr);
+            //         setSelectedVarietyId(item.billPaymentProductId);
+            // }
+        // })
+        // console.log('array values: ',arr);
+
+        // if(varietyData !== undefined){   
+        //     setSelectedVariety(arr)
+        //     console.log('selected Varity',selectedVariety)
+        //     // eslint-disable-next-line array-callback-return
+        //     arr.map(item => {
+        //         console.log('selected Varity',item.metadata.customFields)
+                
+        //         setselectedVarietyFields(item.metadata.customFields)
+        //         console.log('selected Varityw',selectedVarietyFields)
+        //         if(item.isAmountFixed){
+        //             setamount(item.amount);
+        //             setType(item.variation_code);
+        //             setfixed(true)
+        //             // console.log(item)
+        //         }else{
+        //             setfixed(false)
+        //         }
+        //     })
+        //     setselectedVarietyStatus(true);
+        //     setLoading(false);
+        //     console.log('array values:',selectedVariety);
+        // }else{
+        //     setSelectedVariety('')
+        //     console.log('array values:',selectedVariety);
+        // }
+        // if(Object.keys(selectedVariety).length !== 0 ){
+            
+        //     // eslint-disable-next-line array-callback-return
+        //     selectedVariety.map(item => {
+        //         // console.log(item.fixedPrice)
+        //         if(item.fixedPrice === "Yes"){
+        //                 setamount(item.variation_amount);
+        //                 setType(item.variation_code);
+        //                 setfixed(true)
+        //                 // console.log(item.variation_amount)
+        //             }else{
+        //                 setfixed(false)
+        //             }
+        //     })
+        // }
+
+        // handleValidation();
+        // }
     }
 
     const handlemodal= ()=>{
@@ -251,11 +350,16 @@ const Dashboard = (props) => {
         setProceed(!proceed)
     }
 
+    const handlePaymentType = () => {
+
+        setPaymentType(true);
+        console.log('payment type')
+    }
 
     const handlePayment = async () => {
         
-        props.load(true);
-
+        // props.load(true);
+        setLoading(true);
         const payload ={
             billPaymentProductId: serviceId,
             amount: amount_,
@@ -267,32 +371,39 @@ const Dashboard = (props) => {
             variation_code: type
         }
 
-        const res = await axios.post('https://app-service.icadpay.com/api/AltBiller/initiatePayment',payload)
+        // const res = await axios.post('https://app-service.icadpay.com/api/Biller/initiatePayment',payload)
+        const res = axios.post('https://app-service.icadpay.com/api/AltBiller/initiatePayment',payload)
 
         
-        console.log(res.data.transId);
+        // console.log(res.data.transId);
 
-        // .then((val) =>{
-        //     const resData = val.data.transId;
-        //     setTransactionId(resData);
-        //     console.log('trans id: ', resData)
-        // }).catch((err)=>{
-            // })
-        handlepaymentFull(res.data.transId);
-
+        res.then((val) =>{
+            const resData = val.data.transId;
+            setTransactionId(resData);
+            console.log('trans id: ', resData)
+        }).catch((err)=>{
+            
+        })
+        // handlepaymentFull(res.data.transId);
+        setLoading(false);
+        handlePaymentType();
+        
     }
 
     const getProducts = async (context) => {
-    
+        setLoading(true);
         const bill = params.biller
         console.log(bill)
         
         const billers = await axios.get('https://app-service.icadpay.com/api/AltBiller/serviceByIdentifier?id='+bill);
-        const billsdata = await billers.data;
+        // const billers = await axios.get('https://app-service.icadpay.com/api/Biller/allBillersByCategory?category='+bill);
+        const billsdata = billers.data;
         
         // console.log('data',billsdata.products[0]);
         console.log('data',billsdata);
+        
         setBills(billsdata)
+        setLoading(false);
         // return {
         //     props:{
         //         bills:billsdata,
@@ -301,19 +412,113 @@ const Dashboard = (props) => {
         // }
     }
 
+
+    const DashIcon = ({value}) => {
+        let arrrr = '';
+        const Arr = value.billerName.split(' ');
+        Arr.map((item)=> arrrr += item.charAt(0))
+        // console.log(arrrr);
+        return(
+            <>
+                <DListimg>
+                    {
+                        arrrr.split('(')[0]
+                    }
+                </DListimg>
+            </>
+        )
+    }
+
+    const [steps, setSteps] = useState({});
+
+    const onClick = (e, evt)=> {
+        const prop = []
+        const ArrLenght = selectedVarietyFields.length
+        
+        // selectedVarietyFields.map((item,i)=> {
+            // });
+            // const data = evt;
+            console.log(ArrLenght)
+            // console.log(evt,e.target.value)
+            // console.log(evt)
+    }
+        
+        
+    const [showqr,setshowqr] = useState(false);
+    const [qr,setqr] = useState('');
+
+    const handleQr = ()=>{
+        setshowqr(true)
+        handleQrReq();
+    }
+    const back = ()=>{
+        setshowqr(false)
+        // handleQrReq();
+    }
+    const handleQrReq = async ()=>{
+
+        const payload ={
+            key: "live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ",
+            amount: amount_,
+            subId: serviceId,
+            uniqueId: "",
+            paymentRef: transactionId
+        }
+
+        const Qr = await axios.post('https://app-service.icadpay.com/api/payWithQr',payload);
+        const QrData = Qr.data;
+        setqr(QrData.codeUrl)
+
+        console.log(QrData);
+
+    }
+
+    const handleOther = ()=>{
+        handlepaymentFull();
+        setPaymentType(false)
+    }
+    const handleClose = ()=>{
+        setPaymentType(false)
+        setqr('');
+        setshowqr(false)
+    }
+    const MyFormHelperText = () => {
+        const { focused } = useFormControl() || {};
+      
+        const helperText = useMemo(() => {
+        //   if (focused) {
+        //     return 'Smart card no, meter/account no, phone/email (for data), etc.';
+        //   }
+          if(focused){
+              return billerCodeErr
+          }
+          return billerCodeErr;
+        }, [focused]);
+      
+        return <FormHelperText>{helperText}</FormHelperText>;
+      }
   return (
     <DashMain>
-            
+           { loading && <Loader>
+                            <PuffLoader 
+                                color={color} 
+                                loading={loading} 
+                                size={150} 
+                            />
+                        </Loader>   
+            }
 
             <Modal show={modal} close={handlemodal} amount={amount} TxnRef={ref} name={selectedBiller.billPaymentProductName}/>
+            <PaymentModal back={back} close={handleClose} show={paymentType} handleQr={handleQr} handleOther={handleOther} sendQr={showqr} qrvalue={qr}/>
+
             <Sidebar data={bills} setBiller={handleSelectBiller} biller={selectedBiller} proceed={handleProceed}/>
             <DashMainContent detail={proceed}>           
                 <div className="dashheader">
 
                     <div className="imgcontainer">
-                        <DListimg
-                            src={selectedBiller.image}
-                        />
+                        {
+                            selectedBiller ? <DListimg src={selectedBiller.image}/> : <Skeleton circle width={100} height={100}/>
+                        }
                     </div>
                     <div className="namecontainer">
                         
@@ -331,122 +536,93 @@ const Dashboard = (props) => {
                         <>
                         <div className="dashcontent">
                         <div className="dashcontent_left">
-                                <h3 className="">Enter Your Details</h3>
-                                {
-                                    Object.keys(selectedBiller).length !== 0  && (
-                                        <>
-                                            {
-                                                variety && (
-                                                    <>
-                                                        <div className="input_container">
-                                                            <select onChange={e => handleSelectChange(e.target.value)}>
-                                                                <option value={''} default>{varietyData.serviceName}</option>
-                                                                {
-                                                                    varietyData.varations.map((val,ii)=>{
-                                                                        return(
-                                                                            <>
-                                                                                <option key={ii} value={val.variation_code}>{val.name}</option>
-                                                                            </>
-                                                                        )
-                                                                    })
-                                                                }
-                                                            </select>
-                                                        </div>
-                                                    </>
-                                                )
-                                            }
-                                            {/* {
-                                                Object.keys(selectedVariety).length !== 0 && (
-                                                    <>   
-                                                    
-                                                    </>
-                                                )
-                                            } */}
-                                            {
-                                                selectedBiller && (
-                                                    <>   
-                                                        <div className="input_div">
-
-                                                            <label htmlFor="">Amount</label>  
-                                                            <div className='input_container'>
-                                                                <input type={'numeric'} value={amount_} placeholder='Amount' onChange={(e)=> setamount(e.target.value)}   />
-                                                            </div>
-                                                        </div>
-                                                        <div className="input_div">
-                                                            <label htmlFor="">Recipient</label>  
-                                                            <div className='input_container '>
-                                                                <input type={'text'} value={billerCode} placeholder='Smart card no, meter/account no, phone/email (for data), etc.' onChange={(e)=> setbillerCode(e.target.value)}   />
-                                                            </div>
-                                                        </div>
-                                                    </>
-                                                )
-                                            }
-                                            
-                                            {/* {
-                                                selectedBiller.isAmountFixed && (
-                                                    <>   
-                                                        <div className="input_div">
-
-                                                            <label htmlFor="">Amount</label>  
-                                                            <div className={fixed === true ? 'input_container disabled':'input_container'}>
-                                                                <input type={'numeric'} value={amount_} placeholder='Amount' onChange={(e)=> setamount(e.target.value)}  required={selectedBiller.required} />
-                                                            </div>
-                                                        </div>
-                                                    </>
-                                                )
-                                            } */}
-                                        </>
-                                    )
-                                    
-                                }
-                                {
-                                    // Object.keys(selectedBiller).length !== 0  ? (
-                                    //     <>
-                                    //         {
-                                    //             selectedBiller.metadata.customFields.map((opt)=>{
-                                    //                 if(opt.type == 'multiselect'){
-                                    //                     return(
-                                    //                         <>            
-                                    //                         <div className="input_container">
-                                    //                             <select type={opt.type} placeholder={opt.display_name} required={opt.required} >
-                                    //                                 <option value={''} default>{opt.display_name}</option>
-                                    //                                 {
-                                    //                                     opt.selectOptions.map((val,ii)=>{
-                                    //                                         return(
-                                    //                                             <>
-                                    //                                                 <option key={ii} value={val.VALUE}>{val.DISPLAY_NAME}</option>
-                                    //                                             </>
-                                    //                                         )
-                                    //                                     })
-                                    //                                 }
-                                    //                             </select>
-                                    //                         </div>
-                                    //                         </>
-                                    //                     )
-                                    //                 }
-                                                    
-                                    //                 return(
-                                    //                     <>            
-                                    //                     <div className="input_container">
-                                    //                         <input type={opt.type} placeholder={opt.display_name} required={opt.required} />
-                                    //                     </div>
-                                    //                     </>
-                                    //                 )
-                                    //             })
-                                    //         }
-                                    //     </>
-                                    // ):(
-                                    //     <>
-                                        
-                                    //     </>
-                                    // )
-                                }
+                            <h3 className="">Enter Your Details</h3>
                                 
-                                {
-                                    params.biller === 'airtime' || params.biller === 'data' ? (
-                                        <></>
-                                    ):(
-                                        <>
+                            <FormControl fullWidth sx={{ m: 1 }}>
+                                <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+                                <OutlinedInput
+                                    id="outlined-adornment-amount"
+                                    startAdornment={<InputAdornment position="start">₦</InputAdornment>}
+                                    label="Amount"
+                                    value={amount_}
+                                    onChange={e => setamount(e.target.value)}
+                                    // disabled={fixed}
+                                />
+                            </FormControl>
+                    
+                            {
+                                variety && (
+                                    <>
+                                        <FormControl fullWidth sx={{ m: 1 }}>
+                                            <InputLabel id="demo-simple-select-label">Products</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                label="Products"
+                                                value={selectedVarietyId}
+                                                onChange={handleSelectChange}
+                                                loading={true}
+                                                loadingText='Loading'
+                                            >
+                                                 <MenuItem value={'personal'}> personal </MenuItem>
+                                                {
+                                                      varietyData && varietyData?.map((item,i)=>{
+                                                        return(
+                                                                <MenuItem key={i} value={item.variation_code}>{item.name}</MenuItem>
+                                                                // <MenuItem key={i} value={item.billPaymentProductId}>{item.billPaymentProductName}</MenuItem>
+                                                            )
+                                                      })
+                                                }
+                                            </Select>
+                                        </FormControl>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+                                    </>
+                                )
+                            }
+                            {/* {
+                                selectedVarietyFields  && selectedVarietyFields?.map((fields,)=>{
+                                    return(
+                                        // <input type="text" className="" placeholder={fields.display_name} />
+                                        fields.required &&
+                                        <FormControl key={fields.variable_name} fullWidth sx={{ m: 1 }}>
+                                            <InputLabel htmlFor="outlined-adornment-amount">{fields.display_name}</InputLabel>
+                                            <OutlinedInput
+                                                id="outlined-adornment-amount"
+                                                // startAdornment={<InputAdornment position="start">₦</InputAdornment>}
+                                                label={fields.display_name}
+                                                type={fields.type}
+                                                name={fields.variable_name}
+                                                placeholder={fields.display_name}
+                                                onChange={event => onClick(event, fields.variable_name)}
+                                            />
+                                        </FormControl>   
+                                    )
+                                })
+                                  
+                            } */}
+                            {
+                                productExist && (
+                                    <>
+                                        <FormControl fullWidth sx={{ m: 1 }}>
+                                         <InputLabel htmlFor="outlined-adornment-amount">Recipient</InputLabel>
+                                         <OutlinedInput
+                                             id="outlined-adornment-amount"
+                                             // startAdornment={<InputAdornment position="start">₦</InputAdornment>}
+                                             value={ billerCode }
+                                             onChange = {e=>setbillerCode(e.target.value)}
+                                             label="Recipent"
+                                            //  type={selectedVariety[0].metadata.customFields[0].type}
+                                            //  placeholder={selectedVariety[0].metadata.customFields[0].display_name}
+                                         />
+                                         <MyFormHelperText />
+                                     </FormControl>
+                                    </>
+                                )
+                            }
+                            {
+                                params.biller === 'airtime' || params.biller === 'data' ? (
+                                    <></>
+                                ):(
+                                 <>
                                         <div className="subtext">
                                             <h3 className="">Enter your contact information </h3>
                                             <p>Your receipt would be sent to you via your contact details </p>
@@ -463,8 +639,8 @@ const Dashboard = (props) => {
                                         </div>
 
                                 </>
-                            )
-                        }
+                                )
+                            }
                         </div>
                         <div className="dashcontent_right">
                             {

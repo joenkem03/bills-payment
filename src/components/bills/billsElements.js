@@ -1,6 +1,18 @@
 import styled from "styled-components";
 // import Button from './../button/button';
+export const Loader = styled.div`
 
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(255,255,255,.6);
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+`
 export const BillheaderContainer = styled.div`
     width: 100%;
     height: 302px;
@@ -208,6 +220,7 @@ export const Billimg = styled.img`
     position: absolute;
     top: ${props=>props.top};
     left: ${props=>props.left};
+    z-index:100;
     @media screen and (max-width: 480px) {
         display: none;
     }
@@ -447,13 +460,19 @@ li{
 export const DashListcheck = styled.img`
     
 `
-export const DListimg = styled.img`
+export const DListimg = styled.div`
     width: 90px;
     height: 90px;
     border: 1px solid #E3E3E4;
     box-sizing: border-box;
     border-radius: 50%;
     margin-right: 20px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #E3E3E4;
+    font-size: 20;
+    font-weight: 600;
     @media screen and (max-width: 480px) {
         width: 50px;
         height: 50px;
@@ -797,6 +816,19 @@ export const DashListimg = styled.img`
     border: 1px solid #E3E3E4;
     border-radius: 10px;
 `
+export const DashPlaceholder = styled.div`
+    width: 48px;
+    height: 48px;
+    border: 1px solid #E3E3E4;
+    border-radius: 10px;
+    background-color: #1D2646;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #E3E3E4;
+    font-size: 12px;
+    font-weight: 600;
+`
 export const ModalContainer = styled.div`
     position: absolute;
     left: 0;
@@ -804,7 +836,7 @@ export const ModalContainer = styled.div`
     background: rgba(0,0,0,.1);
     width: 100%;
     height: 100vh;
-    z-index: 1000;
+    z-index: 500;
     display: ${props=> props.show ? 'flex':'none'};
 `
 export const Modalbox = styled.div`
@@ -818,7 +850,7 @@ export const Modalbox = styled.div`
     transform: translate(-50%,-50%);
 
     background: #fff;
-    z-index: 2000;
+    z-index: 600;
     display: flex;
     padding: 40px 30px;
     flex-flow: column;
@@ -873,4 +905,26 @@ export const Modalbox = styled.div`
             background: #ECF1FF;
 
         }
+`
+export const Paywith = styled.div`
+    height: 200px;
+    width: 100%;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow:0px 0px 3px rgba(0,0,0,.2);
+    margin-bottom: 20px;
+        //styleName: Body 1 medium;
+        font-family: Poppins;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 24px;
+        letter-spacing: 0em;
+        text-align: center;
+    &:hover{
+        cursor: pointer;
+        box-shadow:0px 0px 5px rgba(0,0,0,.4);
+
+    }
 `

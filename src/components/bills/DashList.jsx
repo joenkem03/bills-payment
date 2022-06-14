@@ -1,7 +1,22 @@
 import { DashListContainer, DashListimg, DashListsContent } from './billsElements';
 import  { useEffect, useState } from 'react';
-// import axios from "axios";
 
+// import axios from "axios";
+// const DashIcon = ({value}) => {
+//     let arrrr = '';
+//     const Arr = value.split(' ');
+//     Arr.map((item)=> arrrr += item.charAt(0))
+//     // console.log(arrrr.split('(')[0]);
+//     return(
+//         <>
+//             <DashPlaceholder>
+//                 {
+//                     arrrr.split('(')[0]
+//                 }
+//             </DashPlaceholder>
+//         </>
+//     )
+// }
 export default function DashList({datas,setdata,bill,proceed}) {
     
     // console.log('DashList_____',datas)
@@ -22,6 +37,7 @@ export default function DashList({datas,setdata,bill,proceed}) {
                 
                 if(item.serviceID === id){
                     setdata(item);
+                    console.log(item);
                     setactive(item.serviceID);
                     setproceed(true)
                     // handleVariety(item.serviceID)
@@ -30,13 +46,14 @@ export default function DashList({datas,setdata,bill,proceed}) {
             })
         }
 
-        // console.log('DashList_____id',bill);
+        console.log('DashList_____id',bill);
         
     }   
     const handleProceedClick = (e)=>{
         e.preventDefault();
         proceed();
     }   
+
     // const handleVariety = async (id)=>{
     //     const variety = await axios.get('https://app-service.icadpay.com/api/AltBiller/serviceVariety?id='+id);
 
@@ -45,6 +62,7 @@ export default function DashList({datas,setdata,bill,proceed}) {
     //     // console.log('data',billsdata.products[0]);
     //     console.log('data',varietyData);
     // }
+    
     return (
         <DashListContainer>
             <DashListsContent>
@@ -54,23 +72,21 @@ export default function DashList({datas,setdata,bill,proceed}) {
                         datas.filter(Boolean).map((item,i)=>{
                             return(
                                         <>
-                                            <li key={item.serviceID} className={active === item.serviceID ? 'active':''} id={item.serviceID} onClick={handleClick}>
-                                                <DashListimg
-                                                    src={item.image}
-                                                />
+                                            <li key={i} className={active === item.serviceID ? 'active':''} id={item.serviceID} onClick={handleClick}>
+                                                <DashListimg src={item.image}/>
+                                                {/* <DashIcon value={item.name}/> */}
                                                 <div className="listnames">
                                                     <h4 className="">{item.name}</h4>
-                                                    {/* <h5>DSTV Kenya</h5> */}
                                                 </div>
-                                                {/* {
-                                                    active == item.serviceID && (
-                                                        <>
-                                                        
-                                                            <DashListCheck src='/img/Check_.svg'/>
-                                                        </>
-                                                        )
-                                                } */}
                                             </li>
+
+                                            {/* <li key={i} className={active === item.billerId ? 'active':''} id={item.billerId} onClick={handleClick}>
+                                                
+                                                <DashIcon value={item.billerName}/>
+                                                <div className="listnames">
+                                                    <h4 className="">{item.billerName}</h4>
+                                                </div>
+                                            </li> */}
                                         </>
                                     )
                         })

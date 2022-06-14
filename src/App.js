@@ -8,6 +8,9 @@ import Dashboard from './components/dashboard/Dashboard';
 import { Helmet } from "react-helmet"
 import TopBarProgress from "react-topbar-progress-indicator";
 import { useState } from 'react';
+import UserLayout from './layout/UserLayout';
+import Login from './components/Auth/Login';
+
 function App() {
 
   const [loading,setLoading]= useState(false);
@@ -39,8 +42,10 @@ function App() {
           <Route path='/dashboard' element={<Dashboard load={setLoading}/>}>
             <Route path=':biller' element={<Dashboard/>} />
           </Route>
-          
         </Route>
+        {/* <Route path='/user' element={<UserLayout/>}>
+          <Route path='/user/login' element={<Login/>}/>
+        </Route> */}
       </Routes>
     </>
   );
