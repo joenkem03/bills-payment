@@ -15,10 +15,13 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
-import { MenuItem, Select } from "@mui/material";
+import { 
+        MenuItem, 
+        Select, 
+        Typography
+    } from "@mui/material";
 import PuffLoader from "react-spinners/PuffLoader"
 import PaymentModal from './../modal/paymentType';
-
 const Dashboard = (props) => {
 
     const [bills,setBills]=useState('');
@@ -38,7 +41,7 @@ const Dashboard = (props) => {
     const [serviceId, setServiceId]=useState({});
     const [billerCode, setbillerCode]=useState('');
     const [billerCodeValid, setbillerCodevalid]=useState(false);
-    const [billerCodeErr, setbillerCodeErr]=useState('Not Valid');
+    const [billerCodeErr, setbillerCodeErr]=useState('');
     // eslint-disable-next-line no-unused-vars
     const [transactionId,setTransactionId]=useState('');
     const [proceed,setProceed]=useState(false);
@@ -52,12 +55,17 @@ const Dashboard = (props) => {
     const [productExist,setProductExist] = useState(false);
     const [paymentType,setPaymentType] = useState(false);
 
-    let [loading, setLoading] = useState(false);
-    let [color, setColor] = useState(" #2C63EA");
+    const [loading, setLoading] = useState(false);
+    const [color, setColor] = useState(" #2C63EA");
+    const [transactionRefId, setTransactionRefId] = useState(null);
+    const [key, setKey] = useState(null);
+    const [power, setpower] = useState(false);
+    const [powerdata, setpowerdata] = useState(null);
 
-    let params = useParams();
 
-    // const { status,amount,ref } = params;
+    const params = useParams();
+
+    // const { biller } = params;
     const search = useLocation().search;
     const amount = new URLSearchParams(search).get('amount');
     const ref = new URLSearchParams(search).get('ref');
@@ -74,11 +82,9 @@ const Dashboard = (props) => {
         // console.log(payload);
         // console.log(validationData);
 
-        if(validationData.error){
-            setbillerCodevalid(true)
-            setbillerCodeErr(setbillerCodevalid)
-            // setname(validationData.Customer_Name)
-        }
+        setbillerCodevalid(true)
+        setbillerCodeErr(validationData.error)
+        setname(validationData.Customer_Name)
         // if(validationData.WrongBillersCode){
         //     setname(validationData.Customer_Name)
         // }
@@ -88,8 +94,9 @@ const Dashboard = (props) => {
         const name = new URLSearchParams(search).get('status');
         console.log(name)
         if(name === 'SUCCESS'){
+            getValue();
             // console.log('status: ',status);
-            setmodal(true)
+            setmodal(true);
             console.log(fixed);
         }
 
@@ -103,6 +110,9 @@ const Dashboard = (props) => {
             setlastname('Topup')
             setemail('AirtimeTopup@icadpay.com');
             setphone(billerCode);
+        }
+        if(params.biller === 'electricity-bill'){
+            setpower(true);
         }
     },[billerCode,params])
 
@@ -163,7 +173,36 @@ const Dashboard = (props) => {
 
      // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
-     
+
+    const getKey = async ()=>{
+        const response = await axios.get('https://app-service.icadpay.com/api/Auth/key');
+        setKey(response.data.kex);
+        getStatus();
+    }
+
+    const getStatus = async ()=>{
+        const payload ={
+            transactionRefId : transactionRefId,
+            key: key
+        }
+        const response = await axios.get('https://app-service.icadpay.com/api/query-status', payload);
+        console.log(response.data);
+    }
+
+    useEffect(() => {
+        if(transactionRefId !== null){
+            getKey();
+        }
+    },[transactionRefId])
+
+    const getValue = async()=>{
+        const payload ={
+            reqId:transactionRefId
+        }
+        const response = await axios.get('https://app-service.icadpay.com/api/AltBiller/getValue', payload);
+        const data = await response.data;
+        setpowerdata(data)
+    }
     const handleSelectBiller = (bill)=>{
         
         setselectedBiller(bill)
@@ -183,7 +222,7 @@ const Dashboard = (props) => {
         // console.log(txn)
 
         console.log({
-            key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
+            // key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
             email: email, // customer email 
             amount: amount_, // amount to be processed
             currency: "NGN", // currency
@@ -380,6 +419,7 @@ const Dashboard = (props) => {
         res.then((val) =>{
             const resData = val.data.transId;
             setTransactionId(resData);
+            setTransactionRefId(resData)
             console.log('trans id: ', resData)
         }).catch((err)=>{
             
@@ -455,6 +495,7 @@ const Dashboard = (props) => {
         setshowqr(false)
         // handleQrReq();
     }
+
     const handleQrReq = async ()=>{
 
         const payload ={
@@ -468,7 +509,7 @@ const Dashboard = (props) => {
         const Qr = await axios.post('https://app-service.icadpay.com/api/payWithQr',payload);
         const QrData = Qr.data;
         setqr(QrData.codeUrl)
-
+       
         console.log(QrData);
 
     }
@@ -477,26 +518,25 @@ const Dashboard = (props) => {
         handlepaymentFull();
         setPaymentType(false)
     }
+
     const handleClose = ()=>{
         setPaymentType(false)
         setqr('');
         setshowqr(false)
     }
+
     const MyFormHelperText = () => {
         const { focused } = useFormControl() || {};
       
         const helperText = useMemo(() => {
-        //   if (focused) {
-        //     return 'Smart card no, meter/account no, phone/email (for data), etc.';
-        //   }
-          if(focused){
-              return billerCodeErr
+          if(name !== ''){
+              return name
           }
-          return billerCodeErr;
-        }, [focused]);
+        }, [focused,name]);
       
         return <FormHelperText>{helperText}</FormHelperText>;
       }
+
   return (
     <DashMain>
            { loading && <Loader>
@@ -508,7 +548,15 @@ const Dashboard = (props) => {
                         </Loader>   
             }
 
-            <Modal show={modal} close={handlemodal} amount={amount} TxnRef={ref} name={selectedBiller.billPaymentProductName}/>
+            <Modal 
+                show={modal} 
+                close={handlemodal} 
+                amount={amount} 
+                TxnRef={ref} 
+                name={selectedBiller.billPaymentProductName}
+                val = {powerdata}
+                ifPower = { power }
+            />
             <PaymentModal back={back} close={handleClose} show={paymentType} handleQr={handleQr} handleOther={handleOther} sendQr={showqr} qrvalue={qr}/>
 
             <Sidebar data={bills} setBiller={handleSelectBiller} biller={selectedBiller} proceed={handleProceed}/>
@@ -610,11 +658,21 @@ const Dashboard = (props) => {
                                              value={ billerCode }
                                              onChange = {e=>setbillerCode(e.target.value)}
                                              label="Recipent"
+                                            //  error={billerCodeValid}
                                             //  type={selectedVariety[0].metadata.customFields[0].type}
                                             //  placeholder={selectedVariety[0].metadata.customFields[0].display_name}
                                          />
-                                         <MyFormHelperText />
                                      </FormControl>
+                                         {
+                                            !billerCodeValid && (
+                                                <Typography variant="caption">{billerCodeErr}</Typography>
+                                            )
+                                         }
+                                         {
+                                            billerCodeValid && (
+                                                <Typography variant="caption">{name}</Typography>
+                                            )
+                                         }
                                     </>
                                 )
                             }

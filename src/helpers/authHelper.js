@@ -1,6 +1,6 @@
 import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
-import { isAuthGuardActive } from '../constants/defaultValues';
+import { Route, Redirect } from 'react-router-dom';
+import { isAuthGuardActive } from 'constants/defaultValues';
 import { getCurrentUser } from './Utils';
 
 const ProtectedRoute = ({
@@ -17,13 +17,23 @@ const ProtectedRoute = ({
             return <Component {...props} />;
           }
           return (
-            <Navigate to={ '/unauthorized'}/>
+            <Redirect
+              to={{
+                pathname: '/unauthorized',
+                state: { from: props.location },
+              }}
+            />
           );
         }
         return <Component {...props} />;
       }
       return (
-        <Navigate to={'/user/login'}/>
+        <Redirect
+          to={{
+            pathname: '/user/login',
+            state: { from: props.location },
+          }}
+        />
       );
     }
     return <Component {...props} />;

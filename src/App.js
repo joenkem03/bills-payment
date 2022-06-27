@@ -10,6 +10,7 @@ import TopBarProgress from "react-topbar-progress-indicator";
 import { useState } from 'react';
 import UserLayout from './layout/UserLayout';
 import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
 
 function App() {
 
@@ -43,9 +44,10 @@ function App() {
             <Route path=':biller' element={<Dashboard/>} />
           </Route>
         </Route>
-        {/* <Route path='/user' element={<UserLayout/>}>
+        <Route path='/user' element={<UserLayout/>}>
           <Route path='/user/login' element={<Login/>}/>
-        </Route> */}
+          <Route path='/user/register' element={<Register/>}/>
+        </Route>
       </Routes>
     </>
   );

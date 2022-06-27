@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import { Link } from 'react-router-dom';
 
 export const SectionBoxContainer =styled.div`
     display: flex;
@@ -35,13 +35,22 @@ export const IconContianter =styled.div`
         z-index: 20;
     }
 `
-export const SectionBox =styled.div`
+export const SectionBox =styled(Link)`
     position: relative;
     display: flex;
     flex-flow: column;
     width: calc(100% / 3 - 10px);
     height: 300px;
     padding: 40px;
+    transition: all .3s ease-in-out;
+    &:hover{
+        cursor: pointer;
+        transform: scale(.95);
+        &::before{
+            border: 1px solid #FFFFFF;
+            box-shadow: 0px 0px 6px #FFFFFF;;
+        }
+    }
     @media screen and (max-width: 480px) {
         width: 100%;
         justify-content: space-between;
@@ -386,6 +395,7 @@ export const FooterContainer = styled.div`
             @media screen and (max-width: 480px) {
                 display: none !important;
             }
+
         }
         &_contacts{
             width: 100%;

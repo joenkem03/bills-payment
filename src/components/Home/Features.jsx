@@ -2,6 +2,7 @@ import { Section, Container, SectionTitle, Column } from './../Layout/layoutElem
 import { FeatureBox,Featurecolumn, FeatureImg,Circle,SectionFeatures } from './HomeElements';
 // import img from 'next/img';
 import MainButton from '../button/MainButton';
+import { Link } from 'react-router-dom';
 export default function Features() {
     return (
         <Section 

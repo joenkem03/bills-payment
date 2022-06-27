@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from 'react';
-// import * as Yup from "yup";
-import { Col , Row, Card, CardTitle, Label, FormGroup, Button } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { axios } from 'axios';
+import { Link } from 'react-router-dom';
+import { Formik } from 'formik';
+// import { axios } from 'axios';
+import axios from 'axios';
+import * as Yup from 'yup';
 
                                                                 
 import { 
-    LoginContainer,
-    FixedBg
+    UserContainerBg,
+    UserBoxContainer,
+    UserBox
 } from './AuthElements';
+import { 
+  Box,
+  Grid,
+  Stack,
+  TextField, 
+  Typography,
+  Alert,
+  AlertTitle 
+ } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+
 // import { connect } from 'react-redux';
 
 // import { NotificationManager } from 'components/common/react-notifications';
@@ -57,9 +69,6 @@ const validateEmail = (value) => {
 // });
 
 const Login = () => {
-  // const [email] = useState('demo@gogo.com');
-  // const [password] = useState('gogo123');
-
   const [isLoading, setIsLoading] = useState(false);
   const [loading, setloading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -122,11 +131,12 @@ const Login = () => {
   
   const handleSubmit = async (e) => {
     setIsLoading(true);
-        const payload = {
-            username: e.email,
-            password: e.password,
-        }
-        const res = axios.post('https://app-service.icadpay.com/api/Auth/authenticate',payload)
+
+      const payload = {
+          username: e.email,
+          password: e.password,
+      }
+      const res = axios.post('https://app-service.icadpay.com/api/Auth/authenticate',payload)
         
       res.then((response) => {  
         console.log(response);
@@ -150,15 +160,15 @@ const Login = () => {
         else{
           setIsError(true);
         }
-        setMessage(response.message);
+        setMessage(response.data.message);
         setIsLoading(false);
       }).catch((er) => {
         console.log("error");
         console.log(er);
-        console.log(er.message);
+        console.log(er.response.data.message);
         setIsLoading(false);
         setIsError(true);
-        setMessage(er.message);
+        setMessage(er.response.data.message);
       });
     // } .catch (er) {
     //   console.log("error");
@@ -171,90 +181,203 @@ const Login = () => {
 
   const initialValues = { email: "", password: ""};
 
+  const validate = values => {
+    const errors = {};
+  
+    if (!values.email) {
+      errors.email = 'Required';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+      errors.email = 'Invalid email address';
+    }
+  
+    return errors;
+  };
+  // const formik = useFormik({
+
+  //   initialValues: initialValues,
+  //   validate,
+  //   onSubmit: values => {
+  //     alert(JSON.stringify(values, null, 2));
+  //   },
+  // });
+
+  const LoginSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Required'),
+    password:Yup.string().required().min('4')
+  });
+
   return (
-        // <div class="h-100">
-            // {/* <FixedBg/>
-            // <img src="./img/balloon-lg.jpg" alt="" /> */}
-            <LoginContainer>
-                    <div class="row no-gutter">
-                        <div class="col-md-6 d-none d-md-flex bg-image"></div>
+    <UserBoxContainer>
+            <UserContainerBg/>
+            <UserBox>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <img src="/img/logo.png" alt="" />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h5">login</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  { isError && (
+                    <Alert severity="error">
+                      <AlertTitle>Error</AlertTitle>
+                      {message}
+                    </Alert>
+                  )}
+                  {/* {
+                    isLogin && (
+                      <Alert severity="success">
+                        <AlertTitle>Success</AlertTitle>
+                        {}
+                      </Alert>
+                    )
+                  } */}
+                </Grid>
+                <Grid item xs={12}>
+                  <Formik 
+                    initialValues={initialValues} 
+                    validationSchema={LoginSchema}
+                    onSubmit={handleSubmit}
+                    // onSubmit={(values, actions) => {
+                    //   setTimeout(() => {
+                    //     alert(JSON.stringify(values, null, 2));
+                    //     actions.setSubmitting(false);
+                    //   }, 1000);
+                    // }}
+                    >
+                    {props => (
+                      <>
+                      
+                      {!isLogin && (
+                        <form onSubmit={ props.handleSubmit}>
+                          <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <TextField
+                                  fullWidth
+                                  size='small'
+                                  label="Email" 
+                                  placeholder='Enter Email' 
+                                  variant="outlined"
+                                  name="email"
+                                  value={ props.values.email}
+                                  onChange={props.handleChange}
+                                  error={ props.errors.email && true}
+                                  autocomplete='off'
+                                />
+                                {props.errors.email && (
+                                <Typography color="warning" variant='caption' >
+                                    {props.errors.email}
+                                </Typography>
+                                )}
+                            </Grid>
+                            <Grid  item xs={12} >
+                                <TextField
+                                  fullWidth
+                                  size='small'
+                                  label="password" 
+                                  placeholder='Enter Password' 
+                                  variant="outlined"
+                                  type="password"
+                                  name="password"
+                                  // validate={validatePassword}
+                                  value={props.values.password}
+                                  onChange={props.handleChange}
+                                  error={ props.errors.password && true}
+                                  autoComplete='off'
+                                />
+                                { props.errors.password &&(
+                                <Typography color="warning" variant='caption' >
+                                    { props.errors.password}
+                                </Typography>
+                                )}
+                            </Grid>
+                            <Grid container item xs={12} md={12} lg={12}>
+                                  <Box 
+                                      sx={{ 
+                                        width:'100%',
+                                        display:'flex',
+                                        alignItems:'center',
+                                        justifyContent:'space-between',
+                                        flexFlow:'row wrap'
+                                      }}
+                                    >
 
-                        <div class="col-md-6 bg-light">
-                            <div class="login d-flex align-items-center py-5">
+                                    <Typography component={Link} to="/user/forgot-password" variant="caption">Forget Password?</Typography>
+                                  
+                                    <LoadingButton 
+                                      disabled={ !props.errors && true}
+                                      loading={isLoading}
+                                      variant="outlined"
+                                      type="submit"
+                                    >
+                                      Login
+                                    </LoadingButton>
+                                  </Box>
+                            </Grid>
+                          </Grid>
+                        </form>
+                        )
+                      }
+                      {
+                        isLogin && (
+                          <Formik initialValues={initialValues} onSubmit={handleTwoFaSubmit}>
+                              {(props) => (
+                                <form onSubmit={props.handleTwoFaSubmit}>
+                                  <Grid container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                          fullWidth
+                                          size='small'
+                                          label="Code" 
+                                          placeholder='Enter Code' 
+                                          variant="outlined"
+                                          name="code"
+                                          validate={validateCode}
+                                          onChange={props.handleChange}
+                                          autocomplete='off'
+                                        />
+                                        {props.errors.email && (
+                                        <Typography color="warning" variant='caption' >
+                                            {props.errors.email}
+                                        </Typography>
+                                        )}
+                                    </Grid>
+                                    <Grid container item xs={12} md={12} lg={12}>
+                                        <Box 
+                                            sx={{ 
+                                              width:'100%',
+                                              display:'flex',
+                                              alignItems:'center',
+                                              justifyContent:'space-between',
+                                              flexFlow:'row wrap'
+                                            }}
+                                          >
 
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-lg-10 col-xl-7 mx-auto">
-                                            <h3 class="display-4">Icadpay Login!</h3>
-
-                                            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-                                                {({ errors, touched }) => (
-                                                    <Form className="av-tooltip tooltip-label-bottom">
-                                                    <FormGroup className="form-group has-float-label">
-                                                        <Label>
-                                                        </Label>
-                                                        <Field
-                                                        className="form-control"
-                                                        name="email"
-                                                        validate={validateEmail}
-                                                        />
-                                                        {errors.email && touched.email && (
-                                                        <div className="invalid-feedback d-block">
-                                                            {errors.email}
-                                                        </div>
-                                                        )}
-                                                    </FormGroup>
-                                                    <FormGroup className="form-group has-float-label">
-                                                        <Label>
-                                                        </Label>
-                                                        <Field
-                                                        className="form-control"
-                                                        type="password"
-                                                        name="password"
-                                                        validate={validatePassword}
-                                                        />
-                                                        {errors.password && touched.password && (
-                                                        <div className="invalid-feedback d-block">
-                                                            {errors.password}
-                                                        </div>
-                                                        )}
-                                                    </FormGroup>
-                                                    <div className="d-flex justify-content-between align-items-center">
-                                                        <NavLink to="/user/forgot-password">
-                                                        </NavLink>
-                                                        <Button 
-                                                            // color="primary"
-                                                            style={{backgroundColor:'#900604 !important',}}
-                                                            className={` ${loading ? 'show-spinner' : ''
-                                                            }`}
-                                                            size="lg"
-                                                            disabled={isLoading}
-                                                        >
-                                                            {isLoading && (
-                                                                <span className="spinner d-inline-block">
-                                                                    <span className="bounce1" />
-                                                                    <span className="bounce2" />
-                                                                    <span className="bounce3" />
-                                                                </span>
-                                                            )}
-                                                            {isLoading && <span>&nbsp;&nbsp;Waiting...</span>}
-                                                            {!isLoading && <span>Login</span>}
-                                                        
-                                                        </Button>
-                                                    </div>
-                                                    </Form>
-                                                )}
-                                                </Formik>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-            </LoginContainer>
-        // </div>
+                                          <Typography component={Link} to="/user/forgot-password" variant="caption">Forget Password?</Typography>
+                                        
+                                          <LoadingButton 
+                                            disabled={ !props.errors && true}
+                                            loading={isLoading}
+                                            variant="outlined"
+                                            type="submit"
+                                          >
+                                            Login
+                                          </LoadingButton>
+                                        </Box>
+                                    </Grid>
+                                  </Grid>
+                                </form>
+                              )}
+                          </Formik>
+                        )
+                      }
+                      </>
+                    )}
+                  </Formik>            
+                </Grid>
+              </Grid>
+            </UserBox>
+    </UserBoxContainer>
   )
 }
 export default Login

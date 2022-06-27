@@ -1,7 +1,7 @@
 import  styled from 'styled-components';
 
-export const FixedBg = styled.div`
-    background: url('img/balloon-lg.jpg') no-repeat 50% fixed;
+export const UserContainerBg = styled.div`
+    background: url('/img/balloon-lg.jpg') no-repeat 50% fixed;
     background-size: cover;
     width: 100%;
     height: 100%;
@@ -10,18 +10,22 @@ export const FixedBg = styled.div`
     right: 0;
     bottom: 0;
     left: 0;
+    z-index: -1;
 `
-export const LoginContainer = styled.div`
-    overflow: hidden;
+export const UserBoxContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    height: 100vh;
-    .login,
-    .image{
-        min-height: 100vh;
-    }
-    .bg-image{
-        background-image: url('/img/balloon-lg.jpg');
-        background-size: cover;
-        background-position: center center;
-    }
+    padding-top: 100px;
+    padding-bottom: 100px;
+`
+export const UserBox = styled.div`
+    width: 40%;
+    min-height: 70vh;
+    background: #fff;
+    border-radius: 10px;
+    padding: 50px 100px;
+    display: flex;
+    flex-flow: column wrap;
 `

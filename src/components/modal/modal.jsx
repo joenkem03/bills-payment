@@ -1,5 +1,6 @@
 import { ModalContainer,Modalbox } from './../bills/billsElements';
 import { Link } from 'react-router-dom';
+import { Typography } from '@mui/material';
 // import { useNavigate } from 'react-router-dom';
 export default function Modal(props){
     // const navigate = useNavigate();
@@ -25,6 +26,11 @@ export default function Modal(props){
             </svg>
             <h2 className="">Payment succesful</h2>
             <p className="">Your {props.name} payment of N{props.amount} was successful. A receipt has been sent to your email.</p>
+            {
+                props.ifPower && (
+                    <Typography variant='h6'>{ props.val.purchased_code }</Typography>
+                )
+            }
             <button className='red'><Link to='/bills' >Pay more Bills</Link></button> 
             {/* <button className='blue' onClick={handleContinue}>Continue</button> */}
             </Modalbox>

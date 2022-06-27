@@ -16,7 +16,7 @@ export default function Getstarted(){
             </Container>
             <Container>
                 <SectionBoxContainer>
-                    <SectionBox>
+                    <SectionBox to='/'>
                         <IconContianter>
                             <img 
                                 src="/img/Wallet_duotone.svg"
@@ -28,7 +28,7 @@ export default function Getstarted(){
                         <h2>Make payments </h2>
                         <p>Pay your government tariffs, private levies, Taxes, Institutional fees, and public applications</p>
                     </SectionBox>
-                    <SectionBox>
+                    <SectionBox to='/'>
                         <IconContianter>
                             <img 
                                 src="/img/Wallet_duotone.svg"
@@ -40,7 +40,7 @@ export default function Getstarted(){
                         <h2>Upscale your business </h2>
                         <p>All the tools you need to run a digital business and thrive in a digital economy on one platform.</p>
                     </SectionBox>
-                    <SectionBox>
+                    <SectionBox to='/'>
                         <IconContianter>
                             <img 
                                 src="/img/Wallet_duotone.svg"

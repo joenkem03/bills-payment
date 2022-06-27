@@ -13,6 +13,7 @@ export function AppProvider({children}) {
     const toggleLoad =()=>{
         setloading(!loading);
     }
+    
     const toggleBillLoad =()=>{
         setbillloading(!billloading);
     }
@@ -40,6 +41,7 @@ export function AppProvider({children}) {
             setisloaded(true)
         }
     }
+
     return(
         <appContext.Provider 
             value = {{
