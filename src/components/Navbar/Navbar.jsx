@@ -22,7 +22,7 @@ export default function Navbar(){
    
     const navigateToLogin = ()=>{
         // window.location.replace('https://icadpay.com/user/login')
-        window.open('https://portal.icadpay.com/user/login', "_blank")
+        window.open('https://icadpay.com/user/login', "_blank")
 
     }
     return(
@@ -57,7 +57,7 @@ export default function Navbar(){
                         <ul>
                             <li className=""><Link to={`/bills`}>Pay Bills </Link></li>
                             <li className=""><Link to={`/`}>For Businessess</Link></li>
-                            <li className=""><a href={`https://icadpay.com/developers/`} target="_blank" rel="noreferrer" >Documentation </a></li>
+                            <li className=""><a href={`https://icadpay.com/developers/index.html`} target="_blank" rel="noreferrer" >Documentation </a></li>
                         </ul>
                         <Button text={`Login`} />
                     </div>

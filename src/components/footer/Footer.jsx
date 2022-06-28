@@ -43,21 +43,21 @@ export default function Footer() {
                             <ul className="footer_menu_nav_list">
                                 <li className="footer_menu_nav_item"><Link to="/bills" className="footer_menu_nav_link">Pay Bills</Link></li>
                                 <li className="footer_menu_nav_item"><Link to="/" className="footer_menu_nav_link">For Businessess</Link></li>
-                                <li className="footer_menu_nav_item"><Link to="/" className="footer_menu_nav_link">Documentation</Link></li>
+                                <li className="footer_menu_nav_item"><a href={`https://icadpay.com/developers/index.html`} target="_blank" rel="noreferrer" className="footer_menu_nav_link">Documentation</a></li>
                             </ul>
                         </div>
                         <div className="footer_menu_btn">
-                            <MainButton text='Get started' main={true}/>
+                            <MainButton text='Register' main={true}/>
                         </div>
                     </div>
                     
                     <div className="footer_copyright">
                         <div className="footer_contacts_social footer_hidden">
                             <ul className="footer_contacts_social_list">
-                                <li className='footer_contacts_social_item'><a href="/" className="footer_contacts_social_link"><img src='/img/facebook.svg' alt='' width={20} height={20}/></a></li>
-                                <li className='footer_contacts_social_item'><a href="/" className="footer_contacts_social_link"><img src='/img/twitter.svg' alt='' width={20} height={20}/></a></li>
-                                <li className='footer_contacts_social_item'><a href="/" className="footer_contacts_social_link"><img src='/img/instagram.svg' alt='' width={20} height={20}/></a></li>
-                                <li className='footer_contacts_social_item'><a href="/" className="footer_contacts_social_link"><img src='/img/linkden.svg' alt='' width={20} height={20}/></a></li>
+                                <li className='footer_contacts_social_item'><a href="https://www.facebook.com/ICADPay" className="footer_contacts_social_link"><img src='/img/facebook.svg' alt='' width={20} height={20}/></a></li>
+                                <li className='footer_contacts_social_item'><a href="https://twitter.com/icadpayng" className="footer_contacts_social_link"><img src='/img/twitter.svg' alt='' width={20} height={20}/></a></li>
+                                <li className='footer_contacts_social_item'><a href="https://www.instagram.com/icadpay/" className="footer_contacts_social_link"><img src='/img/instagram.svg' alt='' width={20} height={20}/></a></li>
+                                <li className='footer_contacts_social_item'><a href="https://www.linkedin.com/company/icadpay" className="footer_contacts_social_link"><img src='/img/linkden.svg' alt='' width={20} height={20}/></a></li>
                             </ul>
                         </div>
                         <div className="footer_copyright_rights">
