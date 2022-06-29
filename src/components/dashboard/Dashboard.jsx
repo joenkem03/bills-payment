@@ -18,7 +18,9 @@ import FormHelperText from '@mui/material/FormHelperText';
 import { 
         MenuItem, 
         Select, 
-        Typography
+        TextField, 
+        Typography,
+        Grid
     } from "@mui/material";
 import PuffLoader from "react-spinners/PuffLoader"
 import PaymentModal from './../modal/paymentType';
@@ -571,7 +573,6 @@ const Dashboard = (props) => {
                     <div className="namecontainer">
                         
                         <div className="">
-
                             <h3 className="">{selectedBiller.name}</h3>
                             <p className="">{selectedBiller.serviceID}</p>
                         </div>
@@ -586,18 +587,6 @@ const Dashboard = (props) => {
                         <div className="dashcontent_left">
                             <h3 className="">Enter Your Details</h3>
                                 
-                            <FormControl fullWidth sx={{ m: 1 }}>
-                                <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-amount"
-                                    startAdornment={<InputAdornment position="start">₦</InputAdornment>}
-                                    label="Amount"
-                                    value={amount_}
-                                    onChange={e => setamount(e.target.value)}
-                                    // disabled={fixed}
-                                />
-                            </FormControl>
-                    
                             {
                                 variety && (
                                     <>
@@ -617,7 +606,6 @@ const Dashboard = (props) => {
                                                       varietyData && varietyData?.map((item,i)=>{
                                                         return(
                                                                 <MenuItem key={i} value={item.variation_code}>{item.name}</MenuItem>
-                                                                // <MenuItem key={i} value={item.billPaymentProductId}>{item.billPaymentProductName}</MenuItem>
                                                             )
                                                       })
                                                 }
@@ -654,10 +642,10 @@ const Dashboard = (props) => {
                                          <InputLabel htmlFor="outlined-adornment-amount">Recipient</InputLabel>
                                          <OutlinedInput
                                              id="outlined-adornment-amount"
-                                             // startAdornment={<InputAdornment position="start">₦</InputAdornment>}
                                              value={ billerCode }
                                              onChange = {e=>setbillerCode(e.target.value)}
                                              label="Recipent"
+                                            // startAdornment={<InputAdornment position="start">₦</InputAdornment>}
                                             //  error={billerCodeValid}
                                             //  type={selectedVariety[0].metadata.customFields[0].type}
                                             //  placeholder={selectedVariety[0].metadata.customFields[0].display_name}
@@ -665,37 +653,49 @@ const Dashboard = (props) => {
                                      </FormControl>
                                          {
                                             !billerCodeValid && (
-                                                <Typography variant="caption">{billerCodeErr}</Typography>
+                                                <Typography sx={{ m: 1 }} variant="caption">{billerCodeErr}</Typography>
                                             )
                                          }
                                          {
                                             billerCodeValid && (
-                                                <Typography variant="caption">{name}</Typography>
+                                                <Typography sx={{ m: 1 }} variant="caption">{name}</Typography>
                                             )
                                          }
                                     </>
                                 )
                             }
+                            <FormControl fullWidth sx={{ m: 1 }}>
+                                <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+                                <OutlinedInput
+                                    id="outlined-adornment-amount"
+                                    startAdornment={<InputAdornment position="start">₦</InputAdornment>}
+                                    label="Amount"
+                                    value={amount_}
+                                    onChange={e => setamount(e.target.value)}
+                                    // disabled={fixed}
+                                />
+                            </FormControl>
                             {
                                 params.biller === 'airtime' || params.biller === 'data' ? (
                                     <></>
                                 ):(
                                  <>
+                                    <Grid container spacing={3}>
                                         <div className="subtext">
                                             <h3 className="">Enter your contact information </h3>
                                             <p>Your receipt would be sent to you via your contact details </p>
                                         </div>
 
-                                        <div className="input_container">
-                                            <input type="email" value={name} onChange={handleName} placeholder="Enter Full Name"/>
-                                        </div>
-                                        <div className="input_container">
-                                            <input type="email" value={email} onChange={handleEmail} placeholder="Enter Email Address xxx@mail.com "/>
-                                        </div>
-                                        <div className="input_container">
-                                            <input type="tel" value={phone} onChange={handlephone} placeholder="Phone Number +234xxxxxxxxxxx"/>
-                                        </div>
-
+                                        <Grid item xs={12}>
+                                            <TextField variant="outlined" label="Full Name" fullWidth type="text" value={name} onChange={handleName} placeholder="Enter Full Name" />
+                                        </Grid >
+                                        <Grid item xs={12}>
+                                            <TextField  variant="outlined" label="Email"fullWidth type="email" value={email} onChange={handleEmail} placeholder="Enter Email Address"/>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                                <TextField variant="outlined" label="Phone Number" fullWidth type="tel" value={phone} onChange={handlephone} placeholder="Phone Number +234xxxxxxxxxxx"/>
+                                        </Grid>
+                                    </Grid>
                                 </>
                                 )
                             }

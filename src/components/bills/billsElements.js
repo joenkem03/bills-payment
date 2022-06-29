@@ -460,7 +460,7 @@ li{
 export const DashListcheck = styled.img`
     
 `
-export const DListimg = styled.div`
+export const DListimg = styled.img`
     width: 90px;
     height: 90px;
     border: 1px solid #E3E3E4;
