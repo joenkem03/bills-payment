@@ -680,19 +680,19 @@ const Dashboard = (props) => {
                                     <></>
                                 ):(
                                  <>
-                                    <Grid container spacing={3}>
+                                    <Grid container spacing={2}>
                                         <div className="subtext">
                                             <h3 className="">Enter your contact information </h3>
                                             <p>Your receipt would be sent to you via your contact details </p>
                                         </div>
 
-                                        <Grid item xs={12}>
+                                        <Grid item xs={12} sx={{ m: 1 }}>
                                             <TextField variant="outlined" label="Full Name" fullWidth type="text" value={name} onChange={handleName} placeholder="Enter Full Name" />
                                         </Grid >
-                                        <Grid item xs={12}>
+                                        <Grid item xs={12} sx={{ m: 1 }}>
                                             <TextField  variant="outlined" label="Email"fullWidth type="email" value={email} onChange={handleEmail} placeholder="Enter Email Address"/>
                                         </Grid>
-                                        <Grid item xs={12}>
+                                        <Grid item xs={12} sx={{ m: 1 }}>
                                                 <TextField variant="outlined" label="Phone Number" fullWidth type="tel" value={phone} onChange={handlephone} placeholder="Phone Number +234xxxxxxxxxxx"/>
                                         </Grid>
                                     </Grid>
