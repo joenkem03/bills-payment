@@ -3,6 +3,7 @@ import { ModalContainer,Modalbox,Paywith } from './../bills/billsElements';
 // import { useNavigate } from 'react-router-dom';
 import QRCode from "react-qr-code";
 import Skeleton from 'react-loading-skeleton';
+import { Typography } from "@mui/material";
 export default function PaymentModal(props){
     // const navigate = useNavigate();
     const handleContinue = ()=>{
@@ -28,7 +29,10 @@ export default function PaymentModal(props){
                 {
                     !props.sendQr && (
                         <>
-                            <Paywith onClick={props.handleQr}> Pay with QR</Paywith>
+                            <Paywith disabled={true} onClick={props.handleQr}>
+                                Pay with QR
+                                <Typography variant="caption">Pay With Qr Unavailable at the Moment</Typography>
+                            </Paywith>
                             <Paywith onClick={props.handleOther}>Other Payment Options</Paywith>
                         </>
                     )

@@ -2,9 +2,13 @@ import { FooterContainer } from '../Home/HomeElements';
 import { Section, Container } from './../Layout/layoutElement';
 // import { ButtonMain } from '../button/buttonElements';
 import MainButton from '../button/MainButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Footer() {
+    const navigate = useNavigate()
+    const hadleregister = ()=>{
+        navigate('/user/register');
+    }
     return (
         <Section bg='#1D2646' padding='28px 0px'>
             <Container>
@@ -47,7 +51,7 @@ export default function Footer() {
                             </ul>
                         </div>
                         <div className="footer_menu_btn">
-                            <MainButton text='Register' main={true}/>
+                            <MainButton click={ hadleregister } text='Register' main={true}/>
                         </div>
                     </div>
                     

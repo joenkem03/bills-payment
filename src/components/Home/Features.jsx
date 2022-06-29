@@ -1,9 +1,15 @@
 import { Section, Container, SectionTitle, Column } from './../Layout/layoutElement';
 import { FeatureBox,Featurecolumn, FeatureImg,Circle,SectionFeatures } from './HomeElements';
 // import img from 'next/img';
+// import { Link } from 'react-router-dom';
 import MainButton from '../button/MainButton';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 export default function Features() {
+
+    const navigate = useNavigate()
+    const hadleregister = ()=>{
+        navigate('/user/register')
+    }
     return (
         <Section 
             padding={'100px 0px'}
@@ -74,7 +80,7 @@ export default function Features() {
                                 <h3>USSD</h3>
                             </div>
                         </div>
-                        <MainButton text='Get started' main={false}/>
+                        <MainButton click={hadleregister} text='Register' main={false}/>
                     </Featurecolumn>
                 </Column>
                 <Column divide={2}>

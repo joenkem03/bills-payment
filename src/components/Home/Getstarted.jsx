@@ -1,6 +1,7 @@
 import { Container, Section, SectionTitle } from "../Layout/layoutElement";
 import { SectionBox, SectionBoxContainer, IconContianter } from "./HomeElements";
 // import Image from 'next/image';
+import { Link } from 'react-router-dom';
 
 export default function Getstarted(){
     return (
@@ -16,19 +17,21 @@ export default function Getstarted(){
             </Container>
             <Container>
                 <SectionBoxContainer>
-                    <SectionBox to='/bills'>
-                        <IconContianter>
-                            <img 
-                                src="/img/Wallet_duotone.svg"
-                                alt="sda" 
-                                width={18}
-                                height={17}
-                            />
-                        </IconContianter>
-                        <h2>Make payments </h2>
-                        <p>Pay your government tariffs, private levies, Taxes, Institutional fees, and public applications</p>
-                    </SectionBox>
-                    <SectionBox to='/'>
+                    <Link to="/bills">
+                        <SectionBox href='#'>
+                            <IconContianter>
+                                <img 
+                                    src="/img/Wallet_duotone.svg"
+                                    alt="sda" 
+                                    width={18}
+                                    height={17}
+                                />
+                            </IconContianter>
+                            <h2>Make payments </h2>
+                            <p>Pay your government tariffs, private levies, Taxes, Institutional fees, and public applications</p>
+                        </SectionBox>
+                    </Link>
+                    <SectionBox href="/">
                         <IconContianter>
                             <img 
                                 src="/img/Wallet_duotone.svg"
@@ -40,7 +43,7 @@ export default function Getstarted(){
                         <h2>Upscale your business </h2>
                         <p>All the tools you need to run a digital business and thrive in a digital economy on one platform.</p>
                     </SectionBox>
-                    <SectionBox to='/user/register'>
+                    <SectionBox href={`https://icadpay.com/developers/index.html`} target="_blank" rel="noreferrer">
                         <IconContianter>
                             <img 
                                 src="/img/Wallet_duotone.svg"

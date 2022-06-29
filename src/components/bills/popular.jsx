@@ -51,11 +51,10 @@ const Popular = ({bills,loading}) => {
                 <PopularMain>
                     <h2 className="">Search By Category </h2>
                     <PopularMainCat>
-
-                    {loading ?
-                        <Categories load={loading} bills={bills}/>
-                        : <CategoryLoader/>
-                    }
+                        {loading ?
+                            <Categories load={loading} bills={bills}/>
+                            : <CategoryLoader/>
+                        }
                     </PopularMainCat>
 
                 </PopularMain>

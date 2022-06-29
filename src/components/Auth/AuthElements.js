@@ -28,4 +28,8 @@ export const UserBox = styled.div`
     padding: 50px 100px;
     display: flex;
     flex-flow: column wrap;
+    @media screen and (max-width: 480px) {
+        width: 90%;
+        padding: 50px 20px;
+    }
 `

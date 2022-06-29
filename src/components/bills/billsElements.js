@@ -120,6 +120,9 @@ export const Searchbardropdown = styled.div`
 export const PopularContainer = styled.div`
     min-height: 544px;
     width: 100%;
+    @media screen and (max-width: 480px) {
+        min-height: 700px;
+    }
 `
 export const PopularMain = styled.div`
     display: flex;
@@ -155,9 +158,16 @@ export const PopularMainCat = styled.div`
         }
     }
     @media screen and (max-width: 480px) {
+        width: 100%;
+        margin: 0px auto;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
         gap: 20px;
+
+        /* flex-flow:row wrap; */
+        /* justify-content: space-between; */
+        /* padding: 0px; */
+        /* padding-bottom: 100px; */
     }
 
 `
@@ -182,11 +192,15 @@ export const Cat = styled.div`
         /* box-shadow: 0px 0px 3px #E7E8E5; */
         border: 3px solid #E7E8E5;
         padding: 2px 18px;
+        
 
     }
     @media screen and (max-width: 480px) {
-        width: 80px;
-        height: 100px;
+        min-width: 80px;
+        height: 30px;
+        padding: 25px 10px;
+        margin: 0px;
+        border-radius: 30px;
     }
 
     h3{
@@ -199,7 +213,7 @@ export const Cat = styled.div`
         text-align: center;
         text-transform: capitalize;
         @media screen and (max-width: 480px) {
-            font-size: 10px;
+            font-size: 12px;
         }
     }
 
@@ -913,15 +927,18 @@ export const Paywith = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-flow: column;
+    pointer-events: ${ props=> props.disabled ? 'none': 'all' };
     box-shadow:0px 0px 3px rgba(0,0,0,.2);
     margin-bottom: 20px;
-        //styleName: Body 1 medium;
-        font-family: Poppins;
-        font-size: 16px;
-        font-weight: 500;
-        line-height: 24px;
-        letter-spacing: 0em;
-        text-align: center;
+    //styleName: Body 1 medium;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: center;
+    background-color:  ${ props=> props.disabled ? 'rgba(0,0,0,.1)': '#fff' };
     &:hover{
         cursor: pointer;
         box-shadow:0px 0px 5px rgba(0,0,0,.4);
