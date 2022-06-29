@@ -2,8 +2,13 @@ import { Column, Container, Section } from "../Layout/layoutElement";
 import { Servicesimage, Servicesimg, ServicesText } from "./HomeElements";
 // import Image from "next/image";
 import MainButton from "../button/MainButton";
+import { useNavigate } from 'react-router-dom';
 
 const Services = () => {
+    const navigate = useNavigate()
+    const hadleregister = ()=>{
+        navigate('/user/register')
+    }
     return (
         <Section bg='' padding='100px 0px'>
             <Container>
@@ -11,7 +16,7 @@ const Services = () => {
                     <ServicesText>
                         <h2 className="">Built for Convenient Payments</h2>
                         <p className="">Join over 1000+ Nigerian businesses enjoying seamless payment services with one click</p>
-                        <MainButton text='Get started' main={false}/>
+                        <MainButton click={hadleregister} text='Register' main={false}/>
                     </ServicesText>
                 </Column>
                 <Column divide={2}>

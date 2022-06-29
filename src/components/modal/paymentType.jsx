@@ -33,7 +33,7 @@ export default function PaymentModal(props){
                                 Pay with QR
                                 <Typography variant="caption">Pay With Qr Unavailable at the Moment</Typography>
                             </Paywith>
-                            <Paywith onClick={props.handleOther}>Other Payment Options</Paywith>
+                            <Paywith disabled={false} onClick={props.handleOther}>Other Payment Options</Paywith>
                         </>
                     )
                 }
