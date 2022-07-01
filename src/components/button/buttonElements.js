@@ -12,6 +12,11 @@ export const ButtonDefault = styled.button`
     width: 120px;
     border-radius: 5px;
     color: #394D93;
+    @media screen and (max-width: 480px) {
+        width: 100%;
+        background:  #F4F4F4 !important;
+        color:#394D93 !important;
+    }
     &:hover{
         cursor: pointer;
         background: #394D93;

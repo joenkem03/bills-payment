@@ -23,9 +23,11 @@ export default function DashList({datas,setdata,bill,proceed}) {
     
     const [active, setactive] = useState();
     const [proceedVal, setproceed] = useState(false);
+    
     useEffect(()=>{
 
     },[]);
+
     const handleClick = (e)=>{
         const id = e.currentTarget.id;
         setactive('');
@@ -49,6 +51,7 @@ export default function DashList({datas,setdata,bill,proceed}) {
         console.log('DashList_____id',bill);
         
     }   
+    
     const handleProceedClick = (e)=>{
         e.preventDefault();
         proceed();

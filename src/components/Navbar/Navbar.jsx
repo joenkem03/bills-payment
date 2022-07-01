@@ -14,9 +14,7 @@ export default function Navbar(){
 
     const toggleMenu = (e)=>{
         e.preventDefault();
-
-        setopen(!open)
-        console.log('menu: ',open);
+        setopen(!open);
     }
 
    
@@ -24,6 +22,10 @@ export default function Navbar(){
         // window.location.replace('https://icadpay.com/user/login')
         window.open('https://icadpay.com/user/login', "_blank")
 
+    }
+    
+    const handleClicked = ()=>{
+        setopen(!open);
     }
     return(
         <NavContainer>
@@ -50,16 +52,17 @@ export default function Navbar(){
                     </button>
                     <div className="mobile_menu">
                         <div className="">
-                            {/* <Link to='/bills'> */}
+                            <Link  to='/bills' onClick={handleClicked}>
                                 <NavLogo src="/img/logo.png" alt="" />
-                            {/* </Link> */}
+                            </Link>
                         </div>
                         <ul>
-                            <li className=""><Link to={`/bills`}>Pay Bills </Link></li>
-                            <li className=""><Link to={`/`}>For Businessess</Link></li>
-                            <li className=""><a href={`https://icadpay.com/developers/index.html`} target="_blank" rel="noreferrer" >Documentation </a></li>
+                            <li className=""><Link to={`/bills`} onClick={handleClicked}>Pay Bills </Link></li>
+                            <li className=""><Link to={`/`} onClick={handleClicked}>For Businessess</Link></li>
+                            <li className=""><a href={`https://icadpay.com/developers/index.html`} onClick={handleClicked} target="_blank" rel="noreferrer" >Documentation </a></li>
                         </ul>
-                        <Button text={`Login`} />
+                        <Button text={`Login`} click={navigateToLogin} />
+                       
                     </div>
                 </div>
             </MobileMenu>
