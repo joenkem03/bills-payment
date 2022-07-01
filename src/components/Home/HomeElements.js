@@ -35,7 +35,7 @@ export const IconContianter =styled.div`
         z-index: 20;
     }
 `
-export const SectionBox =styled.a`
+export const SectionBox =styled.div`
     position: relative;
     display: flex;
     flex-flow: column;

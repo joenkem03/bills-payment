@@ -86,11 +86,16 @@ const Dashboard = (props) => {
 
         setbillerCodevalid(true)
         setbillerCodeErr(validationData.error)
-        setname(validationData.Customer_Name)
+        if(params.biller !== 'airtime' || params.biller !== 'data'){
+            console.log("Not airtime OR data");
+        }else{
+            console.log("airtime OR data");
+            setname(validationData.Customer_Name)
+        }
         // if(validationData.WrongBillersCode){
         //     setname(validationData.Customer_Name)
         // }
-    },[billerCode,serviceId,type]);
+    },[billerCode, params.biller, serviceId, type]);
  
     useEffect(()=>{
         const name = new URLSearchParams(search).get('status');
@@ -211,9 +216,10 @@ const Dashboard = (props) => {
     }
     
     const handlepaymentFull = async (data)=>{
-        // console.log(data)
+        
         setTransactionId(data)
-
+        
+        console.log('handle full payment: ', name)
         const namearr = name.split(" ");
         const fname = namearr[0] === ''? 'firstname':namearr[0]
         const lname = namearr[1] === ''? 'lastname':namearr[1]

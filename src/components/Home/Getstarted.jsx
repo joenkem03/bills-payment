@@ -1,9 +1,22 @@
 import { Container, Section, SectionTitle } from "../Layout/layoutElement";
 import { SectionBox, SectionBoxContainer, IconContianter } from "./HomeElements";
 // import Image from 'next/image';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Getstarted(){
+    const navigate = useNavigate();
+
+    const gotoBills = ()=>{
+        navigate('/bills')
+    }
+    const gotoBiz = ()=>{
+        navigate('/bills')
+        window.open('https://icadpay.com')
+    }
+    const gotoDev = ()=>{
+        navigate('/bills')
+        window.open('https://icadpay.com/developers/index.html', "_blank")
+    }
     return (
         <Section
             bg={'#1D2646'}
@@ -17,8 +30,7 @@ export default function Getstarted(){
             </Container>
             <Container>
                 <SectionBoxContainer>
-                    <Link to="/bills">
-                        <SectionBox href='#'>
+                    <SectionBox onClick={gotoBills}>
                             <IconContianter>
                                 <img 
                                     src="/img/Wallet_duotone.svg"
@@ -29,9 +41,8 @@ export default function Getstarted(){
                             </IconContianter>
                             <h2>Make payments </h2>
                             <p>Pay your government tariffs, private levies, Taxes, Institutional fees, and public applications</p>
-                        </SectionBox>
-                    </Link>
-                    <SectionBox href="/">
+                    </SectionBox>
+                    <SectionBox onClick={gotoBiz}>
                         <IconContianter>
                             <img 
                                 src="/img/Wallet_duotone.svg"
@@ -43,7 +54,7 @@ export default function Getstarted(){
                         <h2>Upscale your business </h2>
                         <p>All the tools you need to run a digital business and thrive in a digital economy on one platform.</p>
                     </SectionBox>
-                    <SectionBox href={`https://icadpay.com/developers/index.html`} target="_blank" rel="noreferrer">
+                    <SectionBox onClick={gotoDev}>
                         <IconContianter>
                             <img 
                                 src="/img/Wallet_duotone.svg"
