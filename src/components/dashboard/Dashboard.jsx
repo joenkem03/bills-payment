@@ -86,12 +86,20 @@ const Dashboard = (props) => {
 
         setbillerCodevalid(true)
         setbillerCodeErr(validationData.error)
-        if(params.biller !== 'airtime' || params.biller !== 'data'){
-            console.log("Not airtime OR data");
-        }else{
+        if(params.biller === 'airtime' || params.biller === 'data'){
+            setname('Airtime Topup');
+            setfirstname('Airtime')
+            setlastname('Topup')
+            setemail('AirtimeTopup@icadpay.com');
+            setphone(billerCode);
             console.log("airtime OR data");
-            setname(validationData.Customer_Name)
         }
+        if(params.biller === 'electricity-bill'){
+            setpower(true);
+            setname(validationData.Customer_Name)
+            console.log("Not airtime OR data");
+        }
+        
         // if(validationData.WrongBillersCode){
         //     setname(validationData.Customer_Name)
         // }
@@ -111,17 +119,8 @@ const Dashboard = (props) => {
 
     useEffect(()=>{
         console.log(params)
-        if(params.biller === 'airtime' || params.biller === 'data'){
-            setname('Airtime Topup');
-            setfirstname('Airtime')
-            setlastname('Topup')
-            setemail('AirtimeTopup@icadpay.com');
-            setphone(billerCode);
-        }
-        if(params.biller === 'electricity-bill'){
-            setpower(true);
-        }
-    },[billerCode,params])
+
+    },[params])
 
     useEffect(()=>{
         if(email.length < 3 || phone.length <= 10){
@@ -210,6 +209,7 @@ const Dashboard = (props) => {
         const data = await response.data;
         setpowerdata(data)
     }
+
     const handleSelectBiller = (bill)=>{
         
         setselectedBiller(bill)
@@ -604,8 +604,6 @@ const Dashboard = (props) => {
                                                 label="Products"
                                                 value={selectedVarietyId}
                                                 onChange={handleSelectChange}
-                                                loading={true}
-                                                loadingText='Loading'
                                             >
                                                  <MenuItem value={'personal'}> personal </MenuItem>
                                                 {
@@ -656,7 +654,7 @@ const Dashboard = (props) => {
                                             //  type={selectedVariety[0].metadata.customFields[0].type}
                                             //  placeholder={selectedVariety[0].metadata.customFields[0].display_name}
                                          />
-                                     </FormControl>
+                                        </FormControl>
                                          {
                                             !billerCodeValid && (
                                                 <Typography sx={{ m: 1 }} variant="caption">{billerCodeErr}</Typography>
