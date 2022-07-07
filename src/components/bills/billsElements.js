@@ -234,7 +234,6 @@ export const Billimg = styled.img`
     position: absolute;
     top: ${props=>props.top};
     left: ${props=>props.left};
-    z-index:100;
     @media screen and (max-width: 480px) {
         display: none;
     }
