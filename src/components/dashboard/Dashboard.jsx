@@ -151,14 +151,14 @@ const Dashboard = (props) => {
         // console.log(validationData);
 
         
-        if(validationData.error !== null){
+        if(validationData.hasOwnProperty("error")){
             setbillerCodeErr(true)
             setbillerCodevalid(false)
             setbillerCodeErrMsg(validationData.error)
             console.log('error in validation: ',validationData.error);
         }
-        if(validationData.Customer_Name !== null){
-            console.log('success in validation: ',validationData);
+        if(validationData.hasOwnProperty("Customer_Name")){
+            console.log('success in validation: ',validationData.hasOwnProperty("Customer_Name"));
             setbillerCodeErr(false)
             setbillerCodevalid(true)
             setbillerCodeValidMsg(validationData.Customer_Name);   
@@ -235,21 +235,26 @@ const Dashboard = (props) => {
                 })
         }
     },[selectedBiller,selectedVariety])
-
     useEffect(()=>{
-
+        
+    },[billerCode])
+    useEffect(()=>{
+        if(billerCode === ''){
+            setbillerCodeErr(false)
+            setbillerCodevalid(false)
+        }else{
             if(billerCode.length <= 10){
                 setbillerCodeErr(true)
                 setbillerCodeErrMsg('Biller Code must be at least 11 characters');
                 console.log('biller code error')
             }
-
-            if (billerCode.length >= 11){
-                setLoading2(true);
-                console.log('biller code valid')
-                handleValidation();
-            }
-    },[billerCode,handleValidation])
+        }
+        if (billerCode.length >= 11){
+            setLoading2(true);
+            console.log('biller code valid')
+            handleValidation();
+        }
+    },[billerCode])
 
 
     useEffect(()=>{
@@ -618,6 +623,7 @@ const Dashboard = (props) => {
     }
 
     const BillerValidation = (e)=>{
+
         const biller = e.target.value;
         setbillerCode(e.target.value);
         
