@@ -1,5 +1,5 @@
+import React, { useState, useEffect,useCallback ,useMemo} from "react";
 import { useParams , useLocation} from "react-router-dom";
-import { useState, useEffect,useCallback ,useMemo} from "react";
 import {  DashMain, DashMainContent, DListimg,Loader } from "../bills/billsElements";
 import Sidebar from "../bills/Sidebar";
 import Modal from "../modal/modal";
@@ -20,10 +20,69 @@ import {
         Select, 
         TextField, 
         Typography,
-        Grid
+        Grid,
+        CircularProgress,
+        circularProgressClasses
     } from "@mui/material";
 import PuffLoader from "react-spinners/PuffLoader"
 import PaymentModal from './../modal/paymentType';
+import NumberFormat from 'react-number-format';
+import PropTypes from 'prop-types';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon   from '@mui/icons-material/Close';
+
+
+const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, ref) {
+    const { onChange, ...other } = props;
+  
+    return (
+      <NumberFormat
+        {...other}
+        getInputRef={ref}
+        onValueChange={(values) => {
+          onChange({
+            target: {
+              name: props.name,
+              value: values.value,
+            },
+          });
+        }}
+        thousandSeparator
+        isNumericString
+      />
+    );
+  });
+NumberFormatCustom.propTypes = {
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+};
+
+// function ValidateRecipient() {
+//     const { focused, onChange  } = useFormControl() || {};
+//     // const [error, setError] = useState('');
+//     // const [value, setValue] = useState('');
+//     // const [isValid, setIsValid] = useState(false);
+
+//     // const helperText = React.useMemo(() => {
+//     //     if (focused) {
+//     //         return 'This field is being focused';
+//     //     }
+    
+//     //     return 'Helper text';
+//     // }, [focused]);
+//     const validate = React.useMemo(() => {
+//         onChange(value =>{
+//             if (value.length < 3) {
+//                 return 'Name must be at least 3 characters';
+//                 console.log(value.target.value);
+//             }
+//             console.log(value.target.value);
+//             return null;
+//         });
+//     },[onChange])
+
+//     return <FormHelperText>{validate}</FormHelperText>;
+// }
 const Dashboard = (props) => {
 
     const [bills,setBills]=useState('');
@@ -41,9 +100,15 @@ const Dashboard = (props) => {
     const [varietyData, setVarietyData]=useState();
     const [type, setType]=useState('');
     const [serviceId, setServiceId]=useState({});
+
     const [billerCode, setbillerCode]=useState('');
+    
     const [billerCodeValid, setbillerCodevalid]=useState(false);
-    const [billerCodeErr, setbillerCodeErr]=useState('');
+    const [billerCodeValidMsg, setbillerCodeValidMsg]=useState('');
+
+    const [billerCodeErr, setbillerCodeErr]=useState(false);
+    const [billerCodeErrMsg, setbillerCodeErrMsg]=useState('');
+
     // eslint-disable-next-line no-unused-vars
     const [transactionId,setTransactionId]=useState('');
     const [proceed,setProceed]=useState(false);
@@ -58,6 +123,7 @@ const Dashboard = (props) => {
     const [paymentType,setPaymentType] = useState(false);
 
     const [loading, setLoading] = useState(false);
+    const [loading2, setLoading2] = useState(false);
     const [color, setColor] = useState(" #2C63EA");
     const [transactionRefId, setTransactionRefId] = useState(null);
     const [key, setKey] = useState(null);
@@ -84,8 +150,20 @@ const Dashboard = (props) => {
         // console.log(payload);
         // console.log(validationData);
 
-        setbillerCodevalid(true)
-        setbillerCodeErr(validationData.error)
+        
+        if(validationData.error !== null){
+            setbillerCodeErr(true)
+            setbillerCodevalid(false)
+            setbillerCodeErrMsg(validationData.error)
+            console.log('error in validation: ',validationData.error);
+        }
+        if(validationData.Customer_Name !== null){
+            console.log('success in validation: ',validationData);
+            setbillerCodeErr(false)
+            setbillerCodevalid(true)
+            setbillerCodeValidMsg(validationData.Customer_Name);   
+        }
+
         if(params.biller === 'airtime' || params.biller === 'data'){
             setname('Airtime Topup');
             setfirstname('Airtime')
@@ -100,6 +178,7 @@ const Dashboard = (props) => {
             console.log("Not airtime OR data");
         }
         
+        setLoading2(false);
         // if(validationData.WrongBillersCode){
         //     setname(validationData.Customer_Name)
         // }
@@ -117,10 +196,6 @@ const Dashboard = (props) => {
 
     },[search,fixed])   
 
-    useEffect(()=>{
-        console.log(params)
-
-    },[params])
 
     useEffect(()=>{
         if(email.length < 3 || phone.length <= 10){
@@ -162,9 +237,18 @@ const Dashboard = (props) => {
     },[selectedBiller,selectedVariety])
 
     useEffect(()=>{
-        if(billerCode.length >= 10){
-             handleValidation();
-        }
+
+            if(billerCode.length <= 10){
+                setbillerCodeErr(true)
+                setbillerCodeErrMsg('Biller Code must be at least 11 characters');
+                console.log('biller code error')
+            }
+
+            if (billerCode.length >= 11){
+                setLoading2(true);
+                console.log('biller code valid')
+                handleValidation();
+            }
     },[billerCode,handleValidation])
 
 
@@ -533,18 +617,11 @@ const Dashboard = (props) => {
         setshowqr(false)
     }
 
-    const MyFormHelperText = () => {
-        const { focused } = useFormControl() || {};
-      
-        const helperText = useMemo(() => {
-          if(name !== ''){
-              return name
-          }
-        }, [focused,name]);
-      
-        return <FormHelperText>{helperText}</FormHelperText>;
-      }
-
+    const BillerValidation = (e)=>{
+        const biller = e.target.value;
+        setbillerCode(e.target.value);
+        
+    }
   return (
     <DashMain>
            { loading && <Loader>
@@ -568,7 +645,7 @@ const Dashboard = (props) => {
             <PaymentModal back={back} close={handleClose} show={paymentType} handleQr={handleQr} handleOther={handleOther} sendQr={showqr} qrvalue={qr}/>
 
             <Sidebar data={bills} setBiller={handleSelectBiller} biller={selectedBiller} proceed={handleProceed}/>
-            <DashMainContent detail={proceed}>           
+            <DashMainContent detail={proceed} >           
                 <div className="dashheader">
 
                     <div className="imgcontainer">
@@ -642,40 +719,39 @@ const Dashboard = (props) => {
                             {
                                 productExist && (
                                     <>
-                                        <FormControl fullWidth sx={{ m: 1 }}>
-                                         <InputLabel htmlFor="outlined-adornment-amount">Recipient</InputLabel>
-                                         <OutlinedInput
-                                             id="outlined-adornment-amount"
-                                             value={ billerCode }
-                                             onChange = {e=>setbillerCode(e.target.value)}
-                                             label="Recipent"
-                                            // startAdornment={<InputAdornment position="start">₦</InputAdornment>}
-                                            //  error={billerCodeValid}
-                                            //  type={selectedVariety[0].metadata.customFields[0].type}
-                                            //  placeholder={selectedVariety[0].metadata.customFields[0].display_name}
+                                    <FormControl fullWidth sx={{ m: 1 }}>
+                                         <TextField
+                                            id="outlined-adornment-amount"
+                                            value={ billerCode }
+                                            onChange = {e=> setbillerCode(e.target.value)}
+                                            label="Recipent"
+                                            autocomplete="none"
+                                            helperText={ 
+                                                 (billerCodeErr && billerCodeErrMsg) || (billerCodeValid && billerCodeValidMsg)
+                                            }
+                                            color={ (billerCodeErr && 'secondary') || (billerCodeValid && 'success')}
+                                            error ={billerCodeErr}
+                                            success= {billerCodeValid}
+                                            InputProps={{
+                                                endAdornment: loading2 && <CircularProgress  color="inherit" size={24}/> ,
+                                            }}
                                          />
-                                        </FormControl>
-                                         {
-                                            !billerCodeValid && (
-                                                <Typography sx={{ m: 1 }} variant="caption">{billerCodeErr}</Typography>
-                                            )
-                                         }
-                                         {
-                                            billerCodeValid && (
-                                                <Typography sx={{ m: 1 }} variant="caption">{name}</Typography>
-                                            )
-                                         }
+                                        {/* <ValidateRecipient/> */}
+                                    </FormControl>
                                     </>
                                 )
                             }
                             <FormControl fullWidth sx={{ m: 1 }}>
-                                <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-                                <OutlinedInput
+                                <TextField
                                     id="outlined-adornment-amount"
-                                    startAdornment={<InputAdornment position="start">₦</InputAdornment>}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">₦</InputAdornment>,
+                                        inputComponent: NumberFormatCustom,
+                                    }}
                                     label="Amount"
                                     value={amount_}
                                     onChange={e => setamount(e.target.value)}
+                                    autocomplete="none"
                                     // disabled={fixed}
                                 />
                             </FormControl>
@@ -691,13 +767,13 @@ const Dashboard = (props) => {
                                         </div>
 
                                         <Grid item xs={12} sx={{ m: 1 }}>
-                                            <TextField variant="outlined" label="Full Name" fullWidth type="text" value={name} onChange={handleName} placeholder="Enter Full Name" />
+                                            <TextField variant="outlined" label="Full Name" fullWidth type="text" value={name} onChange={handleName} autocomplete="none" placeholder="Enter Full Name" />
                                         </Grid >
                                         <Grid item xs={12} sx={{ m: 1 }}>
-                                            <TextField  variant="outlined" label="Email"fullWidth type="email" value={email} onChange={handleEmail} placeholder="Enter Email Address"/>
+                                            <TextField  variant="outlined" label="Email"fullWidth type="email" value={email} onChange={handleEmail} autocomplete="none" placeholder="Enter Email Address"/>
                                         </Grid>
                                         <Grid item xs={12} sx={{ m: 1 }}>
-                                                <TextField variant="outlined" label="Phone Number" fullWidth type="tel" value={phone} onChange={handlephone} placeholder="Phone Number +234xxxxxxxxxxx"/>
+                                                <TextField variant="outlined" label="Phone Number" fullWidth type="tel" value={phone} onChange={handlephone} autocomplete="none" placeholder="Phone Number +234xxxxxxxxxxx"/>
                                         </Grid>
                                     </Grid>
                                 </>
