@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, MenuItem, NavContainer, NavLogo , ButtonContainer, Nav, MobileMenu} from "./NavbarElements"
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Button from "../button/button"
 // import { useNavigate } from "react-router-dom";
 
@@ -9,8 +9,12 @@ import { GrFormClose } from "react-icons/gr";
 
 export default function Navbar(){
     const [open,setopen] =useState(false)
-
+    const location = useLocation()
     // let navigate = useNavigate();
+
+    useEffect(()=>{
+        console.log(location)
+    },[location]);
 
     const toggleMenu = (e)=>{
         e.preventDefault();
@@ -28,6 +32,12 @@ export default function Navbar(){
     const handleClicked = ()=>{
         setopen(!open);
     }
+    const CheckLocation = (path)=>{
+        if(location.pathname === path){
+            console.log('pathname: ', path)
+            return 'active';
+        }
+    }
     return(
         <NavContainer>
             <Nav>
@@ -35,9 +45,9 @@ export default function Navbar(){
                     <NavLogo src="/img/logo.png" alt=""/>
                 </Link>
                 <Menu>
-                    <MenuItem><Link to={`/bills`}>Pay bills</Link></MenuItem>
-                    <MenuItem><Link to={`/`}>For businesses </Link></MenuItem>
-                    <MenuItem><a href={`https://icadpay.com/developers/index.html`} target="_blank" rel="noreferrer" >Documentation </a></MenuItem>
+                    <MenuItem ><Link to={`/`} className={CheckLocation('/')}>For businesses </Link></MenuItem>
+                    <MenuItem ><Link to={`/bills`} className={CheckLocation('/bills')}>Pay bills</Link></MenuItem>
+                    <MenuItem><a href={`https://icadpay.com/developers/index.html`}  className={CheckLocation('/docs')} target="_blank" rel="noreferrer" >Documentation </a></MenuItem>
                 </Menu>
             </Nav>
             <ButtonContainer>
@@ -58,8 +68,8 @@ export default function Navbar(){
                             </Link>
                         </div>
                         <ul>
-                            <li className=""><Link to={`/bills`} onClick={handleClicked}>Pay Bills </Link></li>
                             <li className=""><Link to={`/`} onClick={handleClicked}>For Businessess</Link></li>
+                            <li className=""><Link to={`/bills`} onClick={handleClicked}>Pay Bills </Link></li>
                             <li className=""><a href={`https://icadpay.com/developers/index.html`} onClick={handleClicked} target="_blank" rel="noreferrer" >Documentation </a></li>
                         </ul>
                         <Button text={`Login`} click={navigateToLogin} />

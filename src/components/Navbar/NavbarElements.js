@@ -38,19 +38,27 @@ export const Menu = styled.ul`
     }
 `
 export const MenuItem = styled.li`
-    margin-right: 49px;
+    /* margin-right: 49px; */
+    /* background-color: #2B2C3E; */
+    width:130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     a{
         text-decoration: none;
         font-family: Poppins;
         font-size: 16px;
-        font-weight: 500;
+        font-weight: 400;
         line-height: 18px;
         color: #2B2C3E;
         width: fit-content;
-        padding: 5px;
+        /* padding: 5px; */
         &:hover{
             font-weight: 700;
         }
+    }
+    a.active{
+        font-weight: 700 !important;
     }
 `
 
