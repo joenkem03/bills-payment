@@ -152,10 +152,15 @@ const Dashboard = (props) => {
 
         
         if(validationData.hasOwnProperty("error")){
-            setbillerCodeErr(true)
-            setbillerCodevalid(false)
-            setbillerCodeErrMsg(validationData.error)
-            console.log('error in validation: ',validationData.error);
+            if(validationData.error === null){
+                setbillerCodeErr(false);
+                setbillerCodevalid(true)
+            }else{
+                setbillerCodeErr(true)
+                setbillerCodevalid(false)
+                setbillerCodeErrMsg(validationData.error)
+                console.log('error in validation: ',validationData.error);
+            }
         }
         if(validationData.hasOwnProperty("Customer_Name")){
             console.log('success in validation: ',validationData.hasOwnProperty("Customer_Name"));
@@ -335,7 +340,8 @@ const Dashboard = (props) => {
 
         const payload = {
             // key: 'test_ZTgxNTYxMzUwODYyODU3NzM5MmI4OTdjZmZmMGYyY2FkNGU5Nzc5ZDAwM2NlOWIyZTE3YzEwMTQwNDIwNTA0OA', // this is a demo key.  
-            key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
+            // key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
+            key: 'live_YzM1ODg3YzY5MWVjZjFlYzhkOTQxMDU3NmMzM2NlYjc4YzQwYTU1M2ZkZjRmNjI5ZjQzOGQzZmM4ZmY3NzZmYQ', // this is a demo key.  
             email: email, // customer email 
             amount: amount_, // amount to be processed
             currency: "NGN", // currency
