@@ -14,11 +14,12 @@ const Bills = () => {
   useEffect(()=>{
       getCat();
       getBillers();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   
   useEffect(()=>{
       if(billerProducts.lenght > 0){
-        console.log(billerProducts);  
+        // console.log(billerProducts);  
       }
   },[billerProducts])
   

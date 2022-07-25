@@ -162,6 +162,7 @@ const Dashboard = (props) => {
                 console.log('error in validation: ',validationData.error);
             }
         }
+
         if(validationData.hasOwnProperty("Customer_Name")){
             console.log('success in validation: ',validationData.hasOwnProperty("Customer_Name"));
             setbillerCodeErr(false)

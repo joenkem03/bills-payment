@@ -24,7 +24,7 @@ export function AppProvider({children}) {
         const billers = await axios.get('https://app-service.icadpay.com/api/AltBiller/servicesCategory');
         if(billers.status === 200){
           const billsdata = await billers.data;
-          console.log(billsdata);
+        //   console.log(billsdata);
           setCategory(billsdata);
           toggleLoad()
         }

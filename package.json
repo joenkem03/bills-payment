@@ -47,7 +47,8 @@
     "styled-components": "^5.3.5",
     "video.js": "^7.19.2",
     "web-vitals": "^2.1.4",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "yup-password": "^0.2.2"
   },
   "scripts": {
     "start": "react-scripts start",

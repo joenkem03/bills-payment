@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react'
 import { 
     UserBox,
@@ -5,10 +6,9 @@ import {
     UserContainerBg
 } from './AuthElements'
 import { Formik } from 'formik';
-import * as Yup from 'yup';
-import { RegisterService, GetBusinessTypes } from '../../services/AuthService';
-import { Row, Card, CardTitle, FormGroup, Label, Button } from 'reactstrap';
-import SearchSelect from '../common/searchSelect';
+import { RegisterService } from '../../services/AuthService';
+// import { Row, Card, CardTitle, FormGroup, Label, Button } from 'reactstrap';
+// import SearchSelect from '../common/searchSelect';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Link } from 'react-router-dom';
 
@@ -16,10 +16,13 @@ import {
     Grid,
     Typography,
     TextField,
-    Select,
-    MenuItem,
     Box
- } from '@mui/material';
+} from '@mui/material';
+
+import * as Yup from 'yup';
+import YupPassword from 'yup-password'
+
+YupPassword(Yup);
 
 const registerScheme = Yup.object().shape({
     firstName: Yup.string().required('Required'),
@@ -28,7 +31,14 @@ const registerScheme = Yup.object().shape({
     merchantName: Yup.string().required('Required'),
     // merchantTypeId: Yup.number().min(2, "Select a Service Type").max(729,  "Select a Service Type").required('Required'),
     phone: Yup.string().required('Required'),
-    password: Yup.string().min(6, 'Password must be at least 6 characters').matches(/[a-zA-Z]/, 'Password can only contain Latin letters.').required('Required'),
+    password: Yup.string()
+                .min(8, 'Password must be at least 6 characters')
+                .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.')
+                .minLowercase(1, 'password must contain at least 1 lower case letter')
+                .minUppercase(1, 'password must contain at least 1 upper case letter')
+                .minNumbers(1, 'password must contain at least 1 number')
+                .minSymbols(1, 'password must contain at least 1 special character')
+                .required('Required'),
     passwordConfirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required'),
 });
 
@@ -43,18 +53,7 @@ const Register = () => {
     const options = [];
   
     useEffect(() => {
-    //   if (option === null) {
-    //     GetBusinessTypes().then((ret) => {
-    //       console.log(ret);
-    //       if (ret.data.length > 0) {
-    //         ret.data.forEach((element) => {
-    //           options.push({ value: element.id, label: `${element.name}` });
-    //         });
-    //         setOption(options);
-    //       }
-    //     });
-    //   }
-      // }
+        
     }, []);
 
 
