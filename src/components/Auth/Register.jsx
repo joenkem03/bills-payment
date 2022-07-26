@@ -16,12 +16,16 @@ import {
     Grid,
     Typography,
     TextField,
-    Box
+    Box,
+    List,
+    ListItem,
+    ListItemAvatar,
+    Avatar
 } from '@mui/material';
-
+import ReportIcon from '@mui/icons-material/Report';
+import CheckIcon from '@mui/icons-material/Check';
 import * as Yup from 'yup';
 import YupPassword from 'yup-password'
-
 YupPassword(Yup);
 
 const registerScheme = Yup.object().shape({
@@ -32,7 +36,7 @@ const registerScheme = Yup.object().shape({
     // merchantTypeId: Yup.number().min(2, "Select a Service Type").max(729,  "Select a Service Type").required('Required'),
     phone: Yup.string().required('Required'),
     password: Yup.string()
-                .min(8, 'Password must be at least 6 characters')
+                .min(8, 'Password must be 8 characters long')
                 .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.')
                 .minLowercase(1, 'password must contain at least 1 lower case letter')
                 .minUppercase(1, 'password must contain at least 1 upper case letter')
@@ -41,7 +45,37 @@ const registerScheme = Yup.object().shape({
                 .required('Required'),
     passwordConfirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required'),
 });
-
+const handlePassword = (value)=>{
+    const err = [
+        'Password must be 8 characters long',
+        'password must contain at least 1 lower case letter',
+        'password must contain at least 1 upper case letter',
+        'password must contain at least 1 number',
+        'password must contain at least 1 special character'
+    ];
+    return(
+        <>
+        {/* <Typography color="warning" variant='caption' >Password Must have at least</Typography> */}
+        {/* <List dense={true}>
+            {
+                err.map((i,error)=>{
+                    if(error === err[i]){
+                        return(
+                            <Typography color={error === err[0] && "error"} variant='caption' >{err[0]} { error === err[0] ? <ReportIcon/> : <CheckIcon/> }</Typography>
+                        )
+                    }
+                })
+            }
+            <ListItem m={0}><Typography color={value === err[0] ? "error" : "green"} variant='caption' sx={{ display:'flex', alignItems:'center'}} >8 Characters { value === err[0] ? <ReportIcon/> : <CheckIcon/> }</Typography></ListItem>
+            <ListItem m={0}><Typography color={value === err[1] ? "error" : "green"} variant='caption' >1 Lowercase letter{ value === err[1] ? <ReportIcon/>:<CheckIcon/>}</Typography></ListItem>
+            <ListItem m={0}><Typography color={value === err[2] ? "error" : "green"} variant='caption' >1 Uppercase letter</Typography></ListItem>
+            <ListItem m={0}><Typography color={value === err[3] ? "error" : "green"} variant='caption' >1 Number letter</Typography></ListItem>
+            <ListItem m={0}><Typography color={value === err[4] ? "error" : "green"} variant='caption' >1 Special Character</Typography></ListItem>
+        </List> */}
+        </>
+    )
+    
+}
 const Register = () => {
     const [isSuccess, setIsSuccess] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -112,7 +146,7 @@ const Register = () => {
         }
       };
     
-      const initialValues = {
+    const initialValues = {
         email: "",
         password: "",
         firstName: "",
@@ -121,7 +155,14 @@ const Register = () => {
         merchantTypeId: 0,
         phone: "",
         passwordConfirmation: "",
-      };
+    };
+
+    const handleBlur = async (values,actions)=>{
+        console.log('data onBLur',values)
+        console.log('data onBLur',actions)
+        // console.log('data onBLur',data.password)
+    }
+    
   return (
     <UserBoxContainer>
             <UserContainerBg/>
@@ -136,17 +177,14 @@ const Register = () => {
                     <Grid item xs={12}>
                         {
                             !isSuccess && (
-                                <Formik
+                            <Formik
                                 initialValues={initialValues}
-                                
                                 validationSchema={registerScheme}
                                 onSubmit={handleSubmit}
-                                // onSubmit={(values, actions) => {
-                                //     setTimeout(() => {
-                                //       alert(JSON.stringify(values, null, 2));
-                                //       actions.setSubmitting(false);
-                                //     }, 1000);
-                                //   }}
+                                onBlur={(values)=>{
+                                    console.log('mksa', values)
+                                }}
+                                
                             >
                             { (props) => (
                             <form onSubmit={ props.handleSubmit}>
@@ -159,11 +197,13 @@ const Register = () => {
                                             name="merchantName"
                                             value={props.values.merchantName}
                                             onChange={props.handleChange}
-                                            error={ props.errors.merchantName && true}
+                                            error={props.touched.merchantName && props.errors.merchantName && true}
                                             autoComplete='off'
+                                            onBlur={props.handleBlur}
+
                                             // validate={validateEmail}
                                         />
-                                        {props.errors.merchantName && (
+                                        {props.touched.merchantName && props.errors.merchantName && (
                                             <Typography color="warning" variant='caption' >
                                             {props.errors.merchantName}
                                             </Typography>
@@ -178,11 +218,12 @@ const Register = () => {
                                             label="First Name"
                                             value={props.values.firstName}
                                             onChange={props.handleChange}
-                                            error={ props.errors.firstName && true}
+                                            onBlur={props.handleBlur}
+                                            error={ props.touched.firstName && props.errors.firstName && true}
                                             autoComplete='off'
                                             // validate={validateEmail}
                                         />
-                                        {props.errors.firstName && (
+                                        {props.touched.firstName && props.errors.firstName && (
                                             <Typography color="warning" variant='caption'  >
                                             {props.errors.firstName}
                                             </Typography>
@@ -197,11 +238,12 @@ const Register = () => {
                                             label="Last Name"
                                             value={props.values.lastName}
                                             onChange={props.handleChange}
-                                            error={ props.errors.lastName && true}
+                                            error={props.touched.lastName && props.errors.lastName && true}
                                             autoComplete='off'
+                                            onBlur={props.handleBlur}
                                             // validate={validateEmail}
                                         />
-                                        {props.errors.lastName && (
+                                        {props.touched.lastName && props.errors.lastName && (
                                             <Typography color="warning" variant='caption'  >
                                             {props.errors.lastName}
                                             </Typography>
@@ -216,11 +258,12 @@ const Register = () => {
                                             label="Phone Number"
                                             value={props.values.phone}
                                             onChange={props.handleChange}
-                                            error={ props.errors.phone && true}
+                                            error={props.touched.phone && props.errors.phone && true}
                                             autoComplete='off'
+                                            onBlur={props.handleBlur}
                                             // validate={validatePhone}
                                         />
-                                        {props.errors.phone && (
+                                        {props.touched.phone && props.errors.phone && (
                                             <Typography color="warning" variant='caption' >
                                             {props.errors.phone}
                                             </Typography>
@@ -234,12 +277,13 @@ const Register = () => {
                                             name="email"
                                             label="Email"
                                             value={props.values.email}
-                                                onChange={props.handleChange}
-                                                error={ props.errors.email && true}
-                                                autoComplete='off'
+                                            onChange={props.handleChange}
+                                            error={ props.touched.email  && props.errors.email && true}
+                                            autoComplete='off'
+                                            onBlur={props.handleBlur}
                                             // validate={validateEmail}
                                         />
-                                        {props.errors.email && (
+                                        {props.touched.email && props.errors.email && (
                                             <Typography color="warning" variant='caption' >
                                             {props.errors.email}
                                             </Typography>
@@ -247,6 +291,7 @@ const Register = () => {
                                     </Grid>
 
                                     <Grid item xs={12}>
+                                        
                                         <TextField
                                             fullWidth
                                             size="small"
@@ -254,16 +299,33 @@ const Register = () => {
                                             name="password"
                                             label="Password"
                                             value={props.values.password}
-                                                onChange={props.handleChange}
-                                                error={ props.errors.password && true}
-                                                autoComplete='off'
+                                            onChange={props.handleChange}
+                                            error={ props.touched.password && props.errors.password && true}
+                                            autoComplete='off'
+                                            onBlur={props.handleBlur}
+
                                             // validate={validatePassword}
                                         />
-                                        {props.errors.password && (
+                                        {props.touched.password && props.errors.password && (
                                             <Typography color="warning" variant='caption' >
-                                            {props.errors.password}
+                                                {props.errors.password}
                                             </Typography>
                                         )}
+                                        {
+                                            props.touched.password && props.errors.password && (
+                                                <>
+                                                    <br/>
+                                                    <Typography variant='caption'>Password must be at least</Typography>
+                                                    <List dense={true}>
+                                                        <ListItem m={0}><Typography variant='caption'>8 Characters with</Typography></ListItem>
+                                                        <ListItem m={0}><Typography variant='caption' >1 Lowercase letter</Typography></ListItem>
+                                                        <ListItem m={0}><Typography variant='caption' >1 Uppercase letter</Typography></ListItem>
+                                                        <ListItem m={0}><Typography variant='caption' >1 Number letter</Typography></ListItem>
+                                                        <ListItem m={0}><Typography variant='caption' >1 Special Character</Typography></ListItem>
+                                                    </List>
+                                                </>
+                                            )
+                                        }
                                     </Grid>
 
                                     <Grid item xs={12}>
@@ -274,14 +336,15 @@ const Register = () => {
                                         name="passwordConfirmation"
                                         label="Confirm Password"
                                         value={props.values.passwordConfirmation}
-                                            onChange={props.handleChange}
-                                            error={ props.errors.passwordConfirmation && true}
-                                            autoComplete='off'
+                                        onChange={props.handleChange}
+                                        error={ props.errors.passwordConfirmation && true}
+                                        autoComplete='off'
+                                        onBlur={props.handleBlur}
                                         // validate={validatePassword}
                                     />
-                                    {props.errors.password && (
+                                    {props.touched.passwordConfirmation && props.errors.password && (
                                         <Typography color="warning" variant='caption' >
-                                        {props.errors.password}
+                                        {props.errors.passwordConfirmation}
                                         </Typography>
                                     )}
                                     </Grid>
