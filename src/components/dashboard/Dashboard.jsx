@@ -333,7 +333,7 @@ const Dashboard = (props) => {
             last_name: lname,
             phone_number: phone, // customer's phone number (optional)
             customerId: email,
-            ref: data, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+            ref: transactionId, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
             narration: 'something nice',
             isBill:true,
             callback_url: window.location.href,
@@ -350,7 +350,7 @@ const Dashboard = (props) => {
             last_name: lname,
             phone_number: phone, // customer's phone number (optional)
             customerId: email,
-            ref: data, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+            ref: transactionId, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
             narration: 'something nice',
             isBill:true,
             callback_url: window.location.href, // specified redirect URL (potional)

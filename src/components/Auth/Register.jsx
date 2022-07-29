@@ -26,6 +26,7 @@ import ReportIcon from '@mui/icons-material/Report';
 import CheckIcon from '@mui/icons-material/Check';
 import * as Yup from 'yup';
 import YupPassword from 'yup-password'
+import PasswordChecklist from "react-password-checklist"
 YupPassword(Yup);
 
 const registerScheme = Yup.object().shape({
@@ -169,7 +170,9 @@ const Register = () => {
             <UserBox >
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                    <img src="/img/logo.png" alt="" />
+                        <Link to="/">
+                            <img src="/img/logo.png" alt="" />
+                        </Link>
                     </Grid>
                     <Grid item xs={12}>
                     <Typography variant="h5">Register</Typography>
@@ -307,22 +310,36 @@ const Register = () => {
                                             // validate={validatePassword}
                                         />
                                         {props.touched.password && props.errors.password && (
-                                            <Typography color="warning" variant='caption' >
-                                                {props.errors.password}
-                                            </Typography>
+                                            // <Typography color="warning" variant='caption' >
+                                            //     {props.errors.password}
+                                            // </Typography>
+                                            <></>
                                         )}
                                         {
                                             props.touched.password && props.errors.password && (
                                                 <>
-                                                    <br/>
-                                                    <Typography variant='caption'>Password must be at least</Typography>
-                                                    <List dense={true}>
-                                                        <ListItem m={0}><Typography variant='caption'>8 Characters with</Typography></ListItem>
-                                                        <ListItem m={0}><Typography variant='caption' >1 Lowercase letter</Typography></ListItem>
-                                                        <ListItem m={0}><Typography variant='caption' >1 Uppercase letter</Typography></ListItem>
-                                                        <ListItem m={0}><Typography variant='caption' >1 Number letter</Typography></ListItem>
-                                                        <ListItem m={0}><Typography variant='caption' >1 Special Character</Typography></ListItem>
-                                                    </List>
+                                                    <Box sx-={{
+                                                        background:"#f0f0f0"
+                                                    }}>
+                                                    <Typography sx={{fontSize: '12px'}} color="default" variant='caption'>Password must:</Typography>
+                                                    <PasswordChecklist
+                                                        rules={["minLength","lowercase","capital","number","specialChar"]}
+                                                        minLength={5}
+                                                        value={props.values.password}
+                                                        messages={{
+                                                            minLength: "Be a minimum of 8 Characters with",
+                                                            lowercase:"Include at least one Lowercase letter (a-z)",
+                                                            capital: "Include at least one Uppercase letter (A-Z)",
+                                                            number: "Include at least one number (0-9)",
+                                                            specialChar: "Include at least one Spaecial Character",
+                                                        }}
+                                                        iconSize="10"
+                                                        style={{
+                                                            padding:'5px 20px',
+                                                            fontSize: '13px'
+                                                        }}
+                                                    />
+                                                    </Box>
                                                 </>
                                             )
                                         }
@@ -359,7 +376,10 @@ const Register = () => {
                                                     }}
                                                 >
 
-                                                <Typography component={Link} to="/user/login" variant="caption">Already have an Accout? Login</Typography>
+                                                <Typography variant="caption">Already have an Account? <Typography sx={{
+                                                    textDecoration: "underline",
+                                                    textTransform: "uppercase"
+                                                }} color="primary" component={Link} to="/user/login" variant="caption">Login</Typography></Typography>
                                                 
                                                 <LoadingButton 
                                                     disabled={ !props.errors && true}
