@@ -6,20 +6,6 @@ import CategoryLoader from '../loaders/CategoryLoader';
 
 const Categories =({bills,load})=>{
     return(
-        // <Link  to={'/dashboard/'}>
-        //     <Cat >
-        //         <h3 className="">fsfsfdffsdsfd</h3>
-        //     </Cat>
-        // </Link>
-        // bills !== undefined &&(
-            // load && bills?.map((data,i)=>{
-            //     return(
-            //         <Link key={data.categoryId} to={'/dashboard/'+data.categoryId}>
-            //             <Cat >
-            //                 <h3 className="">{data.categoryName}</h3>
-            //             </Cat>
-            //         </Link>
-            // )
             load && bills?.map((data,i)=>{
                 return(
                     <Link key={i} to={'/dashboard/'+data.identifier}>
@@ -55,8 +41,12 @@ const Popular = ({bills,loading}) => {
                             <Categories load={loading} bills={bills}/>
                             : <CategoryLoader/>
                         }
+                        <Link to={'/dashboard/nipost'}>
+                            <Cat >
+                                <h3 className="">Nipost Payments</h3>
+                            </Cat>
+                        </Link>
                     </PopularMainCat>
-
                 </PopularMain>
             </Container>
         </PopularContainer>

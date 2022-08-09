@@ -25,6 +25,12 @@ export default function DashList({datas,setdata,bill,proceed}) {
     const [proceedVal, setproceed] = useState(false);
     
     useEffect(()=>{
+        console.log(datas);
+        if(datas.hasOwnProperty('serviceID')){
+            console.log('serviceID');
+        }else{
+            console.log('serviceID not found');
+        }
 
     },[]);
 
@@ -34,15 +40,26 @@ export default function DashList({datas,setdata,bill,proceed}) {
         setdata([])
         // if(active)
         if(datas !== '' ){
-
             datas.filter((item)=>{
-                
-                if(item.serviceID === id){
-                    setdata(item);
-                    console.log(item);
-                    setactive(item.serviceID);
-                    setproceed(true)
-                    // handleVariety(item.serviceID)
+                if(item.hasOwnProperty('serviceID')){
+                    // if(item.serviceID === id){
+                    //     setdata(item);
+                    //     console.log(item);
+                    //     setactive(item.serviceID);
+                    //     setproceed(true)
+                    //     // handleVariety(item.serviceID)
+                    // }
+                    console.log("serviceID",item.serviceID);
+                }else{
+
+                    console.log("serviceID not found");
+                    if(item.billerId === id){
+                        setdata(item);
+                        console.log(item);
+                        setactive(item.billerId);
+                        setproceed(true)
+                        // handleVariety(item.serviceID)
+                    }
                 }
                 return item;
             })
@@ -73,25 +90,29 @@ export default function DashList({datas,setdata,bill,proceed}) {
                     datas !== '' && (
 
                         datas.filter(Boolean).map((item,i)=>{
-                            return(
+                            if(item.hasOwnProperty("billerId")){
+                                return(
+                                    
+                                        <li key={i} className={active === item.billerId ? 'active':''} id={item.billerId} onClick={handleClick}>
+                                            <DashListimg src={item.billerLogoUrl}/>
+                                            <div className="listnames">
+                                                <h4 className="">{item.billerName}</h4>
+                                            </div>
+                                        </li>
+                                )
+                                }else {
+                                return(
                                         <>
-                                            <li key={i} className={active === item.serviceID ? 'active':''} id={item.serviceID} onClick={handleClick}>
-                                                <DashListimg src={item.image}/>
-                                                {/* <DashIcon value={item.name}/> */}
-                                                <div className="listnames">
-                                                    <h4 className="">{item.name}</h4>
-                                                </div>
-                                            </li>
-
-                                            {/* <li key={i} className={active === item.billerId ? 'active':''} id={item.billerId} onClick={handleClick}>
-                                                
-                                                <DashIcon value={item.billerName}/>
-                                                <div className="listnames">
-                                                    <h4 className="">{item.billerName}</h4>
-                                                </div>
-                                            </li> */}
-                                        </>
+                                        <li key={i} className={active === item.serviceID ? 'active':''} id={item.serviceID} onClick={handleClick}>
+                                          <DashListimg src={item.image}/>
+                                          {/* <DashIcon value={item.name}/> */}
+                                          <div className="listnames">
+                                              <h4 className="">{item.name}</h4>
+                                          </div>
+                                        </li> 
+                                    </>
                                     )
+                            }  
                         })
                     )
                     

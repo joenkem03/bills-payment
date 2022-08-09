@@ -11,6 +11,7 @@ import { useState } from 'react';
 import UserLayout from './layout/UserLayout';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
+import BillerDash from './components/dashboard/BillerDash';
 
 function App() {
 
@@ -42,6 +43,8 @@ function App() {
           
           <Route path='/dashboard' element={<Dashboard load={setLoading}/>}>
             <Route path=':biller' element={<Dashboard/>} />
+          </Route>
+          <Route path='/dashboard/nipost' element={<BillerDash load={setLoading}/>}>
           </Route>
         </Route>
         <Route path='/user' element={<UserLayout/>}>

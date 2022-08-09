@@ -8,12 +8,23 @@ import appContext from '../hooks/appHook';
 const Bills = () => {
   // const [billers,setbillers] = useState();
   // const [category,setcategory] = useState();
-  const {loading,getCat,category,getBillers,billerProducts,billloading} = useContext(appContext);
+  const {
+    loading,
+    getCat,
+    getBillers,
+    getNpps,
+    altcategory,
+    billerProducts,
+    altbillerProducts,
+    billloading,
+    isloaded
+  } = useContext(appContext);
 
 
   useEffect(()=>{
       getCat();
       getBillers();
+      getNpps();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   
@@ -28,7 +39,7 @@ const Bills = () => {
   return (
     <>
       <Billsheader data={billerProducts} loading={billloading}/>  
-      <Popular bills={category} loading={loading}/>
+      <Popular bills={altcategory} loading={loading}/>
     </>
   )
 }
