@@ -316,7 +316,6 @@ const Register = () => {
                                             <></>
                                         )}
                                         {
-                                            props.touched.password && props.errors.password && (
                                                 <>
                                                     <Box sx-={{
                                                         background:"#f0f0f0"
@@ -341,7 +340,6 @@ const Register = () => {
                                                     />
                                                     </Box>
                                                 </>
-                                            )
                                         }
                                     </Grid>
 

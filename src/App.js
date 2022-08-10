@@ -12,6 +12,7 @@ import UserLayout from './layout/UserLayout';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import BillerDash from './components/dashboard/BillerDash';
+import Confirm from './components/Auth/Confirm';
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
         <Route path='/user' element={<UserLayout/>}>
           <Route path='/user/login' element={<Login/>}/>
           <Route path='/user/register' element={<Register/>}/>
+          <Route path='/user/confirm-account/:id' element={<Confirm/>}/>
         </Route>
       </Routes>
     </>

@@ -1,6 +1,6 @@
 import { DashListContainer, DashListimg, DashListsContent } from './billsElements';
 import  { useEffect, useState } from 'react';
-
+import logo from '../../assets/logos/nipost.png'
 // import axios from "axios";
 // const DashIcon = ({value}) => {
 //     let arrrr = '';
@@ -94,7 +94,8 @@ export default function DashList({datas,setdata,bill,proceed}) {
                                 return(
                                     
                                         <li key={i} className={active === item.billerId ? 'active':''} id={item.billerId} onClick={handleClick}>
-                                            <DashListimg src={item.billerLogoUrl}/>
+                                            <DashListimg src={logo}/>
+                                            {/* <DashListimg src={item.billerLogoUrl}/> */}
                                             <div className="listnames">
                                                 <h4 className="">{item.billerName}</h4>
                                             </div>

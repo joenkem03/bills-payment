@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { getCurrentUser } from 'helpers/Utils';
 import { isAuthGuardActive, currentUser } from 'constants/defaultValues';
 import {

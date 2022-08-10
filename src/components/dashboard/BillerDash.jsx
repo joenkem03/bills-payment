@@ -629,7 +629,8 @@ const BillerDash = (props) => {
 
                     <div className="imgcontainer">
                         {
-                            selectedBiller ? <DListimg src={selectedBiller.billerLogoUrl}/> : <Skeleton circle width={100} height={100}/>
+                            selectedBiller ? <DListimg src={'../../assets/logos/nipost.png'}/> : <Skeleton circle width={100} height={100}/>
+                            // selectedBiller ? <DListimg src={selectedBiller.billerLogoUrl}/> : <Skeleton circle width={100} height={100}/>
                         }
                     </div>
                     <div className="namecontainer">
