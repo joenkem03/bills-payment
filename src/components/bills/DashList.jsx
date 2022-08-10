@@ -1,22 +1,7 @@
 import { DashListContainer, DashListimg, DashListsContent } from './billsElements';
 import  { useEffect, useState } from 'react';
 import logo from '../../assets/logos/nipost.png'
-// import axios from "axios";
-// const DashIcon = ({value}) => {
-//     let arrrr = '';
-//     const Arr = value.split(' ');
-//     Arr.map((item)=> arrrr += item.charAt(0))
-//     // console.log(arrrr.split('(')[0]);
-//     return(
-//         <>
-//             <DashPlaceholder>
-//                 {
-//                     arrrr.split('(')[0]
-//                 }
-//             </DashPlaceholder>
-//         </>
-//     )
-// }
+
 export default function DashList({datas,setdata,bill,proceed}) {
     
     // console.log('DashList_____',datas)
@@ -42,13 +27,13 @@ export default function DashList({datas,setdata,bill,proceed}) {
         if(datas !== '' ){
             datas.filter((item)=>{
                 if(item.hasOwnProperty('serviceID')){
-                    // if(item.serviceID === id){
-                    //     setdata(item);
-                    //     console.log(item);
-                    //     setactive(item.serviceID);
-                    //     setproceed(true)
-                    //     // handleVariety(item.serviceID)
-                    // }
+                    if(item.serviceID === id){
+                        setdata(item);
+                        console.log(item);
+                        setactive(item.serviceID);
+                        setproceed(true)
+                        // handleVariety(item.serviceID)
+                    }
                     console.log("serviceID",item.serviceID);
                 }else{
 
