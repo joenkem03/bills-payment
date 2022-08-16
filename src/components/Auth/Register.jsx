@@ -20,10 +20,17 @@ import {
     List,
     ListItem,
     ListItemAvatar,
-    Avatar
+    Avatar,
+    FormControl,
+    OutlinedInput,
+    InputLabel,
+    InputAdornment,
+    IconButton
 } from '@mui/material';
 import ReportIcon from '@mui/icons-material/Report';
 import CheckIcon from '@mui/icons-material/Check';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import * as Yup from 'yup';
 import YupPassword from 'yup-password'
 import PasswordChecklist from "react-password-checklist"
@@ -83,7 +90,11 @@ const Register = () => {
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
     const [option, setOption] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+    const handleTogglePassword = () => setShowPassword(showPassword => !showPassword);
+    const handleTogglePasswordConfirm = () => setShowConfirmPassword(showConfirmPassword => !showConfirmPassword);
 
     const options = [];
   
@@ -295,26 +306,28 @@ const Register = () => {
 
                                     <Grid item xs={12}>
                                         
-                                        <TextField
-                                            fullWidth
-                                            size="small"
-                                            type="password"
-                                            name="password"
-                                            label="Password"
-                                            value={props.values.password}
-                                            onChange={props.handleChange}
-                                            error={ props.touched.password && props.errors.password && true}
-                                            autoComplete='off'
-                                            onBlur={props.handleBlur}
-
-                                            // validate={validatePassword}
-                                        />
-                                        {props.touched.password && props.errors.password && (
-                                            // <Typography color="warning" variant='caption' >
-                                            //     {props.errors.password}
-                                            // </Typography>
-                                            <></>
-                                        )}
+                                        <FormControl sx={{ width: '100%' }} size='small' variant="outlined">
+                                            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                                            <OutlinedInput
+                                                id="outlined-adornment-password"
+                                                name="password"
+                                                type={showPassword ? 'text' : 'password'}
+                                                value={props.values.password}
+                                                onChange={props.handleChange}
+                                                endAdornment={
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleTogglePassword}
+                                                        edge="end"
+                                                    >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                                }
+                                                label="Password"
+                                            />
+                                        </FormControl>
                                         {
                                                 <>
                                                     <Box sx-={{
@@ -344,19 +357,30 @@ const Register = () => {
                                     </Grid>
 
                                     <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        size="small"
-                                        type="password"
-                                        name="passwordConfirmation"
-                                        label="Confirm Password"
-                                        value={props.values.passwordConfirmation}
-                                        onChange={props.handleChange}
-                                        error={ props.errors.passwordConfirmation && true}
-                                        autoComplete='off'
-                                        onBlur={props.handleBlur}
-                                        // validate={validatePassword}
-                                    />
+                                    
+                                    <FormControl sx={{ width: '100%' }} size='small' variant="outlined">
+                                            <InputLabel htmlFor="outlined-adornment-password">Confirm Password</InputLabel>
+                                            <OutlinedInput
+                                                id="outlined-adornment-password"
+                                                name="passwordConfirmation"
+                                                type={showConfirmPassword ? 'text' : 'password'}
+                                                value={props.values.passwordConfirmation}
+                                                error={ props.errors.passwordConfirmation && true}
+                                                onChange={props.handleChange}
+                                                endAdornment={
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleTogglePasswordConfirm}
+                                                        edge="end"
+                                                    >
+                                                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                                }
+                                                label="Confirm Password"
+                                            />
+                                        </FormControl>
                                     {props.touched.passwordConfirmation && props.errors.password && (
                                         <Typography color="warning" variant='caption' >
                                         {props.errors.passwordConfirmation}
