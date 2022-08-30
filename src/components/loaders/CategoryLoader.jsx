@@ -1,7 +1,7 @@
 import React from 'react'
 import ContentLoader from 'react-content-loader'
 
-const CategoryLoader = (props) => {
+const   CategoryLoader = (props) => {
   return (
     <ContentLoader viewBox="0 0 1000 900" height={900} width={1000} {...props}>
         <rect x="60" y="0" rx="25" ry="50" width="200" height="50" />

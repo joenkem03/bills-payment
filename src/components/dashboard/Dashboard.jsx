@@ -9,6 +9,7 @@ import axios from "axios";
 import { isBrowser } from "react-device-detect";
 
 import Skeleton from 'react-loading-skeleton'
+
 // import Box from '@mui/material/Box';
 import FormControl,{ useFormControl } from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -129,7 +130,8 @@ const Dashboard = (props) => {
     const [key, setKey] = useState(null);
     const [power, setpower] = useState(false);
     const [powerdata, setpowerdata] = useState(null);
-
+    const [ amountErr, SetAmountErr] = useState(false)
+    const [ amountSuccess, SetAmountSuccess] = useState(false)
 
     const params = useParams();
 
@@ -192,9 +194,10 @@ const Dashboard = (props) => {
  
     useEffect(()=>{
         const name = new URLSearchParams(search).get('status');
+        const ref = new URLSearchParams(search).get('ref');
         console.log(name)
         if(name === 'SUCCESS'){
-            getValue();
+            getValue(ref);
             // console.log('status: ',status);
             setmodal(true);
             console.log(fixed);
@@ -204,13 +207,13 @@ const Dashboard = (props) => {
 
 
     useEffect(()=>{
-        if(email.length < 3 || phone.length <= 10){
+        if(email.length < 3 || phone.length <= 10 || amount_ < parseInt(selectedBiller.minimium_amount) || amount_ > parseInt(selectedBiller.maximum_amount)){
             setactive(false)
             // console.log('active: ',active);
         }else{
             setactive(true)
         }
-     },[email,phone,active])   
+     },[email,phone,active,selectedBiller,amount_])   
 
     useEffect(()=>{
         if(Object.keys(selectedBiller).length !== 0 ){
@@ -241,9 +244,25 @@ const Dashboard = (props) => {
                 })
         }
     },[selectedBiller,selectedVariety])
+
+
     useEffect(()=>{
+        if(amount_ < parseInt(selectedBiller.minimium_amount) ){
+            SetAmountErr(true)
+            console.log( 'value < ',parseInt(selectedBiller.minimium_amount))
+        }else{
+            SetAmountErr(false)
+            SetAmountSuccess(true);
+        }
+        if(amount_ >  parseInt(selectedBiller.maximum_amount) ){
+            SetAmountErr(true)
+        }else{
+            SetAmountErr(false)
+            SetAmountSuccess(true);
+        }
         
-    },[billerCode])
+    },[amount_, selectedBiller])
+
     useEffect(()=>{
         if(billerCode === ''){
             setbillerCodeErr(false)
@@ -296,10 +315,11 @@ const Dashboard = (props) => {
         }
     },[transactionRefId])
 
-    const getValue = async()=>{
+    const getValue = async(ref)=>{
         const payload ={
-            reqId:transactionRefId
+            reqId:ref
         }
+        console.log(payload);
         const response = await axios.get('https://app-service.icadpay.com/api/AltBiller/getValue', payload);
         const data = await response.data;
         setpowerdata(data)
@@ -706,29 +726,11 @@ const Dashboard = (props) => {
                                             </Select>
                                         </FormControl>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
                                     </>
-                                )
+                                ) 
+                                
+
                             }
-                            {/* {
-                                selectedVarietyFields  && selectedVarietyFields?.map((fields,)=>{
-                                    return(
-                                        // <input type="text" className="" placeholder={fields.display_name} />
-                                        fields.required &&
-                                        <FormControl key={fields.variable_name} fullWidth sx={{ m: 1 }}>
-                                            <InputLabel htmlFor="outlined-adornment-amount">{fields.display_name}</InputLabel>
-                                            <OutlinedInput
-                                                id="outlined-adornment-amount"
-                                                // startAdornment={<InputAdornment position="start">₦</InputAdornment>}
-                                                label={fields.display_name}
-                                                type={fields.type}
-                                                name={fields.variable_name}
-                                                placeholder={fields.display_name}
-                                                onChange={event => onClick(event, fields.variable_name)}
-                                            />
-                                        </FormControl>   
-                                    )
-                                })
-                                  
-                            } */}
+                            
                             {
                                 productExist && (
                                     <>
@@ -756,15 +758,23 @@ const Dashboard = (props) => {
                             }
                             <FormControl fullWidth sx={{ m: 1 }}>
                                 <TextField
+                                    // type={'number'}
                                     id="outlined-adornment-amount"
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">₦</InputAdornment>,
                                         inputComponent: NumberFormatCustom,
+                                        inputProps: { min: selectedBiller.minimium_amount, max: selectedBiller.maximum_amount }
                                     }}
                                     label="Amount"
                                     value={amount_}
                                     onChange={e => setamount(e.target.value)}
+                                    // placeholder={`Minimum Amount is ${selectedBiller.minimium_amount}`}
                                     autocomplete="none"
+                                    // color={ (amountErr && 'secondary') || (amountSuccess && 'success')}
+                                    error={amount_ < parseInt(selectedBiller.minimium_amount) || amount_ > parseInt(selectedBiller.maximum_amount) }
+                                    helperText={ 
+                                        (amount_ < parseInt(selectedBiller.minimium_amount) && `Minimum Amount is ${selectedBiller.minimium_amount}`) || (amount_ > parseInt(selectedBiller.maximum_amount) && `Maximun Amount is ${selectedBiller.minimium_amount}`)
+                                    }
                                     // disabled={fixed}
                                 />
                             </FormControl>

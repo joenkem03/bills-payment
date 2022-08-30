@@ -63,26 +63,14 @@ const handlePassword = (value)=>{
     ];
     return(
         <>
-        {/* <Typography color="warning" variant='caption' >Password Must have at least</Typography> */}
-        {/* <List dense={true}>
-            {
-                err.map((i,error)=>{
-                    if(error === err[i]){
-                        return(
-                            <Typography color={error === err[0] && "error"} variant='caption' >{err[0]} { error === err[0] ? <ReportIcon/> : <CheckIcon/> }</Typography>
-                        )
-                    }
-                })
-            }
-            <ListItem m={0}><Typography color={value === err[0] ? "error" : "green"} variant='caption' sx={{ display:'flex', alignItems:'center'}} >8 Characters { value === err[0] ? <ReportIcon/> : <CheckIcon/> }</Typography></ListItem>
-            <ListItem m={0}><Typography color={value === err[1] ? "error" : "green"} variant='caption' >1 Lowercase letter{ value === err[1] ? <ReportIcon/>:<CheckIcon/>}</Typography></ListItem>
-            <ListItem m={0}><Typography color={value === err[2] ? "error" : "green"} variant='caption' >1 Uppercase letter</Typography></ListItem>
-            <ListItem m={0}><Typography color={value === err[3] ? "error" : "green"} variant='caption' >1 Number letter</Typography></ListItem>
-            <ListItem m={0}><Typography color={value === err[4] ? "error" : "green"} variant='caption' >1 Special Character</Typography></ListItem>
-        </List> */}
+        
         </>
     )
     
+}
+const navigateToLogin = ()=>{
+    window.open('https://portal.icadpay.com/user/login', "_blank")
+
 }
 const Register = () => {
     const [isSuccess, setIsSuccess] = useState(false);
@@ -398,10 +386,18 @@ const Register = () => {
                                                     }}
                                                 >
 
-                                                <Typography variant="caption">Already have an Account? <Typography sx={{
-                                                    textDecoration: "underline",
-                                                    textTransform: "uppercase"
-                                                }} color="primary" component={Link} to="/user/login" variant="caption">Login</Typography></Typography>
+                                                <Typography variant="caption">Already have an Account? 
+                                                <Typography 
+                                                    sx={{
+                                                        textDecoration: "underline",
+                                                        textTransform: "uppercase"
+                                                    }} 
+                                                    color="primary" 
+                                                    component={Link} 
+                                                    onClick={navigateToLogin}
+                                                    to="" 
+                                                    variant="caption">Login</Typography>
+                                                </Typography>
                                                 
                                                 <LoadingButton 
                                                     disabled={ !props.errors && true}

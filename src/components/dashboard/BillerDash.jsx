@@ -99,7 +99,7 @@ const BillerDash = (props) => {
     const [variety, setVariety]=useState(false);
     const [varietyData, setVarietyData]=useState();
     const [type, setType]=useState('');
-    const [serviceId, setServiceId]=useState({});
+    const [serviceId, setServiceId]=useState('');
 
     const [billerCode, setbillerCode]=useState('');
     
@@ -129,7 +129,7 @@ const BillerDash = (props) => {
     const [key, setKey] = useState(null);
     const [power, setpower] = useState(false);
     const [powerdata, setpowerdata] = useState(null);
-    const [metafields, setMetafields ] = useState({});
+    const [metafields, setMetafields ] = useState();
 
     const params = useParams();
 
@@ -449,17 +449,18 @@ const BillerDash = (props) => {
         // props.load(true);
         setLoading(true);
         const payload ={
-            billPaymentProductId: serviceId,
+            billPaymentProductId: selectedVarietyId,
             amount: amount_,
-            name:name,
             transactionRef: "",
+            name:name,
             email: email,
             phoneNumber: phone,
             customerId: billerCode,
             metadata: {
-              customFields: [metafields]
+              customFields: [{
+                metafields
+              }]
             }
-            
         }
 
         const res = await axios.post('https://app-service.icadpay.com/api/Biller/initiatePayment',payload)

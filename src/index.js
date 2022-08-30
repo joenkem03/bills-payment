@@ -7,10 +7,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { AppProvider } from './hooks/appHook';
 // import { Provider } from 'react-redux';
 // import { configureStore } from './redux/store';
+// import axios from 'axios';
 import styled from 'styled-components';
 
 import 'react-loading-skeleton/dist/skeleton.css';
 // import 'bootstrap/dist/css/bootstrap.min.css';
+
 const UnsecuredPageWarning = styled.h1`
   color:red;
 `
