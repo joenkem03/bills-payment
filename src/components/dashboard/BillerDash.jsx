@@ -457,9 +457,13 @@ const BillerDash = (props) => {
             phoneNumber: phone,
             customerId: billerCode,
             metadata: {
-              customFields: [{
-                metafields
-              }]
+              customFields: [
+                // metafields
+                {
+                    variable_name:'description',
+                    value:'lorem ipsum'
+                }
+              ]
             }
         }
 

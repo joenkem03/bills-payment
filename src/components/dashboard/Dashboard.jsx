@@ -262,22 +262,22 @@ const Dashboard = (props) => {
         }
         
     },[amount_, selectedBiller])
-
+    
     useEffect(()=>{
         if(billerCode === ''){
             setbillerCodeErr(false)
             setbillerCodevalid(false)
         }else{
-            if(billerCode.length <= 10){
-                setbillerCodeErr(true)
-                setbillerCodeErrMsg('Biller Code must be at least 11 characters');
-                console.log('biller code error')
+            // if(billerCode.length <= 10){
+            //     setbillerCodeErr(true)
+            //     setbillerCodeErrMsg('Biller Code Error.. Check Again');
+            //     console.log('biller code error')
+            // }
+            if (billerCode.length >= 5){
+                setLoading2(true);
+                console.log('biller code valid')
+                handleValidation();
             }
-        }
-        if (billerCode.length >= 11){
-            setLoading2(true);
-            console.log('biller code valid')
-            handleValidation();
         }
     },[billerCode])
 
