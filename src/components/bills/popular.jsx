@@ -5,8 +5,18 @@ import { Link } from "react-router-dom";
 import CategoryLoader from '../loaders/CategoryLoader';
 
 const Categories =({bills,load})=>{
+    const billCategories= [
+        {identifier:"airtime",name:"Airtime Recharge"},
+        {identifier:"data",name:"Data Services"},
+        {identifier:"education",name:"Education"},
+        {identifier:"electricity-bill",name:"Electricity Bill"},
+        // {identifier:"events",name:"Events"},
+        // {identifier:"insurance",name:"Insurance"},
+        // {identifier:"other-services",name:"Other Merchants/Services"},
+        {identifier:"tv-subscription",name:"TV Subscription"}
+    ]
     return(
-            load && bills?.map((data,i)=>{
+            billCategories.map((data,i)=>{
                 return(
                     <Link key={i} to={'/dashboard/'+data.identifier}>
                         <Cat >
@@ -15,7 +25,6 @@ const Categories =({bills,load})=>{
                     </Link>
             )
         })
-        // )
     )
 }
 const Popular = ({bills,loading}) => {

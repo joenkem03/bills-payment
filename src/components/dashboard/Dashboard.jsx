@@ -140,6 +140,9 @@ const Dashboard = (props) => {
     const amount = new URLSearchParams(search).get('amount');
     const ref = new URLSearchParams(search).get('ref');
 
+    const [steps, setSteps] = useState({});
+    const [showqr,setshowqr] = useState(false);
+    const [qr,setqr] = useState('');
 
     const handleValidation = useCallback( async ()=>{
         const payload ={
@@ -197,6 +200,7 @@ const Dashboard = (props) => {
         const ref = new URLSearchParams(search).get('ref');
         console.log(name)
         if(name === 'SUCCESS'){
+            setTransactionRefId(ref);
             getValue(ref);
             // console.log('status: ',status);
             setmodal(true);
@@ -247,18 +251,26 @@ const Dashboard = (props) => {
 
 
     useEffect(()=>{
-        if(amount_ < parseInt(selectedBiller.minimium_amount) ){
-            SetAmountErr(true)
-            console.log( 'value < ',parseInt(selectedBiller.minimium_amount))
-        }else{
+        if(selectedBiller.fixedPrice === "Yes"){
             SetAmountErr(false)
             SetAmountSuccess(true);
-        }
-        if(amount_ >  parseInt(selectedBiller.maximum_amount) ){
-            SetAmountErr(true)
+
         }else{
-            SetAmountErr(false)
-            SetAmountSuccess(true);
+
+            if(amount_ < parseInt(selectedBiller.minimium_amount) ){
+                SetAmountErr(true)
+                console.log( 'value < ',parseInt(selectedBiller.minimium_amount))
+            }else{
+                SetAmountErr(false)
+                SetAmountSuccess(true);
+            }
+            
+            if(amount_ >  parseInt(selectedBiller.maximum_amount) ){
+                SetAmountErr(true)
+            }else{
+                SetAmountErr(false)
+                SetAmountSuccess(true);
+            }
         }
         
     },[amount_, selectedBiller])
@@ -300,9 +312,9 @@ const Dashboard = (props) => {
         getStatus();
     }
 
-    const getStatus = async ()=>{
+    const getStatus = async (ref)=>{
         const payload ={
-            transactionRefId : transactionRefId,
+            transactionRefId : ref,
             key: key
         }
         const response = await axios.get('https://app-service.icadpay.com/api/query-status', payload);
@@ -316,6 +328,7 @@ const Dashboard = (props) => {
     },[transactionRefId])
 
     const getValue = async(ref)=>{
+        getStatus(ref)
         const payload ={
             reqId:ref
         }
@@ -332,20 +345,22 @@ const Dashboard = (props) => {
     
     const handlepaymentFull = async (data)=>{
         
-        setTransactionId(data)
-        
+        // setTransactionId(data)
+        setPaymentType(false)
+
         console.log('handle full payment: ', name)
         const namearr = name.split(" ");
         const fname = namearr[0] === ''? 'firstname':namearr[0]
         const lname = namearr[1] === ''? 'lastname':namearr[1]
-        console.log(fname +'=='+ lname )
+        
+        console.log(fname +''+ lname )
+
         setfirstname(fname)
         setlastname(lname)
         // let txn =  data;
         // console.log(txn)
 
         console.log({
-            // key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
             email: email, // customer email 
             amount: amount_, // amount to be processed
             currency: "NGN", // currency
@@ -359,38 +374,41 @@ const Dashboard = (props) => {
             callback_url: window.location.href,
         });
 
+        // key: 'test_ZTgxNTYxMzUwODYyODU3NzM5MmI4OTdjZmZmMGYyY2FkNGU5Nzc5ZDAwM2NlOWIyZTE3YzEwMTQwNDIwNTA0OA', // this is a demo key.  
+        // key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
         const payload = {
-            // key: 'test_ZTgxNTYxMzUwODYyODU3NzM5MmI4OTdjZmZmMGYyY2FkNGU5Nzc5ZDAwM2NlOWIyZTE3YzEwMTQwNDIwNTA0OA', // this is a demo key.  
-            // key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
             key: 'live_YzM1ODg3YzY5MWVjZjFlYzhkOTQxMDU3NmMzM2NlYjc4YzQwYTU1M2ZkZjRmNjI5ZjQzOGQzZmM4ZmY3NzZmYQ', // this is a demo key.  
             email: email, // customer email 
-            amount: amount_, // amount to be processed
+            amount: parseFloat(amount_), // amount to be processed
             currency: "NGN", // currency
             first_name: fname,
             last_name: lname,
             phone_number: phone, // customer's phone number (optional)
             customerId: email,
             ref: transactionId, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-            narration: 'something nice',
+            narration: fname + lname,
             isBill:true,
             callback_url: window.location.href, // specified redirect URL (potional)
             callback: (response) => {
-                // console.log(response);
+                console.log(response);
             },
             onSuccess: (response) => {
-            //   console.log(response);
+              console.log(response);
+                // const ref = response
+                // localStorage.set('transactionResponse',response )
                 
             },
             onError: (response) => {
-            //   console.log(response);
+              console.log(response);
             },
             onClose: () => {
-            //   console.log('window closed');
-              // alert('window closed');
+                // alert('window closed');
             }
         }
-
-        window.IcadPay.setup(payload);
+        
+        console.log('window closed');
+        const handler = window.IcadPay.setup(payload);
+        handler.openIframe();
         props.load(false);
     }
 
@@ -412,6 +430,7 @@ const Dashboard = (props) => {
             setselectedVarietyFields([])
         }else{
             console.log('data',varietyData);
+            console.log('selectedBiller: ' , selectedBiller);
             setProductExist(true)
             setVariety(true);
             // setProductExist(false)
@@ -439,58 +458,9 @@ const Dashboard = (props) => {
         console.log('array values: ',arr);
         setSelectedVariety(arr);
 
-            // filterArray?.filter((item)=>{
-            //     if(item.billPaymentProductId === selectedVarietyId){
-            //         arr.push(item);
-            //         console.log('array values: ',arr);
-            //         setSelectedVarietyId(item.billPaymentProductId);
-            // }
-        // })
-        // console.log('array values: ',arr);
-
-        // if(varietyData !== undefined){   
-        //     setSelectedVariety(arr)
-        //     console.log('selected Varity',selectedVariety)
-        //     // eslint-disable-next-line array-callback-return
-        //     arr.map(item => {
-        //         console.log('selected Varity',item.metadata.customFields)
-                
-        //         setselectedVarietyFields(item.metadata.customFields)
-        //         console.log('selected Varityw',selectedVarietyFields)
-        //         if(item.isAmountFixed){
-        //             setamount(item.amount);
-        //             setType(item.variation_code);
-        //             setfixed(true)
-        //             // console.log(item)
-        //         }else{
-        //             setfixed(false)
-        //         }
-        //     })
-        //     setselectedVarietyStatus(true);
-        //     setLoading(false);
-        //     console.log('array values:',selectedVariety);
-        // }else{
-        //     setSelectedVariety('')
-        //     console.log('array values:',selectedVariety);
-        // }
-        // if(Object.keys(selectedVariety).length !== 0 ){
-            
-        //     // eslint-disable-next-line array-callback-return
-        //     selectedVariety.map(item => {
-        //         // console.log(item.fixedPrice)
-        //         if(item.fixedPrice === "Yes"){
-        //                 setamount(item.variation_amount);
-        //                 setType(item.variation_code);
-        //                 setfixed(true)
-        //                 // console.log(item.variation_amount)
-        //             }else{
-        //                 setfixed(false)
-        //             }
-        //     })
-        // }
-
-        // handleValidation();
-        // }
+        
+         
+        
     }
 
     const handlemodal= ()=>{
@@ -516,11 +486,12 @@ const Dashboard = (props) => {
     const handlePaymentType = () => {
 
         setPaymentType(true);
-        console.log('payment type')
+        // console.log('payment type')
     }
 
     const handlePayment = async () => {
-        
+        // const ref = Array.from(Array(20), () => Math.floor(Math.random() * 36).toString(36)).join('');
+
         // props.load(true);
         setLoading(true);
         const payload ={
@@ -534,46 +505,38 @@ const Dashboard = (props) => {
             variation_code: type
         }
 
-        // const res = await axios.post('https://app-service.icadpay.com/api/Biller/initiatePayment',payload)
         const res = axios.post('https://app-service.icadpay.com/api/AltBiller/initiatePayment',payload)
-
-        
-        // console.log(res.data.transId);
-
         res.then((val) =>{
             const resData = val.data.transId;
             setTransactionId(resData);
             setTransactionRefId(resData)
             console.log('trans id: ', resData)
         }).catch((err)=>{
-            
+            console.log(err);  
         })
-        // handlepaymentFull(res.data.transId);
         setLoading(false);
         handlePaymentType();
         
+        
+        // const res = await axios.post('https://app-service.icadpay.com/api/Biller/initiatePayment',payload)
+        // console.log(res.data.transId);
+
+        // handlepaymentFull(res.data.transId);
     }
 
     const getProducts = async (context) => {
+
         setLoading(true);
         const bill = params.biller
         console.log(bill)
         
         const billers = await axios.get('https://app-service.icadpay.com/api/AltBiller/serviceByIdentifier?id='+bill);
-        // const billers = await axios.get('https://app-service.icadpay.com/api/Biller/allBillersByCategory?category='+bill);
         const billsdata = billers.data;
         
-        // console.log('data',billsdata.products[0]);
         console.log('data',billsdata);
         
         setBills(billsdata)
         setLoading(false);
-        // return {
-        //     props:{
-        //         bills:billsdata,
-        //         sidbar:billsdata
-        //     }
-        // }
     }
 
 
@@ -592,29 +555,13 @@ const Dashboard = (props) => {
             </>
         )
     }
-
-    const [steps, setSteps] = useState({});
-
-    const onClick = (e, evt)=> {
-        const prop = []
-        const ArrLenght = selectedVarietyFields.length
         
-        // selectedVarietyFields.map((item,i)=> {
-            // });
-            // const data = evt;
-            console.log(ArrLenght)
-            // console.log(evt,e.target.value)
-            // console.log(evt)
-    }
-        
-        
-    const [showqr,setshowqr] = useState(false);
-    const [qr,setqr] = useState('');
 
     const handleQr = ()=>{
         setshowqr(true)
         handleQrReq();
     }
+
     const back = ()=>{
         setshowqr(false)
         // handleQrReq();
@@ -640,7 +587,6 @@ const Dashboard = (props) => {
 
     const handleOther = ()=>{
         handlepaymentFull();
-        setPaymentType(false)
     }
 
     const handleClose = ()=>{
@@ -675,9 +621,23 @@ const Dashboard = (props) => {
                 val = {powerdata}
                 ifPower = { power }
             />
-            <PaymentModal back={back} close={handleClose} show={paymentType} handleQr={handleQr} handleOther={handleOther} sendQr={showqr} qrvalue={qr}/>
+            <PaymentModal 
+                back={back} 
+                close={handleClose} 
+                show={paymentType} 
+                handleQr={handleQr} 
+                handleOther={handleOther} 
+                sendQr={showqr} 
+                qrvalue={qr}
+            />
 
-            <Sidebar data={bills} setBiller={handleSelectBiller} biller={selectedBiller} proceed={handleProceed}/>
+            <Sidebar 
+                data={bills} 
+                setBiller={handleSelectBiller} 
+                biller={selectedBiller} 
+                proceed={handleProceed}
+            />
+            
             <DashMainContent detail={proceed} >           
                 <div className="dashheader">
 
@@ -771,8 +731,14 @@ const Dashboard = (props) => {
                                     // placeholder={`Minimum Amount is ${selectedBiller.minimium_amount}`}
                                     autocomplete="none"
                                     // color={ (amountErr && 'secondary') || (amountSuccess && 'success')}
-                                    error={amount_ < parseInt(selectedBiller.minimium_amount) || amount_ > parseInt(selectedBiller.maximum_amount) }
+                                    error={
+                                        selectedVariety[0]?.fixedPrice === "Yes" ?
+                                            false :
+                                            amount_ < parseInt(selectedBiller.minimium_amount) || amount_ > parseInt(selectedBiller.maximum_amount )
+                                    }
                                     helperText={ 
+                                        selectedVariety[0]?.fixedPrice === "Yes" ?
+                                        '': 
                                         (amount_ < parseInt(selectedBiller.minimium_amount) && `Minimum Amount is ${selectedBiller.minimium_amount}`) || (amount_ > parseInt(selectedBiller.maximum_amount) && `Maximun Amount is ${selectedBiller.minimium_amount}`)
                                     }
                                     // disabled={fixed}

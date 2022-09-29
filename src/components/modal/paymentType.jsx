@@ -4,6 +4,7 @@ import { ModalContainer,Modalbox,Paywith } from './../bills/billsElements';
 import QRCode from "react-qr-code";
 import Skeleton from 'react-loading-skeleton';
 import { Typography } from "@mui/material";
+
 export default function PaymentModal(props){
     // const navigate = useNavigate();
     const handleContinue = ()=>{

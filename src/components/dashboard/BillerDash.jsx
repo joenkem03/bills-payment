@@ -31,7 +31,7 @@ import PropTypes from 'prop-types';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon   from '@mui/icons-material/Close';
 
-
+// import { uuid } from 'uuidv4';
 const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, ref) {
     const { onChange, ...other } = props;
   
@@ -115,6 +115,7 @@ const BillerDash = (props) => {
     
     const [selectedVariety, setSelectedVariety]=useState({});
     const [selectedVarietyFields, setselectedVarietyFields]=useState();
+    const [selectedFields, setselectedFields]=useState();
     const [selectedVarietyStatus, setselectedVarietyStatus]=useState(false);
     const [selectedVarietyId, setSelectedVarietyId] = useState(null);
 
@@ -129,7 +130,7 @@ const BillerDash = (props) => {
     const [key, setKey] = useState(null);
     const [power, setpower] = useState(false);
     const [powerdata, setpowerdata] = useState(null);
-    const [metafields, setMetafields ] = useState();
+    const [metafields, setMetafields ] = useState([]);
 
     const params = useParams();
 
@@ -285,7 +286,7 @@ const BillerDash = (props) => {
             getKey();
         }
     },[transactionRefId])
-
+    
     const getValue = async()=>{
         const payload ={
             reqId:transactionRefId
@@ -393,8 +394,6 @@ const BillerDash = (props) => {
         // setLoading(true);
         const id = e.target.value; 
         setSelectedVarietyId(id);
-        // console.log(selectedVarietyId);
-        // console.log(varietyData);
         const arr =[];
         const filterArray = varietyData;
         // eslint-disable-next-line array-callback-return
@@ -410,10 +409,19 @@ const BillerDash = (props) => {
         const fields = arr.map((e)=>{
             return e.metadata.customFields;
         })
-        
-        console.log('fields', fields);
+        console.log('Fields', fields);
 
+        const mutatedFields = fields[0].map(item=>{
+            console.log('mutated item', item);
+            return {
+                variable_name: item.variable_name,
+                value: ''
+            }
+        })
+        console.log('selected fields: ',mutatedFields)
+        setselectedFields(mutatedFields);
         setselectedVarietyFields(fields);
+
         setselectedVarietyStatus(true);
         
     }
@@ -445,25 +453,22 @@ const BillerDash = (props) => {
     }
 
     const handlePayment = async () => {
-        
+        const ref = Array.from(Array(20), () => Math.floor(Math.random() * 36).toString(36)).join('');
+
+
+
         // props.load(true);
         setLoading(true);
         const payload ={
             billPaymentProductId: selectedVarietyId,
             amount: amount_,
-            transactionRef: "",
+            transactionRef: ref ,
             name:name,
             email: email,
             phoneNumber: phone,
             customerId: billerCode,
             metadata: {
-              customFields: [
-                // metafields
-                {
-                    variable_name:'description',
-                    value:'lorem ipsum'
-                }
-              ]
+              customFields:selectedFields
             }
         }
 
@@ -473,14 +478,11 @@ const BillerDash = (props) => {
         
         // console.log(res.data.transId);
 
-        res.then((val) =>{
-            const resData = val.data.transId;
-            setTransactionId(resData);
-            setTransactionRefId(resData)
-            console.log('trans id: ', resData)
-        }).catch((err)=>{
-            
-        })
+        const resData = res.data.rrr;
+        setTransactionId(resData);
+        setTransactionRefId(resData)
+        console.log('trans id: ', resData)
+        
         // handlepaymentFull(res.data.transId);
         setLoading(false);
         handlePaymentType();
@@ -542,24 +544,17 @@ const BillerDash = (props) => {
     }
 
     const [steps, setSteps] = useState({});
+        
+    const onClick = (index , event) => {
+       
+        console.log(index, event.target.name);
 
-    const onClick = (e, evt)=> {
-        const prop = {}
-        const ArrLenght = selectedVarietyFields[0].length
-        const value = e.target.value;
-        selectedVarietyFields[0].map((item,i) => {
-            // if(item.variable_name === evt){
-                Object.assign(prop, {[item.variable_name]: value});
-                // prop[item.variable_name] = value;
-            // }
-        })
-        setMetafields(prop);
-        console.log('prop',metafields);
-        console.log(ArrLenght)
-        console.log(evt , e.target.value)
-    }
-        
-        
+            const values =  [...selectedFields];
+            values[index]['value']= event.target.value;
+            setselectedFields(values);
+            // console.log('new values', selectedFields);
+      };
+
     const [showqr,setshowqr] = useState(false);
     const [qr,setqr] = useState('');
 
@@ -684,27 +679,19 @@ const BillerDash = (props) => {
                                 selectedVarietyStatus && (
                                     <>
                                         {
-                                            selectedVarietyFields[0].map((fields,i)=>{
+                                            selectedFields.map((fields,index)=>{
                                                 return(
-                                                    // <TextField
-                                                    //     fullWidth
-                                                    //     key={i}
-                                                    //     label={fields.display_name}
-                                                    //     type={fields.type}
-                                                    //     name={fields.variable_name}
-                                                    //     placeholder={fields.display_name}
-                                                    //     onChange={event => onClick(event, fields.variable_name)} 
-                                                    // />
                                                     <FormControl key={fields.variable_name} fullWidth sx={{ m: 1 }}>
-                                                        <InputLabel htmlFor="outlined-adornment-amount">{fields.display_name}</InputLabel>
+                                                        <InputLabel htmlFor="outlined-adornment-amount">{fields.variable_name}</InputLabel>
                                                         <OutlinedInput
                                                             id="outlined-adornment-amount"
                                                             // startAdornment={<InputAdornment position="start">₦</InputAdornment>}
-                                                            label={fields.display_name}
-                                                            type={fields.type}
+                                                            label={fields.variable_name}
+                                                            // type={fields.type}
                                                             name={fields.variable_name}
-                                                            placeholder={fields.display_name}
-                                                            onChange={event => onClick(event, fields.variable_name)}
+                                                            placeholder={fields.variable_name}
+                                                            value={fields.value}
+                                                            onChange={event => onClick(index,event)}
                                                         />
                                                     </FormControl>  
                                                 )
