@@ -134,6 +134,7 @@ const Dashboard = (props) => {
     const [ amountSuccess, SetAmountSuccess] = useState(false)
 
     const params = useParams();
+    console.log(params)
 
     // const { biller } = params;
     const search = useLocation().search;
@@ -188,6 +189,9 @@ const Dashboard = (props) => {
             setname(validationData.Customer_Name)
             console.log("Not airtime OR data");
         }
+        if(params.biller === 'tv-subscription'){
+            setemail('admin@icadconcord.com.ng')
+        }
         
         setLoading2(false);
         // if(validationData.WrongBillersCode){
@@ -211,7 +215,9 @@ const Dashboard = (props) => {
 
 
     useEffect(()=>{
-        if(email.length < 3 || phone.length <= 10 || amount_ < parseInt(selectedBiller.minimium_amount) || amount_ > parseInt(selectedBiller.maximum_amount)){
+        //console.log(selectedBiller.maximum_amount)
+        //  || (parseInt(amount_) > parseInt(selectedBiller.maximum_amount)) Why is the maximum amount reading Zero. 
+        if((email.length < 3) || (phone.length <= 10) || (parseInt(amount_) < parseInt(selectedBiller.minimium_amount))) {
             setactive(false)
             // console.log('active: ',active);
         }else{
@@ -339,8 +345,12 @@ const Dashboard = (props) => {
     }
 
     const handleSelectBiller = (bill)=>{
-        
-        setselectedBiller(bill)
+        const billData = {
+            ...bill,
+            minimium_amount : bill.minimium_amount === "" ? "0" : bill.minimium_amount
+            }
+        setselectedBiller(billData)
+        console.log(bill)
     }
     
     const handlepaymentFull = async (data)=>{
@@ -758,9 +768,9 @@ const Dashboard = (props) => {
                                         <Grid item xs={12} sx={{ m: 1 }}>
                                             <TextField variant="outlined" label="Full Name" fullWidth type="text" value={name} onChange={handleName} autocomplete="none" placeholder="Enter Full Name" />
                                         </Grid >
-                                        <Grid item xs={12} sx={{ m: 1 }}>
+                                        {/* <Grid item xs={12} sx={{ m: 1 }}>
                                             <TextField  variant="outlined" label="Email"fullWidth type="email" value={email} onChange={handleEmail} autocomplete="none" placeholder="Enter Email Address"/>
-                                        </Grid>
+                                        </Grid> */}
                                         <Grid item xs={12} sx={{ m: 1 }}>
                                                 <TextField variant="outlined" label="Phone Number" fullWidth type="tel" value={phone} onChange={handlephone} autocomplete="none" placeholder="Phone Number +234xxxxxxxxxxx"/>
                                         </Grid>
