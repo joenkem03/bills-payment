@@ -60,7 +60,7 @@ export default function DashList({datas,setdata,bill,proceed}) {
     }   
 
     // const handleVariety = async (id)=>{
-    //     const variety = await axios.get('https://app-service.icadpay.com/api/AltBiller/serviceVariety?id='+id);
+    //     const variety = await axios.get('https://staging-api.icadpay.com/api/AltBiller/serviceVariety?id='+id);
 
     //     const varietyData = await variety.data;
     

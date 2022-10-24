@@ -22,8 +22,8 @@ export function AppProvider({children}) {
 
     const getCat = async ()=>{
         toggleLoad()
-        // const billers = await axios.get('https://app-service.icadpay.com/api/Biller/billerCategories');
-        const billers = await axios.get('https://app-service.icadpay.com/api/AltBiller/servicesCategory');
+        // const billers = await axios.get('https://staging-api.icadpay.com/api/Biller/billerCategories');
+        const billers = await axios.get('https://staging-api.icadpay.com/api/AltBiller/servicesCategory');
         if(billers.status === 200){
           const Altbillsdata = await billers.data;
         //   console.log(Altbillsdata);
@@ -34,8 +34,8 @@ export function AppProvider({children}) {
     
     const getBillers = async ()=>{
         toggleBillLoad()
-        // const billers = await axios.get('https://app-service.icadpay.com/api/Biller/allBillers');
-        const billers = await axios.get('https://app-service.icadpay.com/api/AltBiller/servicesCategory');
+        // const billers = await axios.get('https://staging-api.icadpay.com/api/Biller/allBillers');
+        const billers = await axios.get('https://staging-api.icadpay.com/api/AltBiller/servicesCategory');
         if(billers.status === 200){
             const Altbillsdata = await billers.data;
             setAltBillerProducts(Altbillsdata);
@@ -46,7 +46,7 @@ export function AppProvider({children}) {
 
     const getNpps = async ()=>{
         toggleBillLoad()
-        const billers = await axios.get('https://app-service.icadpay.com/api/Biller/allBillers');
+        const billers = await axios.get('https://staging-api.icadpay.com/api/Biller/allBillers');
         if(billers.status === 200){
             const billsdata = await billers.data;
             const biller = billsdata.filter( (bill) => {

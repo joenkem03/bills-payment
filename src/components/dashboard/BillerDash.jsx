@@ -145,8 +145,8 @@ const BillerDash = (props) => {
             billPaymentProductId: serviceId,
             customerId: billerCode,
         }
-        // const validation =await axios.post('https://app-service.icadpay.com/api/AltBiller/customerValidation',payload)
-        const validation =await axios.post('https://app-service.icadpay.com/api/Biller/customerValidation',payload)
+        // const validation =await axios.post('https://staging-api.icadpay.com/api/AltBiller/customerValidation',payload)
+        const validation =await axios.post('https://staging-api.icadpay.com/api/Biller/customerValidation',payload)
         const validationData = await validation.data;
         // console.log(payload);
         // console.log(validationData);
@@ -267,7 +267,7 @@ const BillerDash = (props) => {
     },[])
 
     const getKey = async ()=>{
-        const response = await axios.get('https://app-service.icadpay.com/api/Auth/key');
+        const response = await axios.get('https://staging-api.icadpay.com/api/Auth/key');
         setKey(response.data.kex);
         getStatus();
     }
@@ -277,7 +277,7 @@ const BillerDash = (props) => {
             transactionRefId : transactionRefId,
             key: key
         }
-        const response = await axios.get('https://app-service.icadpay.com/api/query-status', payload);
+        const response = await axios.get('https://staging-api.icadpay.com/api/query-status', payload);
         console.log(response.data);
     }
 
@@ -291,7 +291,7 @@ const BillerDash = (props) => {
         const payload ={
             reqId:transactionRefId
         }
-        const response = await axios.get('https://app-service.icadpay.com/api/AltBiller/getValue', payload);
+        const response = await axios.get('https://staging-api.icadpay.com/api/AltBiller/getValue', payload);
         const data = await response.data;
         setpowerdata(data)
     }
@@ -367,8 +367,8 @@ const BillerDash = (props) => {
 
     const handleVariety = async (id)=>{
         console.log(id);
-        // const variety = await axios.get('https://app-service.icadpay.com/api/AltBiller/serviceVariety?id='+id);
-        const variety = await axios.get('https://app-service.icadpay.com/api/Biller/billerProducts?billerId='+id);
+        // const variety = await axios.get('https://staging-api.icadpay.com/api/AltBiller/serviceVariety?id='+id);
+        const variety = await axios.get('https://staging-api.icadpay.com/api/Biller/billerProducts?billerId='+id);
         const varietyData = variety.data.products;
         // const varietyData = variety.data.varations;
     
@@ -472,8 +472,8 @@ const BillerDash = (props) => {
             }
         }
 
-        const res = await axios.post('https://app-service.icadpay.com/api/Biller/initiatePayment',payload)
-        // const res = axios.post('https://app-service.icadpay.com/api/AltBiller/initiatePayment',payload)
+        const res = await axios.post('https://staging-api.icadpay.com/api/Biller/initiatePayment',payload)
+        // const res = axios.post('https://staging-api.icadpay.com/api/AltBiller/initiatePayment',payload)
 
         
         // console.log(res.data.transId);
@@ -494,8 +494,8 @@ const BillerDash = (props) => {
         const bill = params.biller
         console.log(bill)
         
-        const billers = await axios.get('https://app-service.icadpay.com/api/AltBiller/serviceByIdentifier?id='+bill);
-        // const billers = await axios.get('https://app-service.icadpay.com/api/Biller/allBillersByCategory?category='+bill);
+        const billers = await axios.get('https://staging-api.icadpay.com/api/AltBiller/serviceByIdentifier?id='+bill);
+        // const billers = await axios.get('https://staging-api.icadpay.com/api/Biller/allBillersByCategory?category='+bill);
         const billsdata = billers.data;
         
         // console.log('data',billsdata.products[0]);
@@ -506,7 +506,7 @@ const BillerDash = (props) => {
     }
 
     const getNpps = async ()=>{
-        const billers = await axios.get('https://app-service.icadpay.com/api/Biller/allBillers');
+        const billers = await axios.get('https://staging-api.icadpay.com/api/Biller/allBillers');
         if(billers.status === 200){
             const billsdata = await billers.data;
             const biller = billsdata.filter( (bill) => {
@@ -577,7 +577,7 @@ const BillerDash = (props) => {
             paymentRef: transactionId
         }
 
-        const Qr = await axios.post('https://app-service.icadpay.com/api/payWithQr',payload);
+        const Qr = await axios.post('https://staging-api.icadpay.com/api/payWithQr',payload);
         const QrData = Qr.data;
         setqr(QrData.codeUrl)
        

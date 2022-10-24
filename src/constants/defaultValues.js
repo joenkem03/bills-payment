@@ -78,14 +78,14 @@ export const colors = [
 
 // export const BASE_URL = "http://icard-api.smadeandsmight.com/api";
 // export const BASE_URL = "https://localhost:44331/api"
-export const BASE_URL = "https://app-service.icadpay.com/api";
+export const BASE_URL = "https://staging-api.icadpay.com/api";
 const BASE_AUTH = `${BASE_URL}/Auth`;
 const BASE_ADMIN = `${BASE_URL}/Admin`;
 const BASE_MERCHANT = `${BASE_URL}/Merchant`;
 const BASE_SETTINGS = `${BASE_URL}/Settings`;
 const BASE_REPORT = `${BASE_URL}/Report`;
 const BASE_PAYMENT = `${BASE_URL}/Payment`;
-// const BASE_PAYMENT = `https://app-service.icadpay.com`;
+// const BASE_PAYMENT = `https://staging-api.icadpay.com`;
 
 export const QUERY_DEMO = `${BASE_URL}/query-status`;
 

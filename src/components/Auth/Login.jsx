@@ -136,7 +136,7 @@ const Login = () => {
           username: e.email,
           password: e.password,
       }
-      const res = axios.post('https://app-service.icadpay.com/api/Auth/authenticate',payload)
+      const res = axios.post('https://staging-api.icadpay.com/api/Auth/authenticate',payload)
         
       res.then((response) => {  
         console.log(response);
