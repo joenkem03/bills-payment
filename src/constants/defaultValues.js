@@ -85,7 +85,7 @@ const BASE_MERCHANT = `${BASE_URL}/Merchant`;
 const BASE_SETTINGS = `${BASE_URL}/Settings`;
 const BASE_REPORT = `${BASE_URL}/Report`;
 const BASE_PAYMENT = `${BASE_URL}/Payment`;
-// const BASE_PAYMENT = `https://staging-api.icadpay.com`;
+// const BASE_PAYMENT = `https://app-service.icadpay.com`;
 
 export const QUERY_DEMO = `${BASE_URL}/query-status`;
 

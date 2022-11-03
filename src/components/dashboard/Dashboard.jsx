@@ -106,6 +106,12 @@ const Dashboard = (props) => {
     
     const [billerCodeValid, setbillerCodevalid]=useState(false);
     const [billerCodeValidMsg, setbillerCodeValidMsg]=useState('');
+    const [tvPlan, settvPlan]=useState('');
+    const [tvPlanAmount, settvPlanAmount]=useState(0);
+    const [validCustomerTvData, setvalidCustomerTvData]=useState(false);
+    const [isTvPlanRenew, setisTvPlanRenew]=useState(false);
+    const [serviceBiller, setserviceBiller]=useState('');
+    const [subType, setsubType]=useState('renew');
 
     const [billerCodeErr, setbillerCodeErr]=useState(false);
     const [billerCodeErrMsg, setbillerCodeErrMsg]=useState('');
@@ -173,7 +179,18 @@ const Dashboard = (props) => {
             console.log('success in validation: ',validationData.hasOwnProperty("Customer_Name"));
             setbillerCodeErr(false)
             setbillerCodevalid(true)
-            setbillerCodeValidMsg(validationData.Customer_Name);   
+            setbillerCodeValidMsg(validationData.Customer_Name); 
+            setname(validationData.Customer_Name);
+        }
+
+        if(validationData.hasOwnProperty("Current_Bouquet")){
+            settvPlan(validationData.Current_Bouquet);  
+            setvalidCustomerTvData(true); 
+        }
+
+        if(validationData.hasOwnProperty("Renewal_Amount")){
+            settvPlanAmount(validationData.Renewal_Amount);
+            setamount(validationData.Renewal_Amount);
         }
 
         if(params.biller === 'airtime' || params.biller === 'data'){
@@ -190,7 +207,9 @@ const Dashboard = (props) => {
             console.log("Not airtime OR data");
         }
         if(params.biller === 'tv-subscription'){
-            setemail('admin@icadconcord.com.ng')
+            if(serviceBiller === 'dstv' || serviceBiller === 'gotv'){
+                setisTvPlanRenew(true);
+            }
         }
         
         setLoading2(false);
@@ -217,7 +236,8 @@ const Dashboard = (props) => {
     useEffect(()=>{
         //console.log(selectedBiller.maximum_amount)
         //  || (parseInt(amount_) > parseInt(selectedBiller.maximum_amount)) Why is the maximum amount reading Zero. 
-        if((email.length < 3) || (phone.length <= 10) || (parseInt(amount_) < parseInt(selectedBiller.minimium_amount))) {
+        if((phone.length <= 10) || (parseInt(amount_) < parseInt(selectedBiller.minimium_amount))) {
+        // if((email.length < 3) || (phone.length <= 10) || (parseInt(amount_) < parseInt(selectedBiller.minimium_amount))) {
             setactive(false)
             // console.log('active: ',active);
         }else{
@@ -341,7 +361,7 @@ const Dashboard = (props) => {
         console.log(payload);
         const response = await axios.get('https://staging-api.icadpay.com/api/AltBiller/getValue', payload);
         const data = await response.data;
-        setpowerdata(data)
+        setpowerdata(data)//
     }
 
     const handleSelectBiller = (bill)=>{
@@ -387,7 +407,9 @@ const Dashboard = (props) => {
         // key: 'test_ZTgxNTYxMzUwODYyODU3NzM5MmI4OTdjZmZmMGYyY2FkNGU5Nzc5ZDAwM2NlOWIyZTE3YzEwMTQwNDIwNTA0OA', // this is a demo key.  
         // key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
         const payload = {
-            key: 'live_YzM1ODg3YzY5MWVjZjFlYzhkOTQxMDU3NmMzM2NlYjc4YzQwYTU1M2ZkZjRmNjI5ZjQzOGQzZmM4ZmY3NzZmYQ', // this is a demo key.  
+            key: 'live_YzM1ODg3YzY5MWVjZjFlYzhkOTQxMDU3NmMzM2NlYjc4YzQwYTU1M2ZkZjRmNjI5ZjQzOGQzZmM4ZmY3NzZmYQ', // this is not a demo key. 
+            // key: 'test_MDE0OTY1Y2NjNDI0MjIyZjY1ZWYwOWQ1YzkyMmJjZTZkYzlhZDBiZDVkOTg5ZDBmZjllYTMyMzVjNTI4MmJmMQ', // this is a demo key.  
+            // key: 'test_YzA1MmNmYzE0OTc1Y2QyM2ViNWUwNTIxOGMzZjA2MjI5N2M4ZDU3YmY5ZDg1ZmU1OWIwNWE1NDU0YjkzYTZkOQ', // this is a demo key.     
             email: email, // customer email 
             amount: parseFloat(amount_), // amount to be processed
             currency: "NGN", // currency
@@ -398,7 +420,8 @@ const Dashboard = (props) => {
             ref: transactionId, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
             narration: fname + lname,
             isBill:true,
-            callback_url: window.location.href, // specified redirect URL (potional)
+            // callback_url: window.location.href, // specified redirect URL (potional)
+            callback_url: '', // specified redirect URL (potional)
             callback: (response) => {
                 console.log(response);
             },
@@ -406,6 +429,20 @@ const Dashboard = (props) => {
               console.log(response);
                 // const ref = response
                 // localStorage.set('transactionResponse',response )
+
+                if(setpower && type === 'prepaid'){
+                    doGetElectricValue(transactionId)                    
+                } else{
+                    // console.log(name)
+                    // if(name === 'SUCCESS'){
+                    //     setTransactionRefId(ref);
+                    //     getValue(ref);
+                        // console.log('status: ',status);
+                        setmodal(true);
+                    //     console.log(fixed);
+                    // }
+                    
+                }
                 
             },
             onError: (response) => {
@@ -422,8 +459,19 @@ const Dashboard = (props) => {
         props.load(false);
     }
 
+    const doGetElectricValue = async (reqId) => {
+
+        const powerToken = await axios.get('https://staging-api.icadpay.com/api/AltBiller/getValue?reqId='+reqId);
+        
+        console.log(powerToken);
+        
+        setpowerdata(powerToken.data)//
+        setmodal(true);
+    }
+
     const handleVariety = async (id)=>{
         console.log(id);
+        setserviceBiller(id);
         const variety = await axios.get('https://staging-api.icadpay.com/api/AltBiller/serviceVariety?id='+id);
         // const variety = await axios.get('https://staging-api.icadpay.com/api/Biller/billerProducts?billerId='+id);
         // const varietyData = variety.data.products;
@@ -500,6 +548,9 @@ const Dashboard = (props) => {
     }
 
     const handlePayment = async () => {
+        if (email === undefined || email.trim() === '' ) {
+            setemail(serviceId+'@icadconcord.com.ng')                
+        }
         // const ref = Array.from(Array(20), () => Math.floor(Math.random() * 36).toString(36)).join('');
 
         // props.load(true);
@@ -512,7 +563,9 @@ const Dashboard = (props) => {
             phoneNumber: phone,
             customerId: '',
             billersCode:billerCode,
-            variation_code: type
+            variation_code: type,
+            subscription_type: subType,
+            quantity: 1,
         }
 
         const res = axios.post('https://staging-api.icadpay.com/api/AltBiller/initiatePayment',payload)
@@ -605,6 +658,18 @@ const Dashboard = (props) => {
         setshowqr(false)
     }
 
+    const handleChangeBuquet = () => {
+        setisTvPlanRenew(false);
+        setamount(0);
+        setsubType('change');
+    }
+
+    const handleRenewBuquet = () => {
+        setisTvPlanRenew(true);
+        setamount(tvPlanAmount);
+        setsubType('renew');
+    }
+
     const BillerValidation = (e)=>{
 
         const biller = e.target.value;
@@ -672,9 +737,50 @@ const Dashboard = (props) => {
                         <div className="dashcontent">
                         <div className="dashcontent_left">
                             <h3 className="">Enter Your Details</h3>
+                            
+                            {
+                                productExist && (serviceBiller === 'dstv' || serviceBiller === 'gotv' || serviceBiller === 'startimes') && (
+                                    <>
+                                    <FormControl fullWidth sx={{ m: 1 }}>
+                                         <TextField
+                                            id="outlined-adornment-amount"
+                                            value={ billerCode }
+                                            onChange = {e=> setbillerCode(e.target.value)}
+                                            label="Smartcard No"
+                                            autocomplete="none"
+                                            helperText={ 
+                                                 (billerCodeErr && billerCodeErrMsg) || (billerCodeValid && billerCodeValidMsg)
+                                            }
+                                            color={ (billerCodeErr && 'secondary') || (billerCodeValid && 'success')}
+                                            error ={billerCodeErr}
+                                            success= {billerCodeValid}
+                                            InputProps={{
+                                                endAdornment: loading2 && <CircularProgress  color="inherit" size={24}/> ,
+                                            }}
+                                         />
+                                        {/* <ValidateRecipient/> */}
+                                    </FormControl>
+                                        {validCustomerTvData && (
+                                            <>
+                                        <div className="subtext">
+                                            <h3 className="">Current Buquet & Renewal Amount </h3>
+                                            <p>`${tvPlan} =>  NGN${tvPlanAmount}`</p>                                            
+                                        </div>
+                                        <div className="dashpay">
+                                            {/* <button className='paybtn btn col-4' onClick={handleRenewBuquet}>Renew Buquet</button> {' '} */}
+                                            {isTvPlanRenew ? 
+                                                 <button className='paybtn_not btn col-4' onClick={() => handleChangeBuquet()}>Change Buquet</button>
+                                                 :
+                                                 <button className='paybtn btn col-4' onClick={() => handleRenewBuquet()}>Renew Current Buquet</button>}
+                                        </div>
+                                        </>
+                                        )}              
+                                    </>
+                                )
+                            }
                                 
                             {
-                                variety && (
+                                (variety && !isTvPlanRenew) && (
                                     <>
                                         <FormControl fullWidth sx={{ m: 1 }}>
                                             <InputLabel id="demo-simple-select-label">Products</InputLabel>
@@ -694,7 +800,7 @@ const Dashboard = (props) => {
                                                       })
                                                 }
                                             </Select>
-                                        </FormControl>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+                                        </FormControl>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                                     </>
                                 ) 
                                 
@@ -702,7 +808,7 @@ const Dashboard = (props) => {
                             }
                             
                             {
-                                productExist && (
+                                (productExist && (serviceBiller !== 'dstv' && serviceBiller !== 'gotv' && serviceBiller !== 'startimes')) && (
                                     <>
                                     <FormControl fullWidth sx={{ m: 1 }}>
                                          <TextField
@@ -768,12 +874,18 @@ const Dashboard = (props) => {
                                         <Grid item xs={12} sx={{ m: 1 }}>
                                             <TextField variant="outlined" label="Full Name" fullWidth type="text" value={name} onChange={handleName} autocomplete="none" placeholder="Enter Full Name" />
                                         </Grid >
-                                        {/* <Grid item xs={12} sx={{ m: 1 }}>
-                                            <TextField  variant="outlined" label="Email"fullWidth type="email" value={email} onChange={handleEmail} autocomplete="none" placeholder="Enter Email Address"/>
-                                        </Grid> */}
                                         <Grid item xs={12} sx={{ m: 1 }}>
                                                 <TextField variant="outlined" label="Phone Number" fullWidth type="tel" value={phone} onChange={handlephone} autocomplete="none" placeholder="Phone Number +234xxxxxxxxxxx"/>
                                         </Grid>
+                                        {/* {params.biller === 'electricity-bill' && ( */}
+                                        <Grid item xs={12} sx={{ m: 1 }}>
+                                            <TextField  variant="outlined" label="Email"fullWidth type="email" value={email} onChange={handleEmail} autocomplete="none" placeholder="Enter Email Address"
+                                            helperText={ 
+                                                 params.biller === 'electricity-bill' && 'Electric Token will be sent to email (if provided)'
+                                            }/>
+                                        </Grid>
+                                        {/* ) */}
+                                        {/* } */}
                                     </Grid>
                                 </>
                                 )

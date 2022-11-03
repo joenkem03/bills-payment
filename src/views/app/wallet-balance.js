@@ -155,8 +155,8 @@ const WalletBalance = ({ match }) => {
     } else {
       const script = document.createElement('script');
       // script.src = "http://icad-app.smadeandsmight.com/icad-pay-inline.js";
-      script.src = 'https://pay-service.icadpay.com/inline-pay.js';
-      // script.src = "https://demo.icadpay.com/inline-pay.js";
+      script.src = 'https://demo.icadpay.com/inline-stage-pay.js';
+      // script.src = "https://demo.icadpay.com/inline-stage-pay.js";
       script.async = true;
       // script.onload = () => handleSubmitAction(e);
       document.body.appendChild(script);
