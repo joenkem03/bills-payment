@@ -485,8 +485,8 @@ const BillerDash = (props) => {
         
         // handlepaymentFull(res.data.transId);
         setLoading(false);
-       // handlePaymentType();
-       handleOther();
+        handlePaymentType();
+       //handleOther();
         
     }
 
