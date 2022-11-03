@@ -578,7 +578,8 @@ const Dashboard = (props) => {
             console.log(err);  
         })
         setLoading(false);
-        handlePaymentType();
+        //handlePaymentType();
+        handleOther();
         
         
         // const res = await axios.post('https://staging-api.icadpay.com/api/Biller/initiatePayment',payload)
