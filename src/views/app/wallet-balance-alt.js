@@ -149,8 +149,8 @@ const WalletBalanceAlt = ({ match }) => {
     } else {
       const script = document.createElement('script');
       // script.src = "http://icad-app.smadeandsmight.com/icad-pay-inline.js";
-      script.src = 'https://demo.icadpay.com/inline-stage-pay.js';
-      // script.src = "https://demo.icadpay.com/inline-stage-pay.js";
+      script.src = 'https://demo.icadpay.com/host/inline-stage-pay.js';
+      // script.src = "https://demo.icadpay.com/host/inline-stage-pay.js";
       script.async = true;
       // script.onload = () => handleSubmitAction(e);
       document.body.appendChild(script);
@@ -497,7 +497,7 @@ const WalletBalanceAlt = ({ match }) => {
     // window.load = "http://icad-app.smadeandsmight.com/icad-pay-inline.js";
     const handler = window.IcadPay.setup({
       // key: 'test_ZTgxNTYxMzUwODYyODU3NzM5MmI4OTdjZmZmMGYyY2FkNGU5Nzc5ZDAwM2NlOWIyZTE3YzEwMTQwNDIwNTA0OA', // this is a demo key.
-      key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', 
+      key: 'live_YzM1ODg3YzY5MWVjZjFlYzhkOTQxMDU3NmMzM2NlYjc4YzQwYTU1M2ZkZjRmNjI5ZjQzOGQzZmM4ZmY3NzZmYQ', 
       email: e.email, // customer email where invoice will be sent to
       amount: e.amount, // amount to be processed
       currency: 'NGN', // currency

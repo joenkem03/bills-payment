@@ -118,7 +118,7 @@ export const GetUnSumService = () => {
 export const VerifyWalletTopupService = (data) => {
   return request.getAuthRequest( 
     // `${WALLET_TOPUP}?transactionRef=${data}&key=test_ZTgxNTYxMzUwODYyODU3NzM5MmI4OTdjZmZmMGYyY2FkNGU5Nzc5ZDAwM2NlOWIyZTE3YzEwMTQwNDIwNTA0OA`
-    `${WALLET_TOPUP}?transactionRef=${data}&key=live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ`
+    `${WALLET_TOPUP}?transactionRef=${data}&key=live_YzM1ODg3YzY5MWVjZjFlYzhkOTQxMDU3NmMzM2NlYjc4YzQwYTU1M2ZkZjRmNjI5ZjQzOGQzZmM4ZmY3NzZmYQ`
     // `${WALLET_TOPUP}?transactionRef=${data}&key=live_MTllZWJmMjU0YTgzODYxOGNmZDQ4NWMzMjgzNzgxNDYyMzE1MjQ1MjI1ODM3MTExMWFlODk0NTQwN2JiNjkyMQ`
   );
 };
@@ -135,7 +135,7 @@ export const VerifyPaymentService = (data) => {
 
 export const VerifyBillPaymentService = (data) => {
   return request.getRequest(
-    // `${QUERY_DEMO}?transactionRefId=${data}&key=live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ`
+    // `${QUERY_DEMO}?transactionRefId=${data}&key=live_YzM1ODg3YzY5MWVjZjFlYzhkOTQxMDU3NmMzM2NlYjc4YzQwYTU1M2ZkZjRmNjI5ZjQzOGQzZmM4ZmY3NzZmYQ`
     `${QUERY_DEMO}?transactionRefId=${data}&key=test_ZTgxNTYxMzUwODYyODU3NzM5MmI4OTdjZmZmMGYyY2FkNGU5Nzc5ZDAwM2NlOWIyZTE3YzEwMTQwNDIwNTA0OA`
   );
 };

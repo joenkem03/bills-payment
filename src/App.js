@@ -29,8 +29,8 @@ function App() {
     <>
       <Helmet>
           <script
-            src="https://demo.icadpay.com/inline-stage-pay.js"
-            // src="https://demo.icadpay.com/inline-stage-pay.js"
+            src="https://demo.icadpay.com/host/inline-stage-pay.js"
+            // src="https://demo.icadpay.com/host/inline-stage-pay.js"
             async
           ></script>
       </Helmet>

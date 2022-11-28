@@ -347,11 +347,11 @@ const Dashboard = (props) => {
         console.log(response.data);
     }
 
-    useEffect(() => {
-        if(transactionRefId !== null){
-            getKey();
-        }
-    },[transactionRefId])
+    // useEffect(() => {
+    //     if(transactionRefId !== null){
+    //         getKey();
+    //     }
+    // },[transactionRefId])
 
     const getValue = async(ref)=>{
         getStatus(ref)
@@ -398,14 +398,14 @@ const Dashboard = (props) => {
             last_name: lname,
             phone_number: phone, // customer's phone number (optional)
             customerId: email,
-            ref: transactionId, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+            ref: data, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
             narration: 'something nice',
             isBill:true,
             callback_url: window.location.href,
         });
 
         // key: 'test_ZTgxNTYxMzUwODYyODU3NzM5MmI4OTdjZmZmMGYyY2FkNGU5Nzc5ZDAwM2NlOWIyZTE3YzEwMTQwNDIwNTA0OA', // this is a demo key.  
-        // key: 'live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ', // this is a demo key.  
+        // key: 'live_YzM1ODg3YzY5MWVjZjFlYzhkOTQxMDU3NmMzM2NlYjc4YzQwYTU1M2ZkZjRmNjI5ZjQzOGQzZmM4ZmY3NzZmYQ', // this is a demo key.  
         const payload = {
             key: 'live_YzM1ODg3YzY5MWVjZjFlYzhkOTQxMDU3NmMzM2NlYjc4YzQwYTU1M2ZkZjRmNjI5ZjQzOGQzZmM4ZmY3NzZmYQ', // this is not a demo key. 
             // key: 'test_MDE0OTY1Y2NjNDI0MjIyZjY1ZWYwOWQ1YzkyMmJjZTZkYzlhZDBiZDVkOTg5ZDBmZjllYTMyMzVjNTI4MmJmMQ', // this is a demo key.  
@@ -417,7 +417,7 @@ const Dashboard = (props) => {
             last_name: lname,
             phone_number: phone, // customer's phone number (optional)
             customerId: email,
-            ref: transactionId, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+            ref: data, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
             narration: fname + lname,
             isBill:true,
             // callback_url: window.location.href, // specified redirect URL (potional)
@@ -453,9 +453,9 @@ const Dashboard = (props) => {
             }
         }
         
-        console.log('window closed');
+        // console.log('window closed');
         const handler = window.IcadPay.setup(payload);
-        handler.openIframe();
+        // handler.openIframe();
         props.load(false);
     }
 
@@ -574,12 +574,12 @@ const Dashboard = (props) => {
             setTransactionId(resData);
             setTransactionRefId(resData)
             console.log('trans id: ', resData)
+            handleOther(resData);
         }).catch((err)=>{
             console.log(err);  
         })
         setLoading(false);
         //handlePaymentType();
-        handleOther();
         
         
         // const res = await axios.post('https://staging-api.icadpay.com/api/Biller/initiatePayment',payload)
@@ -634,7 +634,7 @@ const Dashboard = (props) => {
     const handleQrReq = async ()=>{
 
         const payload ={
-            key: "live_ZmMxMzJiOGQ4MjZkODc4Y2ZiYjk5NTYxMTE5ODNkYjE5NzRiNjQzNTI4MmFiNGU4YTRkMzE0NzIwNDVhYzhmMQ",
+            key: "live_YzM1ODg3YzY5MWVjZjFlYzhkOTQxMDU3NmMzM2NlYjc4YzQwYTU1M2ZkZjRmNjI5ZjQzOGQzZmM4ZmY3NzZmYQ",
             amount: amount_,
             subId: serviceId,
             uniqueId: "",
@@ -649,8 +649,8 @@ const Dashboard = (props) => {
 
     }
 
-    const handleOther = ()=>{
-        handlepaymentFull();
+    const handleOther = (data)=>{
+        handlepaymentFull(data);
     }
 
     const handleClose = ()=>{
