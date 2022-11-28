@@ -764,15 +764,15 @@ const Dashboard = (props) => {
                                         {validCustomerTvData && (
                                             <>
                                         <div className="subtext">
-                                            <h3 className="">Current Buquet & Renewal Amount </h3>
+                                            <h3 className="">Current Bouquet & Renewal Amount </h3>
                                             <p>`${tvPlan} =>  NGN${tvPlanAmount}`</p>                                            
                                         </div>
                                         <div className="dashpay">
                                             {/* <button className='paybtn btn col-4' onClick={handleRenewBuquet}>Renew Buquet</button> {' '} */}
                                             {isTvPlanRenew ? 
-                                                 <button className='paybtn_not btn col-4' onClick={() => handleChangeBuquet()}>Change Buquet</button>
+                                                 <button className='paybtn_not btn col-4' onClick={() => handleChangeBuquet()}>Change Bouquet</button>
                                                  :
-                                                 <button className='paybtn btn col-4' onClick={() => handleRenewBuquet()}>Renew Current Buquet</button>}
+                                                 <button className='paybtn btn col-4' onClick={() => handleRenewBuquet()}>Renew Current Bouquet</button>}
                                         </div>
                                         </>
                                         )}              
