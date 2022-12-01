@@ -765,7 +765,7 @@ const Dashboard = (props) => {
                                             <>
                                         <div className="subtext">
                                             <h3 className="">Current Bouquet & Renewal Amount </h3>
-                                            <p>`${tvPlan} =>  NGN${tvPlanAmount}`</p>                                            
+                                            <p> {tvPlan} = NGN{tvPlanAmount}</p>                                            
                                         </div>
                                         <div className="dashpay">
                                             {/* <button className='paybtn btn col-4' onClick={handleRenewBuquet}>Renew Buquet</button> {' '} */}
@@ -792,7 +792,7 @@ const Dashboard = (props) => {
                                                 value={selectedVarietyId}
                                                 onChange={handleSelectChange}
                                             >
-                                                 <MenuItem value={'personal'}> personal </MenuItem>
+                                                 {/*<MenuItem value={'personal'}> personal </MenuItem>*/}
                                                 {
                                                       varietyData && varietyData?.map((item,i)=>{
                                                         return(
