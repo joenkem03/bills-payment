@@ -28,7 +28,7 @@ export default function Modal(props){
             <p className="">Your {props.name} payment of N{props.amount} was successful.<br /> Transaction ID: {props.transactionId}</p>
             {
                 props.ifPower && (
-                    <Typography variant='h6'>{ props.val?.purchased_code }<br />  A receipt has been sent to your email. ,<br /> Transaction ID: {props.transactionId}</Typography>
+                    <Typography variant='h6'>{ props.val?.purchased_code }<br />  A receipt has been sent to your email. ,<br /> Transaction ID: {props.TxnRef}</Typography>
                 )
             }
             <button className='red'><Link to='/bills' >Pay more Bills</Link></button> 

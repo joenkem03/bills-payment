@@ -10,6 +10,7 @@ const Bills = () => {
   // const [category,setcategory] = useState();
   const {
     loading,
+    categoryLoading,
     getCat,
     getBillers,
     getNpps,
@@ -39,7 +40,7 @@ const Bills = () => {
   return (
     <>
       <Billsheader data={billerProducts} loading={billloading}/>  
-      <Popular bills={altcategory} loading={loading}/>
+      <Popular bills={altcategory} loading={categoryLoading}/>
     </>
   )
 }

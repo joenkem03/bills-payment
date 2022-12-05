@@ -5,6 +5,7 @@ const appContext = createContext();
 
 export function AppProvider({children}) {
     const [ loading, setloading ]= useState(false);
+    const [ categoryLoading, setCategoryLoading ]= useState(false);
     const [ billloading, setbillloading ]= useState(false);
     const [ altcategory, setAltcategory] = useState([])
     const [ altbillerProducts, setAltBillerProducts] = useState([])
@@ -12,6 +13,9 @@ export function AppProvider({children}) {
     const [ isloaded, setisloaded] = useState(false)
     const [ biller, setBiller] = useState([])
     // const [ billerProducts, setBillerProducts] = useState([])
+    const toggleCategoryLoad =()=>{
+        setCategoryLoading(!categoryLoading);
+    }
     const toggleLoad =()=>{
         setloading(!loading);
     }
@@ -21,14 +25,14 @@ export function AppProvider({children}) {
     }
 
     const getCat = async ()=>{
-        toggleLoad()
+        toggleCategoryLoad()
         // const billers = await axios.get('https://staging-api.icadpay.com/api/Biller/billerCategories');
         const billers = await axios.get('https://staging-api.icadpay.com/api/AltBiller/servicesCategory');
         if(billers.status === 200){
           const Altbillsdata = await billers.data;
-        //   console.log(Altbillsdata);
           setAltcategory(Altbillsdata);
-          toggleLoad()
+          setCategoryLoading(false);
+
         }
     }
     
@@ -73,6 +77,7 @@ export function AppProvider({children}) {
         <appContext.Provider 
             value = {{
                 loading,
+                categoryLoading,
                 getCat,
                 getBillers,
                 getNpps,

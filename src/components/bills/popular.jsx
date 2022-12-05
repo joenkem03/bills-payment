@@ -28,7 +28,7 @@ const Categories =({bills,load})=>{
     )
 }
 const Popular = ({bills,loading}) => {
-
+    console.log(loading);
     // const images =[
     //     { identifier: 'airtime', src: '/img/phone.png' },
     //     { identifier: 'data', src: '/img/data.png' },
@@ -47,8 +47,8 @@ const Popular = ({bills,loading}) => {
                     <h2 className="">Search By Category </h2>
                     <PopularMainCat>
                         {loading ?
-                            <Categories load={loading} bills={bills}/>
-                            : <CategoryLoader/>
+                            <CategoryLoader/>
+                            :  <Categories load={loading} bills={bills}/>
                         }
                         <Link to={'/dashboard/nipost'}>
                             <Cat >
