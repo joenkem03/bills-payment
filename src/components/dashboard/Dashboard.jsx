@@ -470,14 +470,16 @@ const Dashboard = (props) => {
     }
 
     const handleVariety = async (id)=>{
+        setLoading(true);
         console.log(id);
         setserviceBiller(id);
         const variety = await axios.get('https://staging-api.icadpay.com/api/AltBiller/serviceVariety?id='+id);
         // const variety = await axios.get('https://staging-api.icadpay.com/api/Biller/billerProducts?billerId='+id);
         // const varietyData = variety.data.products;
         const varietyData = variety.data.varations;
-    
+        
         console.log('varietyData: ',varietyData);
+        setLoading(false);
         if(varietyData === undefined){
             console.log('no data returned: ' , selectedBiller);
             setSelectedVarietyId(selectedBiller.serviceID);

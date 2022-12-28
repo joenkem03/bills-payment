@@ -185,7 +185,7 @@ const BillerDash = (props) => {
             console.log("Not airtime OR data");
         }
         
-        setLoading2(false);
+        setLoading2(true);
         // if(validationData.WrongBillersCode){
         //     setname(validationData.Customer_Name)
         // }
@@ -503,7 +503,7 @@ const BillerDash = (props) => {
         console.log('data',billsdata);
         
         setBills(billsdata)
-        setLoading(false);
+        setLoading(true);
     }
 
     const getNpps = async ()=>{
