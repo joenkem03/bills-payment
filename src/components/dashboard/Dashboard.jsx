@@ -858,7 +858,7 @@ const Dashboard = (props) => {
                                     helperText={ 
                                         selectedVariety[0]?.fixedPrice === "Yes" ?
                                         '': 
-                                        (amount_ < parseInt(selectedBiller.minimium_amount) && `Minimum Amount is ${selectedBiller.minimium_amount}`) || (amount_ > parseInt(selectedBiller.maximum_amount) && `Maximun Amount is ${selectedBiller.minimium_amount}`)
+                                        (amount_ < parseInt(selectedBiller.minimium_amount) && `Minimum Amount is ₦${selectedBiller.minimium_amount}`) || (amount_ > parseInt(selectedBiller.maximum_amount) && `Maximun Amount is ${selectedBiller.minimium_amount}`)
                                     }
                                     // disabled={fixed}
                                 />
