@@ -616,8 +616,8 @@ const BillerDash = (props) => {
             <Modal 
                 show={modal} 
                 close={handlemodal} 
-                amount={amount} 
-                TxnRef={ref} 
+                amountPaid={amount}
+                transactionRef={ref} 
                 name={selectedBiller.billPaymentProductName}
                 val = {powerdata}
                 ifPower = { power }
