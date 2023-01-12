@@ -616,11 +616,11 @@ const BillerDash = (props) => {
             <Modal 
                 show={modal} 
                 close={handlemodal} 
-                amountPaid={amount}
-                transactionRef={ref} 
+                amount={amount_} 
+                TxnRef={ref} 
                 name={selectedBiller.billPaymentProductName}
-                val = {powerdata}
-                ifPower = { power }
+                val={powerdata}
+                ifPower={power}
             />
             <PaymentModal back={back} close={handleClose} show={paymentType} handleQr={handleQr} handleOther={handleOther} sendQr={showqr} qrvalue={qr}/>
 
