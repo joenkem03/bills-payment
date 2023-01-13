@@ -375,6 +375,7 @@ const Dashboard = (props) => {
     
     const handlepaymentFull = async (data)=>{
         
+        setTransactionRefId(data)
         // setTransactionId(data)
         setPaymentType(false)
 
@@ -693,11 +694,11 @@ const Dashboard = (props) => {
             <Modal 
                 show={modal} 
                 close={handlemodal} 
-                amount={amount} 
-                TxnRef={ref} 
+                amount={amount_} 
+                TxnRef={transactionRefId} 
                 name={selectedBiller.billPaymentProductName}
-                val = {powerdata}
-                ifPower = { power }
+                val={powerdata}
+                ifPower={power}
             />
             <PaymentModal 
                 back={back} 
